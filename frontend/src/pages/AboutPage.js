@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import axios from 'axios';
-import { Target, Eye, Heart, Shield, Users, Award } from 'lucide-react';
+import { Target, Eye, Heart, Shield, Users, Award, HandHeart, Clock } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -26,22 +26,22 @@ const AboutPage = () => {
     {
       icon: Heart,
       title: { en: 'Compassion', gu: 'કરુણા' },
-      description: { en: 'We serve with empathy and kindness, treating every individual with dignity and respect.', gu: 'અમે સહાનુભૂતિ અને દયા સાથે સેવા કરીએ છીએ, દરેક વ્યક્તિ સાથે ગૌરવ અને આદર સાથે વર્તન કરીએ છીએ.' }
+      description: { en: 'Every resident is treated with unconditional love, kindness, and empathy — as a valued member of our family.', gu: 'દરેક નિવાસી સાથે બિનશરતી પ્રેમ, દયા અને સહાનુભૂતિ સાથે વર્તન કરવામાં આવે છે — અમારા પરિવારના મૂલ્યવાન સભ્ય તરીકે.' }
     },
     {
       icon: Shield,
-      title: { en: 'Integrity', gu: 'પ્રામાણિકતા' },
-      description: { en: 'Complete transparency in all our operations. Every rupee is accounted for and reported.', gu: 'અમારી તમામ કામગીરીમાં સંપૂર્ણ પારદર્શિતા. દરેક રૂપિયાનો હિસાબ અને રિપોર્ટ કરવામાં આવે છે.' }
+      title: { en: 'Dignity', gu: 'ગૌરવ' },
+      description: { en: 'We uphold the inherent dignity of every individual, regardless of their abilities or disabilities.', gu: 'અમે દરેક વ્યક્તિના સહજ ગૌરવને જાળવી રાખીએ છીએ, તેમની ક્ષમતાઓ અથવા અક્ષમતાઓને ધ્યાનમાં લીધા વિના.' }
     },
     {
-      icon: Users,
-      title: { en: 'Community', gu: 'સમુદાય' },
-      description: { en: 'We believe in the power of collective action and community-driven solutions.', gu: 'અમે સામૂહિક ક્રિયા અને સમુદાય-સંચાલિત ઉકેલોની શક્તિમાં માનીએ છીએ.' }
+      icon: Clock,
+      title: { en: 'Commitment', gu: 'પ્રતિબદ્ધતા' },
+      description: { en: 'Lifelong care means we are here for our residents for as long as they need us — no one is ever abandoned.', gu: 'આજીવન સંભાળનો અર્થ છે કે અમે અમારા નિવાસીઓ માટે જ્યાં સુધી તેમને જરૂર હોય ત્યાં સુધી અહીં છીએ — કોઈને ક્યારેય ત્યજી દેવામાં આવતું નથી.' }
     },
     {
-      icon: Award,
-      title: { en: 'Excellence', gu: 'શ્રેષ્ઠતા' },
-      description: { en: 'Committed to delivering impactful programs that create lasting positive change.', gu: 'કાયમી સકારાત્મક પરિવર્તન બનાવતા પ્રભાવશાળી કાર્યક્રમો આપવા માટે પ્રતિબદ્ધ.' }
+      icon: HandHeart,
+      title: { en: 'Excellence in Care', gu: 'સંભાળમાં શ્રેષ્ઠતા' },
+      description: { en: 'Professional, trained caregivers provide the highest standard of care with attention to individual needs.', gu: 'વ્યાવસાયિક, પ્રશિક્ષિત સંભાળ રાખનારાઓ વ્યક્તિગત જરૂરિયાતો પર ધ્યાન આપીને સંભાળનું ઉચ્ચતમ ધોરણ પ્રદાન કરે છે.' }
     }
   ];
 
