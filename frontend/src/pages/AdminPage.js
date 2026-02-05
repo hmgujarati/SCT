@@ -599,6 +599,7 @@ const SettingsSection = () => {
 
   const tabs = [
     { id: 'pages', label: language === 'en' ? 'Page Visibility' : 'પેજ દૃશ્યતા' },
+    { id: 'footer', label: language === 'en' ? 'Footer Text' : 'ફૂટર ટેક્સ્ટ' },
     { id: 'contact', label: language === 'en' ? 'Contact Info' : 'સંપર્ક માહિતી' },
     { id: 'bank', label: language === 'en' ? 'Bank Details' : 'બેંક વિગતો' },
     { id: 'trust', label: language === 'en' ? 'Trust Details' : 'ટ્રસ્ટ વિગતો' },
