@@ -659,6 +659,36 @@ const SettingsSection = () => {
           </div>
         )}
 
+        {activeTab === 'footer' && (
+          <div className="space-y-4">
+            <p className="text-sm text-[#6B7280] mb-4">
+              {language === 'en' ? 'Edit the description text shown in the footer section of the website.' : 'વેબસાઇટના ફૂટર વિભાગમાં દર્શાવેલ વર્ણન ટેક્સ્ટ સંપાદિત કરો.'}
+            </p>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">{language === 'en' ? 'Footer Text (English)' : 'ફૂટર ટેક્સ્ટ (English)'}</label>
+                <Textarea 
+                  value={settings.footer_text?.en || ''} 
+                  onChange={(e) => updateNestedField('footer_text', 'en', e.target.value)} 
+                  placeholder="Serving humanity with compassion..."
+                  rows={4}
+                  className="input-field" 
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">{language === 'en' ? 'Footer Text (Gujarati)' : 'ફૂટર ટેક્સ્ટ (ગુજરાતી)'}</label>
+                <Textarea 
+                  value={settings.footer_text?.gu || ''} 
+                  onChange={(e) => updateNestedField('footer_text', 'gu', e.target.value)} 
+                  placeholder="કરુણા સાથે માનવતાની સેવા..."
+                  rows={4}
+                  className="input-field font-gujarati" 
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'contact' && (
           <div className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
