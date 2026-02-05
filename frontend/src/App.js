@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import "@/App.css";
 import "@/index.css";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import axios from "axios";
 import { Toaster } from "sonner";
 
 // Contexts
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import { PageVisibilityProvider, usePageVisibility } from "./contexts/PageVisibilityContext";
 
 // Components
 import Header from "./components/Header";
