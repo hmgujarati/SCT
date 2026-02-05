@@ -153,12 +153,19 @@ const Footer = () => {
               </div>
             )}
             
-            {/* UPI QR Code */}
-            {settings?.upi_details?.qr_code_url && (
-              <div className="bg-white rounded-lg p-3 inline-block mb-4">
-                <img src={getImageUrl(settings.upi_details.qr_code_url) || settings.upi_details.qr_code_url} alt="UPI QR Code" className="w-24 h-24" />
+            {/* UPI Details */}
+            {(settings?.upi_details?.qr_code_url || settings?.upi_details?.upi_id) && (
+              <div className="mb-4">
+                {settings.upi_details.qr_code_url && (
+                  <div className="bg-white rounded-lg p-3 inline-block">
+                    <img src={getImageUrl(settings.upi_details.qr_code_url) || settings.upi_details.qr_code_url} alt="UPI QR Code" className="w-24 h-24" />
+                  </div>
+                )}
                 {settings.upi_details.upi_id && (
-                  <p className="text-xs text-[#1F2937] text-center mt-1 font-mono">{settings.upi_details.upi_id}</p>
+                  <div className="mt-2">
+                    <p className="text-xs text-stone-500 mb-1">{language === 'en' ? 'UPI ID:' : 'UPI ID:'}</p>
+                    <p className="text-sm text-stone-300 font-mono bg-white/5 px-3 py-1.5 rounded inline-block">{settings.upi_details.upi_id}</p>
+                  </div>
                 )}
               </div>
             )}
