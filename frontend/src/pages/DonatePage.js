@@ -5,18 +5,32 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Checkbox } from '../components/ui/checkbox';
 import { toast } from 'sonner';
-import { Heart, Check, Shield, Gift, Users, Stethoscope, GraduationCap } from 'lucide-react';
-import useRazorpay from 'react-razorpay';
+import { Heart, Check, Shield, Users, Stethoscope, GraduationCap } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
+// Load Razorpay script
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    if (window.Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
+
 const DonatePage = () => {
   const { language, t, ui } = useLanguage();
-  const [Razorpay] = useRazorpay();
   const [settings, setSettings] = useState(null);
   const [content, setContent] = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [razorpayLoaded, setRazorpayLoaded] = useState(false);
   
   const [formData, setFormData] = useState({
     amount: 1001,
@@ -39,6 +53,7 @@ const DonatePage = () => {
 
   useEffect(() => {
     fetchData();
+    loadRazorpayScript().then(setRazorpayLoaded);
   }, []);
 
   const fetchData = async () => {
@@ -105,6 +120,11 @@ const DonatePage = () => {
   const proceedToPayment = async () => {
     if (!validateStep1() || !validateStep2()) return;
 
+    if (!razorpayLoaded) {
+      toast.error(language === 'en' ? 'Payment system is loading. Please try again.' : 'પેમેન્ટ સિસ્ટમ લોડ થઈ રહી છે. કૃપા કરીને ફરી પ્રયાસ કરો.');
+      return;
+    }
+
     setLoading(true);
     try {
       // Create order
@@ -129,10 +149,10 @@ const DonatePage = () => {
         } : null
       });
 
-      const { order_id, amount, donation_id } = orderResponse.data;
+      const { order_id, amount } = orderResponse.data;
 
       // Initialize Razorpay
-      const razorpayKeyId = settings?.razorpay_key_id || process.env.REACT_APP_RAZORPAY_KEY_ID || 'rzp_test_placeholder';
+      const razorpayKeyId = settings?.razorpay_key_id || 'rzp_test_placeholder';
       
       const options = {
         key: razorpayKeyId,
@@ -166,7 +186,7 @@ const DonatePage = () => {
         }
       };
 
-      const rzp = new Razorpay(options);
+      const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (error) {
       console.error('Payment error:', error);
@@ -242,7 +262,7 @@ const DonatePage = () => {
               ))}
             </div>
 
-            <div className="card-elevated">
+            <div className="bg-white rounded-2xl p-8 shadow-lg">
               {/* Step 1: Amount Selection */}
               <div className="mb-8">
                 <h2 className="text-xl font-semibold text-[#1F2937] mb-6">
