@@ -1,7 +1,7 @@
-# Shivdhara Charitable Trust - Bilingual NGO Website
+# Shivdhara Charitable - Bilingual NGO Website
 
 ## Project Overview
-Professional bilingual (English + Gujarati) website for Shivdhara Charitable Trust with donation optimization, admin panel, and full content management.
+Professional bilingual (English + Gujarati) website for Shivdhara Charitable with donation optimization, admin panel, and full content management.
 
 ## Original Problem Statement
 Build a professional bilingual website for a charitable trust with:
