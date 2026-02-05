@@ -200,12 +200,12 @@ const HomePage = () => {
             </h2>
             <p className="text-[#6B7280] max-w-2xl mx-auto">
               {language === 'en' 
-                ? 'We work across multiple areas to create comprehensive impact in the communities we serve.'
-                : 'અમે જે સમુદાયોની સેવા કરીએ છીએ તેમાં વ્યાપક અસર ઊભી કરવા માટે અમે વિવિધ ક્ષેત્રોમાં કામ કરીએ છીએ.'}
+                ? 'We provide comprehensive residential care for individuals with intellectual disabilities, ensuring every aspect of their well-being is addressed.'
+                : 'અમે બૌદ્ધિક વિકલાંગતા ધરાવતી વ્યક્તિઓ માટે વ્યાપક રહેણાંક સંભાળ પૂરી પાડીએ છીએ, તેમની સુખાકારીના દરેક પાસાને સંબોધિત કરવામાં આવે તેની ખાતરી કરીએ છીએ.'}
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {programs.map((program, index) => (
               <div
                 key={index}
