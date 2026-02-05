@@ -199,7 +199,7 @@ const Footer = () => {
       <div className="border-t border-white/10">
         <div className="container-custom py-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className={`text-stone-500 text-sm ${language === 'gu' ? 'font-gujarati' : ''}`}>
-            © {new Date().getFullYear()} {language === 'en' ? 'Shivdhara Charitable Trust. All rights reserved.' : 'શિવધારા ચેરીટેબલ ટ્રસ્ટ. સર્વ હક્કો અમારી પાસે રાખેલ છે.'}
+            © {new Date().getFullYear()} {language === 'en' ? 'Shivdhara Charitable. All rights reserved.' : 'શિવધારા ચેરીટેબલ. સર્વ હક્કો અમારી પાસે રાખેલ છે.'}
           </p>
           <p className="flex items-center gap-1 text-stone-500 text-sm">
             {language === 'en' ? 'Made with' : 'બનાવેલ'} <Heart className="w-4 h-4 text-[#8B1E1E] fill-[#8B1E1E]" /> {language === 'en' ? 'for humanity' : 'માનવતા માટે'}

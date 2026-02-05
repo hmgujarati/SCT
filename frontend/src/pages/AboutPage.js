@@ -55,12 +55,12 @@ const AboutPage = () => {
               {language === 'en' ? 'About Us' : 'અમારા વિશે'}
             </span>
             <h1 className="text-4xl md:text-5xl font-bold text-[#1F2937] mb-6">
-              {t(content.title) || (language === 'en' ? 'About Shivdhara Charitable Trust' : 'શિવધારા ચેરીટેબલ ટ્રસ્ટ વિશે')}
+              {t(content.title) || (language === 'en' ? 'About Shivdhara Charitable' : 'શિવધારા ચેરીટેબલ વિશે')}
             </h1>
             <p className="text-lg text-[#6B7280] leading-relaxed">
               {t(content.intro) || (language === 'en' 
-                ? 'Shivdhara Charitable Trust was established with a sacred mission to serve humanity through selfless action. Inspired by the eternal flow of Lord Shiva\'s grace, we believe that true worship lies in serving those in need.'
-                : 'શિવધારા ચેરીટેબલ ટ્રસ્ટની સ્થાપના નિઃસ્વાર્થ સેવા દ્વારા માનવતાની સેવા કરવાના પવિત્ર મિશન સાથે કરવામાં આવી હતી. ભગવાન શિવની કૃપાના શાશ્વત પ્રવાહથી પ્રેરિત, અમે માનીએ છીએ કે સાચી પૂજા જરૂરિયાતમંદોની સેવામાં છે.')}
+                ? 'Shivdhara Charitable was established with a sacred mission to serve humanity through selfless action. Inspired by the eternal flow of Lord Shiva\'s grace, we believe that true worship lies in serving those in need.'
+                : 'શિવધારા ચેરીટેબલની સ્થાપના નિઃસ્વાર્થ સેવા દ્વારા માનવતાની સેવા કરવાના પવિત્ર મિશન સાથે કરવામાં આવી હતી. ભગવાન શિવની કૃપાના શાશ્વત પ્રવાહથી પ્રેરિત, અમે માનીએ છીએ કે સાચી પૂજા જરૂરિયાતમંદોની સેવામાં છે.')}
             </p>
           </div>
         </div>
@@ -143,8 +143,8 @@ const AboutPage = () => {
               </h2>
               <p className="text-[#6B7280] text-center mb-8">
                 {language === 'en' 
-                  ? 'Shivdhara Charitable Trust is duly registered under the applicable laws and maintains full compliance with all regulatory requirements.'
-                  : 'શિવધારા ચેરીટેબલ ટ્રસ્ટ લાગુ કાયદાઓ હેઠળ યોગ્ય રીતે નોંધાયેલ છે અને તમામ નિયમનકારી આવશ્યકતાઓ સાથે સંપૂર્ણ અનુપાલન જાળવે છે.'}
+                  ? 'Shivdhara Charitable is duly registered under the applicable laws and maintains full compliance with all regulatory requirements.'
+                  : 'શિવધારા ચેરીટેબલ લાગુ કાયદાઓ હેઠળ યોગ્ય રીતે નોંધાયેલ છે અને તમામ નિયમનકારી આવશ્યકતાઓ સાથે સંપૂર્ણ અનુપાલન જાળવે છે.'}
               </p>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {[

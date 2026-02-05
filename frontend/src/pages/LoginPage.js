@@ -71,7 +71,7 @@ const LoginPage = () => {
                 : (language === 'en' ? 'Create Account' : 'એકાઉન્ટ બનાવો')}
             </h1>
             <p className="text-sm text-[#6B7280] mt-2">
-              {language === 'en' ? 'Shivdhara Charitable Trust' : 'શિવધારા ચેરીટેબલ ટ્રસ્ટ'}
+              {language === 'en' ? 'Shivdhara Charitable' : 'શિવધારા ચેરીટેબલ'}
             </p>
           </div>
 

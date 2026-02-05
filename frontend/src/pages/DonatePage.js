@@ -158,7 +158,7 @@ const DonatePage = () => {
         key: razorpayKeyId,
         amount: amount,
         currency: 'INR',
-        name: language === 'en' ? 'Shivdhara Charitable Trust' : 'શિવધારા ચેરીટેબલ ટ્રસ્ટ',
+        name: language === 'en' ? 'Shivdhara Charitable' : 'શિવધારા ચેરીટેબલ',
         description: language === 'en' ? 'Donation' : 'દાન',
         order_id: order_id,
         handler: async (response) => {
