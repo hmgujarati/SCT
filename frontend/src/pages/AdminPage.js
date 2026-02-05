@@ -383,6 +383,163 @@ const BrandingSection = ({ settings, setSettings, language }) => {
   );
 };
 
+// UPI Settings Section Component - For UPI ID and QR Code upload
+const UPISettingsSection = ({ settings, setSettings, language }) => {
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = React.useRef(null);
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+
+  const handleUpload = async (file) => {
+    if (!file) return;
+    
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await axios.post(`${API}/upload`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      
+      const imageUrl = response.data.url;
+      setSettings(prev => ({
+        ...prev,
+        upi_details: {
+          ...prev.upi_details,
+          qr_code_url: imageUrl
+        }
+      }));
+      toast.success(language === 'en' ? 'QR Code uploaded!' : 'QR કોડ અપલોડ થયો!');
+    } catch (error) {
+      toast.error(language === 'en' ? 'Upload failed' : 'અપલોડ નિષ્ફળ');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const clearQRCode = () => {
+    setSettings(prev => ({
+      ...prev,
+      upi_details: {
+        ...prev.upi_details,
+        qr_code_url: ''
+      }
+    }));
+  };
+
+  const updateUPIField = (field, value) => {
+    setSettings(prev => ({
+      ...prev,
+      upi_details: {
+        ...prev.upi_details,
+        [field]: value
+      }
+    }));
+  };
+
+  const getImageUrl = (url) => {
+    if (!url) return null;
+    if (url.startsWith('http')) return url;
+    return `${BASE_URL}${url}`;
+  };
+
+  const currentQR = settings.upi_details?.qr_code_url;
+
+  return (
+    <div className="space-y-6">
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* UPI ID Input */}
+        <div>
+          <label className="block text-sm font-medium mb-2">UPI ID</label>
+          <Input 
+            value={settings.upi_details?.upi_id || ''} 
+            onChange={(e) => updateUPIField('upi_id', e.target.value)} 
+            placeholder="yourname@upi" 
+            className="input-field" 
+          />
+          <p className="text-xs text-[#6B7280] mt-1">
+            {language === 'en' ? 'e.g., yourname@okicici, yourname@paytm' : 'દા.ત., yourname@okicici, yourname@paytm'}
+          </p>
+        </div>
+
+        {/* QR Code Upload */}
+        <div>
+          <div className="flex justify-between items-center mb-2">
+            <label className="block text-sm font-medium">{language === 'en' ? 'UPI QR Code' : 'UPI QR કોડ'}</label>
+            {currentQR && (
+              <button onClick={clearQRCode} className="text-red-500 hover:text-red-700 text-xs">
+                {language === 'en' ? 'Remove' : 'દૂર કરો'}
+              </button>
+            )}
+          </div>
+          
+          <div className="border-2 border-dashed border-stone-200 rounded-lg p-4 text-center relative">
+            {currentQR ? (
+              <div className="flex flex-col items-center">
+                <img 
+                  src={getImageUrl(currentQR)} 
+                  alt="UPI QR Code" 
+                  className="w-32 h-32 object-contain rounded-lg border"
+                />
+                <p className="text-xs text-[#6B7280] mt-2">{language === 'en' ? 'QR Code uploaded' : 'QR કોડ અપલોડ થયો'}</p>
+              </div>
+            ) : (
+              <div className="py-4">
+                <Image className="w-8 h-8 mx-auto text-stone-300 mb-2" />
+                <p className="text-sm text-stone-500">{language === 'en' ? 'No QR code uploaded' : 'કોઈ QR કોડ અપલોડ થયો નથી'}</p>
+              </div>
+            )}
+            
+            {uploading && (
+              <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-lg">
+                <div className="w-6 h-6 border-2 border-[#8B1E1E] border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            )}
+          </div>
+          
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => handleUpload(e.target.files[0])}
+          />
+          <Button
+            onClick={() => fileInputRef.current?.click()}
+            variant="outline"
+            size="sm"
+            className="w-full mt-3"
+            disabled={uploading}
+          >
+            <Upload className="w-4 h-4 mr-2" />
+            {currentQR ? (language === 'en' ? 'Change QR Code' : 'QR કોડ બદલો') : (language === 'en' ? 'Upload QR Code' : 'QR કોડ અપલોડ કરો')}
+          </Button>
+        </div>
+      </div>
+
+      {/* Preview Section */}
+      {(settings.upi_details?.upi_id || currentQR) && (
+        <div className="border-t pt-4 mt-4">
+          <h4 className="font-medium text-sm mb-3">{language === 'en' ? 'Preview (as shown in footer)' : 'પૂર્વાવલોકન (ફૂટરમાં બતાવ્યા મુજબ)'}</h4>
+          <div className="bg-[#1F2937] rounded-lg p-4 inline-block">
+            {currentQR && (
+              <div className="bg-white rounded-lg p-2 mb-2">
+                <img src={getImageUrl(currentQR)} alt="UPI QR" className="w-24 h-24 object-contain" />
+              </div>
+            )}
+            {settings.upi_details?.upi_id && (
+              <div className="text-center">
+                <p className="text-xs text-stone-400 mb-1">UPI ID:</p>
+                <p className="text-sm text-stone-200 font-mono bg-white/10 px-3 py-1 rounded">{settings.upi_details.upi_id}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 // Settings Section
 const SettingsSection = () => {
   const { language } = useLanguage();
