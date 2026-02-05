@@ -104,11 +104,13 @@ const Header = () => {
             </button>
 
             {/* Donate Button */}
-            <Link to="/donate" data-testid="header-donate-btn">
-              <Button className="hidden sm:flex btn-gold text-sm px-6 py-2">
-                {ui.donate_now}
-              </Button>
-            </Link>
+            {isPageVisible('donate') && (
+              <Link to="/donate" data-testid="header-donate-btn">
+                <Button className="hidden sm:flex btn-gold text-sm px-6 py-2">
+                  {ui.donate_now}
+                </Button>
+              </Link>
+            )}
 
             {/* Admin Link */}
             {user && (
