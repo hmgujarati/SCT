@@ -157,15 +157,23 @@
   }
   
   .gallery-item {
-    @apply relative overflow-hidden rounded-xl group cursor-pointer;
+    @apply relative overflow-hidden rounded-xl cursor-pointer;
   }
   
   .gallery-item img {
-    @apply w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110;
+    @apply w-full h-64 object-cover transition-transform duration-500;
+  }
+  
+  .gallery-item:hover img {
+    @apply scale-110;
   }
   
   .gallery-overlay {
-    @apply absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4;
+    @apply absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 transition-opacity duration-300 flex items-end p-4;
+  }
+  
+  .gallery-item:hover .gallery-overlay {
+    @apply opacity-100;
   }
   
   /* Blog Card */
