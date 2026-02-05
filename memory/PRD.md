@@ -61,6 +61,8 @@ Build a professional bilingual website for a charitable trust with:
 - [x] Page content editing from admin (bilingual EN/GU)
 - [x] Local image upload for gallery (replaces URL-only)
 - [x] Page visibility toggle (turn pages on/off)
+- [x] Logo & Images management (7 uploadable images)
+- [x] Social Links management (6 platforms)
 
 ### P1 - High Priority
 - [ ] Add real Razorpay live keys from admin
