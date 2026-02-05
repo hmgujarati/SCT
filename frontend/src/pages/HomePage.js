@@ -117,18 +117,18 @@ const HomePage = () => {
                 {language === 'en' ? '🙏 Manav Mandir' : '🙏 માનવ મંદિર'}
               </span>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#1F2937] leading-tight mb-6">
-                {t(content.hero_title) || (language === 'en' ? 'Serving Humanity with Compassion' : 'કરુણા સાથે માનવતાની સેવા')}
+                {t(content.hero_title) || (language === 'en' ? 'A Home of Dignity and Care' : 'ગૌરવ અને સંભાળનું ઘર')}
               </h1>
               <p className="text-lg md:text-xl text-[#6B7280] leading-relaxed mb-8 max-w-xl">
                 {t(content.hero_subtitle) || (language === 'en' 
-                  ? 'Together, we can transform lives through education, healthcare, and community support. Your contribution creates lasting change.'
-                  : 'સાથે મળીને, આપણે શિક્ષણ, આરોગ્ય સેવા અને સમુદાય સહાય દ્વારા જીવન બદલી શકીએ છીએ. તમારું યોગદાન કાયમી પરિવર્તન લાવે છે.')}
+                  ? 'Providing lifelong compassionate care, shelter, and support to individuals with intellectual disabilities. Every person deserves to live with dignity.'
+                  : 'બૌદ્ધિક વિકલાંગતા ધરાવતી વ્યક્તિઓને આજીવન કરુણામય સંભાળ, આશ્રય અને સહાય પૂરી પાડવી. દરેક વ્યક્તિ ગૌરવ સાથે જીવવાને લાયક છે.')}
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link to="/donate" data-testid="hero-donate-btn">
                   <Button className="btn-gold text-lg px-8 py-4">
                     <Heart className="w-5 h-5 mr-2" />
-                    {ui.donate_now}
+                    {language === 'en' ? 'Support Our Residents' : 'અમારા નિવાસીઓને સહાય કરો'}
                   </Button>
                 </Link>
                 <Link to="/about" data-testid="hero-learn-more-btn">
