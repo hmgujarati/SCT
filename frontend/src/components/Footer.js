@@ -51,8 +51,8 @@ const Footer = () => {
             </Link>
             <p className={`text-stone-400 text-sm leading-relaxed mb-4 ${language === 'gu' ? 'font-gujarati' : ''}`}>
               {language === 'en' 
-                ? 'Serving humanity with compassion through education, healthcare, and community support since 2012.'
-                : '2012 થી શિક્ષણ, આરોગ્ય સેવા અને સમુદાય સહાય દ્વારા કરુણા સાથે માનવતાની સેવા કરી રહ્યા છીએ.'}
+                ? (settings?.footer_text?.en || 'Serving humanity with compassion through education, healthcare, and community support since 2012.')
+                : (settings?.footer_text?.gu || '2012 થી શિક્ષણ, આરોગ્ય સેવા અને સમુદાય સહાય દ્વારા કરુણા સાથે માનવતાની સેવા કરી રહ્યા છીએ.')}
             </p>
             {/* Social Links - Only show if at least one link exists */}
             {(hasSocialLink('facebook') || hasSocialLink('instagram') || hasSocialLink('twitter') || hasSocialLink('youtube') || hasSocialLink('linkedin')) && (
@@ -158,7 +158,7 @@ const Footer = () => {
               <div className="mb-4">
                 {settings.upi_details.qr_code_url && (
                   <div className="bg-white rounded-lg p-3 inline-block">
-                    <img src={getImageUrl(settings.upi_details.qr_code_url) || settings.upi_details.qr_code_url} alt="UPI QR Code" className="w-24 h-24" />
+                    <img src={getImageUrl(settings.upi_details.qr_code_url) || settings.upi_details.qr_code_url} alt="UPI QR Code" className="max-w-[96px] max-h-[96px] object-contain" />
                   </div>
                 )}
                 {settings.upi_details.upi_id && (

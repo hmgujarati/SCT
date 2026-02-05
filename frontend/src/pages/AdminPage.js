@@ -86,6 +86,7 @@ const AdminPage = () => {
         <div className="p-6">
           <Link to="/" className="flex items-center gap-3 mb-8">
             <img src={LOGO_URL} alt="Logo" className="h-12" />
+            <span className="text-lg font-semibold">Shivdhara Charitable</span>
           </Link>
 
           <nav className="space-y-2">
