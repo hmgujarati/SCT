@@ -5,7 +5,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Checkbox } from '../components/ui/checkbox';
 import { toast } from 'sonner';
-import { Heart, Check, Shield, Users, Stethoscope, GraduationCap } from 'lucide-react';
+import { Heart, Check, Shield, Users, Stethoscope, Utensils, Home } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
