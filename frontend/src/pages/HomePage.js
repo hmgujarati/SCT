@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useSiteSettings } from '../contexts/SiteSettingsContext';
 import axios from 'axios';
 import { Button } from '../components/ui/button';
 import { ArrowRight, Heart, Home, Droplets, Stethoscope, Utensils, HeartHandshake, Shield, ShieldCheck, FileCheck, ChevronRight } from 'lucide-react';
@@ -9,6 +10,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const HomePage = () => {
   const { language, t, ui } = useLanguage();
+  const { getHeroImage, getCtaImage } = useSiteSettings();
   const [content, setContent] = useState({});
   const [settings, setSettings] = useState(null);
   const [stories, setStories] = useState([]);
