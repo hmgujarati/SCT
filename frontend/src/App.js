@@ -134,15 +134,16 @@ function App() {
       <BrowserRouter>
         <AuthProvider>
           <LanguageProvider>
-            <PageVisibilityProvider>
-              <AppRoutes />
-              <Toaster 
-                position="top-right" 
-                richColors 
-                closeButton
-                toastOptions={{
-                  style: {
-                    fontFamily: 'Inter, sans-serif'
+            <SiteSettingsProvider>
+              <PageVisibilityProvider>
+                <AppRoutes />
+                <Toaster 
+                  position="top-right" 
+                  richColors 
+                  closeButton
+                  toastOptions={{
+                    style: {
+                      fontFamily: 'Inter, sans-serif'
                   }
                 }}
               />
