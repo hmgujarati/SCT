@@ -234,12 +234,12 @@ const DonatePage = () => {
             {language === 'en' ? 'Make a Difference' : 'ફરક લાવો'}
           </span>
           <h1 className="text-4xl md:text-5xl font-bold text-[#1F2937] mb-6">
-            {t(content.title) || (language === 'en' ? 'Make a Difference Today' : 'આજે ફરક લાવો')}
+            {t(content.title) || (language === 'en' ? 'Support a Life of Dignity' : 'ગૌરવના જીવનને સપોર્ટ કરો')}
           </h1>
           <p className="text-lg text-[#6B7280] max-w-2xl mx-auto">
             {t(content.subtitle) || (language === 'en' 
-              ? 'Your generosity can transform lives. Every contribution creates ripples of positive change.'
-              : 'તમારી ઉદારતા જીવન બદલી શકે છે. દરેક યોગદાન હકારાત્મક પરિવર્તનની લહેરો બનાવે છે.')}
+              ? 'Your donation provides shelter, care, nutrition, and medical support to individuals with intellectual disabilities who have no one else to care for them.'
+              : 'તમારું દાન બૌદ્ધિક વિકલાંગતા ધરાવતી વ્યક્તિઓને આશ્રય, સંભાળ, પોષણ અને તબીબી સપોર્ટ પૂરું પાડે છે જેમની સંભાળ રાખવા માટે બીજું કોઈ નથી.')}
           </p>
         </div>
       </section>
@@ -251,9 +251,9 @@ const DonatePage = () => {
             {/* Impact Info */}
             <div className="grid grid-cols-3 gap-4 mb-12">
               {[
-                { icon: GraduationCap, text: language === 'en' ? '₹501 = School supplies for 1 year' : '₹501 = 1 વર્ષ માટે શાળાની સામગ્રી' },
-                { icon: Stethoscope, text: language === 'en' ? '₹1001 = Medical checkup for family' : '₹1001 = પરિવાર માટે તબીબી તપાસ' },
-                { icon: Users, text: language === 'en' ? '₹2501 = Feed family for 1 month' : '₹2501 = 1 મહિના માટે પરિવારને ખવડાવો' }
+                { icon: Utensils, text: language === 'en' ? '₹501 = Nutritious meals for 1 week' : '₹501 = 1 અઠવાડિયા માટે પૌષ્ટિક ભોજન' },
+                { icon: Stethoscope, text: language === 'en' ? '₹1001 = Medical supplies & checkup' : '₹1001 = તબીબી પુરવઠો અને તપાસ' },
+                { icon: Users, text: language === 'en' ? '₹2501 = Full month care for 1 resident' : '₹2501 = 1 નિવાસી માટે સંપૂર્ણ મહિનાની સંભાળ' }
               ].map((item, i) => (
                 <div key={i} className="text-center p-4 bg-[#F7F1E6] rounded-xl">
                   <item.icon className="w-8 h-8 text-[#8B1E1E] mx-auto mb-2" />
