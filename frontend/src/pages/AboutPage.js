@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useSiteSettings } from '../contexts/SiteSettingsContext';
 import axios from 'axios';
 import { Target, Eye, Heart, Shield, Users, Award, HandHeart, Clock } from 'lucide-react';
 
@@ -7,6 +8,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const AboutPage = () => {
   const { language, t, ui } = useLanguage();
+  const { getAboutImage } = useSiteSettings();
   const [content, setContent] = useState({});
 
   useEffect(() => {
