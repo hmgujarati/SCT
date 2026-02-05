@@ -1189,6 +1189,359 @@ async def seed_initial_data():
     
     return {"message": "Initial data seeded successfully"}
 
+@api_router.post("/reseed")
+async def reseed_content():
+    """Reseed/Update content for intellectual disability care focus"""
+    
+    # Clear existing content
+    await db.page_content.delete_many({})
+    await db.stories.delete_many({})
+    await db.blog.delete_many({})
+    await db.gallery.delete_many({})
+    
+    # New home page content
+    home_content = [
+        {
+            "page_key": "home",
+            "section_key": "hero_title",
+            "content": {
+                "en": "A Home of Dignity and Care",
+                "gu": "ગૌરવ અને સંભાળનું ઘર"
+            }
+        },
+        {
+            "page_key": "home",
+            "section_key": "hero_subtitle",
+            "content": {
+                "en": "Providing lifelong compassionate care, shelter, and support to individuals with intellectual disabilities. Every person deserves to live with dignity.",
+                "gu": "બૌદ્ધિક વિકલાંગતા ધરાવતી વ્યક્તિઓને આજીવન કરુણામય સંભાળ, આશ્રય અને સહાય પૂરી પાડવી. દરેક વ્યક્તિ ગૌરવ સાથે જીવવાને લાયક છે."
+            }
+        },
+        {
+            "page_key": "home",
+            "section_key": "donate_cta",
+            "content": {
+                "en": "Support Our Residents",
+                "gu": "અમારા નિવાસીઓને સહાય કરો"
+            }
+        },
+        {
+            "page_key": "home",
+            "section_key": "impact_title",
+            "content": {
+                "en": "Lives We Touch",
+                "gu": "જીવન જે અમે સ્પર્શીએ છીએ"
+            }
+        },
+        {
+            "page_key": "home",
+            "section_key": "programs_title",
+            "content": {
+                "en": "Our Care Services",
+                "gu": "અમારી સંભાળ સેવાઓ"
+            }
+        },
+        {
+            "page_key": "home",
+            "section_key": "transparency_title",
+            "content": {
+                "en": "Transparency & Trust",
+                "gu": "પારદર્શકતા અને વિશ્વાસ"
+            }
+        },
+        {
+            "page_key": "home",
+            "section_key": "transparency_text",
+            "content": {
+                "en": "Every donation directly supports our residents' daily care, medical needs, nutrition, and well-being. We maintain complete transparency in our operations and publish annual reports detailing how your contributions improve the lives of those in our care. Our accounts are audited by certified accountants, and we are registered under 80G, 12A, and CSR Act.",
+                "gu": "દરેક દાન સીધું અમારા નિવાસીઓની દૈનિક સંભાળ, તબીબી જરૂરિયાતો, પોષણ અને સુખાકારીને સપોર્ટ કરે છે. અમે અમારી કામગીરીમાં સંપૂર્ણ પારદર્શિતા જાળવીએ છીએ અને તમારા યોગદાનથી અમારી સંભાળમાં રહેલા લોકોના જીવનમાં કેવી સુધારો થાય છે તેની વિગતો આપતા વાર્ષિક અહેવાલો પ્રકાશિત કરીએ છીએ."
+            }
+        },
+        {
+            "page_key": "home",
+            "section_key": "cta_title",
+            "content": {
+                "en": "Become a Part of Their Family",
+                "gu": "તેમના પરિવારનો ભાગ બનો"
+            }
+        },
+        {
+            "page_key": "home",
+            "section_key": "cta_text",
+            "content": {
+                "en": "Your monthly support ensures our residents receive consistent care, nutritious meals, medical attention, and the emotional support they need every single day.",
+                "gu": "તમારો માસિક સપોર્ટ સુનિશ્ચિત કરે છે કે અમારા નિવાસીઓને દરરોજ સતત સંભાળ, પૌષ્ટિક ભોજન, તબીબી ધ્યાન અને ભાવનાત્મક સપોર્ટ મળે."
+            }
+        }
+    ]
+    
+    # About page content
+    about_content = [
+        {
+            "page_key": "about",
+            "section_key": "title",
+            "content": {
+                "en": "About Shivdhara Charitable Trust",
+                "gu": "શિવધારા ચેરીટેબલ ટ્રસ્ટ વિશે"
+            }
+        },
+        {
+            "page_key": "about",
+            "section_key": "intro",
+            "content": {
+                "en": "Shivdhara Charitable Trust is dedicated to providing full-time residential care for individuals with intellectual and mental disabilities who have nowhere else to turn. Our facility serves as a permanent home where residents receive round-the-clock care, including shelter, personal hygiene assistance, medical treatment, nutritious meals, emotional support, and help with daily activities. We believe every individual, regardless of their abilities, deserves to live with dignity, respect, and love.",
+                "gu": "શિવધારા ચેરીટેબલ ટ્રસ્ટ બૌદ્ધિક અને માનસિક વિકલાંગતા ધરાવતી વ્યક્તિઓ માટે સંપૂર્ણ સમયની રહેણાંક સંભાળ પૂરી પાડવા માટે સમર્પિત છે જેમની પાસે જવા માટે બીજે ક્યાંય નથી. અમારી સુવિધા કાયમી ઘર તરીકે સેવા આપે છે જ્યાં નિવાસીઓને ચોવીસ કલાક સંભાળ મળે છે, જેમાં આશ્રય, વ્યક્તિગત સ્વચ્છતા સહાય, તબીબી સારવાર, પૌષ્ટિક ભોજન, ભાવનાત્મક સપોર્ટ અને દૈનિક પ્રવૃત્તિઓમાં મદદનો સમાવેશ થાય છે. અમે માનીએ છીએ કે દરેક વ્યક્તિ, તેમની ક્ષમતાઓને ધ્યાનમાં લીધા વિના, ગૌરવ, આદર અને પ્રેમ સાથે જીવવાને લાયક છે."
+            }
+        },
+        {
+            "page_key": "about",
+            "section_key": "vision_title",
+            "content": {
+                "en": "Our Vision",
+                "gu": "અમારું વિઝન"
+            }
+        },
+        {
+            "page_key": "about",
+            "section_key": "vision",
+            "content": {
+                "en": "To be a sanctuary of hope and dignity for individuals with intellectual disabilities — a place where they are valued, cared for, and loved unconditionally throughout their lives. We envision a society that embraces and supports its most vulnerable members.",
+                "gu": "બૌદ્ધિક વિકલાંગતા ધરાવતી વ્યક્તિઓ માટે આશા અને ગૌરવનું આશ્રયસ્થાન બનવું — એક એવી જગ્યા જ્યાં તેમને જીવનભર મૂલ્ય આપવામાં આવે, સંભાળ રાખવામાં આવે અને બિનશરતી પ્રેમ કરવામાં આવે. અમે એવા સમાજની કલ્પના કરીએ છીએ જે તેના સૌથી સંવેદનશીલ સભ્યોને સ્વીકારે અને સપોર્ટ કરે."
+            }
+        },
+        {
+            "page_key": "about",
+            "section_key": "mission_title",
+            "content": {
+                "en": "Our Mission",
+                "gu": "અમારું મિશન"
+            }
+        },
+        {
+            "page_key": "about",
+            "section_key": "mission",
+            "content": {
+                "en": "To provide comprehensive, compassionate, lifelong care to individuals with intellectual and mental disabilities. This includes safe shelter, daily hygiene and grooming assistance, regular medical care and treatment, balanced nutrition, emotional support and companionship, recreational activities, and assistance with all aspects of daily living — ensuring each resident lives with dignity and comfort.",
+                "gu": "બૌદ્ધિક અને માનસિક વિકલાંગતા ધરાવતી વ્યક્તિઓને વ્યાપક, કરુણામય, આજીવન સંભાળ પૂરી પાડવી. આમાં સુરક્ષિત આશ્રય, દૈનિક સ્વચ્છતા અને ગ્રૂમિંગ સહાય, નિયમિત તબીબી સંભાળ અને સારવાર, સંતુલિત પોષણ, ભાવનાત્મક સપોર્ટ અને સાથીપણું, મનોરંજક પ્રવૃત્તિઓ અને દૈનિક જીવનના તમામ પાસાઓમાં સહાયનો સમાવેશ થાય છે — જેથી દરેક નિવાસી ગૌરવ અને આરામ સાથે જીવે."
+            }
+        },
+        {
+            "page_key": "about",
+            "section_key": "values_title",
+            "content": {
+                "en": "Our Values",
+                "gu": "અમારા મૂલ્યો"
+            }
+        }
+    ]
+    
+    # Donate page content
+    donate_content = [
+        {
+            "page_key": "donate",
+            "section_key": "title",
+            "content": {
+                "en": "Support a Life of Dignity",
+                "gu": "ગૌરવના જીવનને સપોર્ટ કરો"
+            }
+        },
+        {
+            "page_key": "donate",
+            "section_key": "subtitle",
+            "content": {
+                "en": "Your donation provides shelter, care, nutrition, and medical support to individuals with intellectual disabilities who have no one else to care for them.",
+                "gu": "તમારું દાન બૌદ્ધિક વિકલાંગતા ધરાવતી વ્યક્તિઓને આશ્રય, સંભાળ, પોષણ અને તબીબી સપોર્ટ પૂરું પાડે છે જેમની સંભાળ રાખવા માટે બીજું કોઈ નથી."
+            }
+        },
+        {
+            "page_key": "donate",
+            "section_key": "impact_text",
+            "content": {
+                "en": "₹501 provides nutritious meals for a resident for one week. ₹1001 covers medical supplies and routine health checkups. ₹2501 supports complete monthly care including shelter, food, and hygiene for one resident.",
+                "gu": "₹501 એક નિવાસી માટે એક અઠવાડિયા માટે પૌષ્ટિક ભોજન પૂરું પાડે છે. ₹1001 તબીબી પુરવઠો અને નિયમિત આરોગ્ય તપાસને આવરી લે છે. ₹2501 એક નિવાસી માટે આશ્રય, ખોરાક અને સ્વચ્છતા સહિત સંપૂર્ણ માસિક સંભાળને સપોર્ટ કરે છે."
+            }
+        }
+    ]
+    
+    # Contact page content
+    contact_content = [
+        {
+            "page_key": "contact",
+            "section_key": "title",
+            "content": {
+                "en": "Get in Touch",
+                "gu": "સંપર્કમાં રહો"
+            }
+        },
+        {
+            "page_key": "contact",
+            "section_key": "subtitle",
+            "content": {
+                "en": "Have questions about our care home or wish to visit? Want to volunteer or support our residents? We'd love to hear from you.",
+                "gu": "અમારા કેર હોમ વિશે પ્રશ્નો છે અથવા મુલાકાત લેવા માંગો છો? સ્વયંસેવક બનવા અથવા અમારા નિવાસીઓને સપોર્ટ કરવા માંગો છો? અમને તમારા તરફથી સાંભળવું ગમશે."
+            }
+        }
+    ]
+    
+    all_content = home_content + about_content + donate_content + contact_content
+    
+    for content in all_content:
+        content['id'] = str(uuid.uuid4())
+        content['updated_at'] = datetime.now(timezone.utc).isoformat()
+        await db.page_content.insert_one(content)
+    
+    # Update impact stats
+    impact_stats = {
+        "families_helped": 150,
+        "education_drives": 12,
+        "medical_camps": 365,
+        "years_of_service": 10
+    }
+    
+    await db.site_settings.update_one(
+        {},
+        {"$set": {"impact_stats": impact_stats}},
+        upsert=True
+    )
+    
+    # New success stories focused on disability care
+    stories = [
+        {
+            "id": str(uuid.uuid4()),
+            "title": {"en": "Finding a Family at Shivdhara", "gu": "શિવધારામાં પરિવાર મળ્યો"},
+            "person_name": {"en": "Ramesh", "gu": "રમેશ"},
+            "location": {"en": "Shivdhara Care Home", "gu": "શિવધારા કેર હોમ"},
+            "problem": {"en": "Ramesh, now 35, was found abandoned at a bus station at age 22 with severe intellectual disability. Unable to communicate or care for himself, he had no family and no place to go. He was malnourished, frightened, and alone.", "gu": "રમેશ, હવે 35 વર્ષનો, 22 વર્ષની ઉંમરે ગંભીર બૌદ્ધિક વિકલાંગતા સાથે બસ સ્ટેશન પર ત્યજી દેવાયેલો મળ્યો હતો. વાતચીત કરવામાં અથવા પોતાની સંભાળ રાખવામાં અસમર્થ, તેની પાસે કોઈ પરિવાર નહોતો અને જવા માટે ક્યાંય નહોતું. તે કુપોષિત, ભયભીત અને એકલો હતો."},
+            "help_provided": {"en": "Shivdhara welcomed Ramesh into our care home, providing him with a clean bed, nutritious meals, daily hygiene assistance, and most importantly, companionship. Our caregivers worked patiently with him, helping him adjust to his new home.", "gu": "શિવધારાએ રમેશને અમારા કેર હોમમાં આવકાર્યો, તેને સ્વચ્છ પથારી, પૌષ્ટિક ભોજન, દૈનિક સ્વચ્છતા સહાય અને સૌથી અગત્યનું, સાથીપણું પૂરું પાડ્યું. અમારા સંભાળ રાખનારાઓએ તેની સાથે ધીરજથી કામ કર્યું, તેને નવા ઘરમાં અનુકૂળ થવામાં મદદ કરી."},
+            "impact": {"en": "Today, Ramesh smiles every morning. He enjoys listening to devotional music, participates in simple activities, and has formed bonds with other residents and staff. He is healthy, happy, and finally has a place to call home.", "gu": "આજે, રમેશ દરરોજ સવારે હસે છે. તે ભક્તિ સંગીત સાંભળવાનો આનંદ માણે છે, સરળ પ્રવૃત્તિઓમાં ભાગ લે છે, અને અન્ય નિવાસીઓ અને સ્ટાફ સાથે બંધન બાંધ્યું છે. તે સ્વસ્થ, ખુશ છે, અને આખરે ઘર કહેવા માટે જગ્યા છે."},
+            "quote": {"en": "He may not speak, but his eyes light up when he sees his caregivers. This is his family now.", "gu": "તે બોલી શકતો નથી, પણ જ્યારે તે તેના સંભાળ રાખનારાઓને જુએ છે ત્યારે તેની આંખો ચમકી ઉઠે છે. આ હવે તેનો પરિવાર છે."},
+            "image_url": "https://images.pexels.com/photos/7551617/pexels-photo-7551617.jpeg",
+            "category": "daily-care",
+            "is_active": True,
+            "order": 1,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "title": {"en": "Restored Health, Restored Hope", "gu": "પુનઃસ્થાપિત આરોગ્ય, પુનઃસ્થાપિત આશા"},
+            "person_name": {"en": "Manjuben", "gu": "મંજુબેન"},
+            "location": {"en": "Shivdhara Care Home", "gu": "શિવધારા કેર હોમ"},
+            "problem": {"en": "Manjuben, 48, has lived with schizophrenia since her twenties. After her elderly parents passed away, her relatives could not provide the specialized care she needed. She was found wandering the streets, neglected and in poor health.", "gu": "મંજુબેન, 48, વીસીથી સ્કિઝોફ્રેનિયા સાથે જીવે છે. તેના વૃદ્ધ માતા-પિતાના અવસાન પછી, તેના સંબંધીઓ તેને જરૂરી વિશેષ સંભાળ પૂરી પાડી શક્યા નહીં. તે શેરીઓમાં ભટકતી, ઉપેક્ષિત અને ખરાબ આરોગ્યમાં મળી હતી."},
+            "help_provided": {"en": "At Shivdhara, Manjuben receives daily medication management, regular psychiatric consultations, nutritious meals, and personal care. Our trained staff ensures she takes her medication consistently and monitors her well-being around the clock.", "gu": "શિવધારામાં, મંજુબેનને દૈનિક દવા વ્યવસ્થાપન, નિયમિત માનસિક પરામર્શ, પૌષ્ટિક ભોજન અને વ્યક્તિગત સંભાળ મળે છે. અમારો પ્રશિક્ષિત સ્ટાફ સુનિશ્ચિત કરે છે કે તે સતત દવા લે છે અને ચોવીસ કલાક તેની સુખાકારીનું નિરીક્ષણ કરે છે."},
+            "impact": {"en": "With consistent care and medication, Manjuben is now stable and content. She helps with small tasks around the facility, enjoys watching TV with other residents, and has regained her dignity.", "gu": "સતત સંભાળ અને દવા સાથે, મંજુબેન હવે સ્થિર અને સંતુષ્ટ છે. તે સુવિધાની આસપાસ નાના કામોમાં મદદ કરે છે, અન્ય નિવાસીઓ સાથે ટીવી જોવાનો આનંદ માણે છે, અને પોતાનું ગૌરવ પાછું મેળવ્યું છે."},
+            "quote": {"en": "For the first time in years, I feel safe. The people here care for me like family.", "gu": "વર્ષોમાં પહેલીવાર, હું સુરક્ષિત અનુભવું છું. અહીંના લોકો મારી પરિવારની જેમ સંભાળ રાખે છે."},
+            "image_url": "https://images.pexels.com/photos/7551668/pexels-photo-7551668.jpeg",
+            "category": "medical-care",
+            "is_active": True,
+            "order": 2,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "title": {"en": "A Life Transformed Through Care", "gu": "સંભાળ દ્વારા પરિવર્તિત જીવન"},
+            "person_name": {"en": "Prakash", "gu": "પ્રકાશ"},
+            "location": {"en": "Shivdhara Care Home", "gu": "શિવધારા કેર હોમ"},
+            "problem": {"en": "Prakash, 28, was born with Down syndrome and cerebral palsy. His single mother cared for him devotedly until her death. With no other family, Prakash faced an uncertain future, unable to perform basic daily activities without assistance.", "gu": "પ્રકાશ, 28, ડાઉન સિન્ડ્રોમ અને સેરેબ્રલ પાલ્સી સાથે જન્મ્યો હતો. તેની એકલી માતાએ તેની મૃત્યુ સુધી સમર્પિત રીતે તેની સંભાળ રાખી. બીજા કોઈ પરિવાર વિના, પ્રકાશ અનિશ્ચિત ભવિષ્યનો સામનો કરી રહ્યો હતો, સહાય વિના મૂળભૂત દૈનિક પ્રવૃત્તિઓ કરવામાં અસમર્થ."},
+            "help_provided": {"en": "Shivdhara became Prakash's new family. He receives complete assistance with bathing, dressing, eating, and mobility. Our caregivers provide physiotherapy exercises, engage him in sensory activities, and ensure he feels loved and included.", "gu": "શિવધારા પ્રકાશનો નવો પરિવાર બની ગયો. તેને સ્નાન, કપડાં પહેરવા, ખાવા અને ગતિશીલતામાં સંપૂર્ણ સહાય મળે છે. અમારા સંભાળ રાખનારાઓ ફિઝિયોથેરાપી કસરતો પ્રદાન કરે છે, તેને સંવેદનાત્મક પ્રવૃત્તિઓમાં જોડે છે, અને સુનિશ્ચિત કરે છે કે તે પ્રેમ અને સમાવિષ્ટ અનુભવે."},
+            "impact": {"en": "Prakash now thrives in our care home. He responds joyfully to music therapy, has improved his motor skills through regular exercises, and brings smiles to everyone with his gentle nature.", "gu": "પ્રકાશ હવે અમારા કેર હોમમાં ખીલી રહ્યો છે. તે મ્યુઝિક થેરાપી પર આનંદથી પ્રતિભાવ આપે છે, નિયમિત કસરતો દ્વારા તેની મોટર કુશળતામાં સુધારો કર્યો છે, અને તેના નમ્ર સ્વભાવથી દરેકના ચહેરા પર સ્મિત લાવે છે."},
+            "quote": {"en": "Every small improvement in Prakash's life is a celebration for all of us. He deserves every bit of care and love.", "gu": "પ્રકાશના જીવનમાં દરેક નાનો સુધારો અમારા બધા માટે ઉજવણી છે. તે દરેક સંભાળ અને પ્રેમને લાયક છે."},
+            "image_url": "https://images.pexels.com/photos/7551619/pexels-photo-7551619.jpeg",
+            "category": "daily-care",
+            "is_active": True,
+            "order": 3,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+    ]
+    
+    for story in stories:
+        await db.stories.insert_one(story)
+    
+    # New blog posts focused on disability care
+    blog_posts = [
+        {
+            "id": str(uuid.uuid4()),
+            "title": {"en": "Understanding Intellectual Disabilities: Breaking the Stigma", "gu": "બૌદ્ધિક વિકલાંગતાને સમજવું: કલંક તોડવું"},
+            "slug": "understanding-intellectual-disabilities",
+            "excerpt": {"en": "Intellectual disabilities affect millions worldwide, yet stigma and misunderstanding persist. Learn about the realities of living with intellectual disabilities and how compassionate care makes a difference.", "gu": "બૌદ્ધિક વિકલાંગતા વિશ્વભરમાં લાખો લોકોને અસર કરે છે, છતાં કલંક અને ગેરસમજ ચાલુ રહે છે. બૌદ્ધિક વિકલાંગતા સાથે જીવવાની વાસ્તવિકતાઓ અને કરુણામય સંભાળ કેવી રીતે ફરક પાડે છે તે જાણો."},
+            "content": {"en": "Intellectual disability is a condition characterized by significant limitations in cognitive functioning and adaptive behavior. It affects people of all backgrounds and can range from mild to profound.\n\nAt Shivdhara Charitable Trust, we provide lifelong care to individuals with intellectual disabilities who have been abandoned, orphaned, or whose families cannot provide the specialized care they need.\n\nOur approach focuses on:\n\n- Dignity and Respect: Every resident is treated with the utmost respect, regardless of their abilities.\n\n- Person-Centered Care: We understand that each individual has unique needs and preferences.\n\n- Holistic Well-being: Physical health, emotional support, and social engagement are all essential.\n\n- Safe Environment: Our facility provides a secure, comfortable home.\n\nBreaking the stigma around intellectual disabilities starts with understanding. These individuals are capable of joy, connection, and growth. They deserve care, compassion, and a place to belong.\n\nYour support helps us provide this essential care to those who need it most.", "gu": "બૌદ્ધિક વિકલાંગતા એ જ્ઞાનાત્મક કાર્યપ્રણાલી અને અનુકૂલનશીલ વર્તનમાં નોંધપાત્ર મર્યાદાઓ દ્વારા વર્ગીકૃત સ્થિતિ છે. તે તમામ પૃષ્ઠભૂમિના લોકોને અસર કરે છે અને હળવાથી ગહન સુધી હોઈ શકે છે.\n\nશિવધારા ચેરીટેબલ ટ્રસ્ટ ખાતે, અમે બૌદ્ધિક વિકલાંગતા ધરાવતી વ્યક્તિઓને આજીવન સંભાળ પૂરી પાડીએ છીએ જેઓ ત્યજી દેવાયા છે, અનાથ છે, અથવા જેમના પરિવારો તેમને જરૂરી વિશેષ સંભાળ પૂરી પાડી શકતા નથી.\n\nઅમારો અભિગમ ધ્યાન કેન્દ્રિત કરે છે:\n\n- ગૌરવ અને આદર: દરેક નિવાસી સાથે તેમની ક્ષમતાઓને ધ્યાનમાં લીધા વિના ઉચ્ચતમ આદર સાથે વર્તન કરવામાં આવે છે.\n\n- વ્યક્તિ-કેન્દ્રિત સંભાળ: અમે સમજીએ છીએ કે દરેક વ્યક્તિની અનન્ય જરૂરિયાતો અને પસંદગીઓ છે.\n\n- સર્વગ્રાહી સુખાકારી: શારીરિક આરોગ્ય, ભાવનાત્મક સપોર્ટ અને સામાજિક જોડાણ બધા આવશ્યક છે.\n\n- સુરક્ષિત વાતાવરણ: અમારી સુવિધા સુરક્ષિત, આરામદાયક ઘર પ્રદાન કરે છે.\n\nબૌદ્ધિક વિકલાંગતાની આસપાસના કલંકને તોડવું સમજણથી શરૂ થાય છે. આ વ્યક્તિઓ આનંદ, જોડાણ અને વૃદ્ધિ માટે સક્ષમ છે. તેઓ સંભાળ, કરુણા અને સંબંધિત સ્થળને લાયક છે."},
+            "cover_image": "https://images.pexels.com/photos/7551617/pexels-photo-7551617.jpeg",
+            "author": "Shivdhara Team",
+            "tags": ["awareness", "intellectual disability", "care"],
+            "is_published": True,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "published_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "title": {"en": "A Day in the Life at Shivdhara Care Home", "gu": "શિવધારા કેર હોમમાં એક દિવસ"},
+            "slug": "day-in-life-at-shivdhara",
+            "excerpt": {"en": "Ever wondered what daily life looks like for our residents? Take a glimpse into our care home where dignity, routine, and compassion come together.", "gu": "ક્યારેય વિચાર્યું છે કે અમારા નિવાસીઓ માટે દૈનિક જીવન કેવું દેખાય છે? અમારા કેર હોમમાં એક ઝલક લો જ્યાં ગૌરવ, રૂટિન અને કરુણા એકસાથે આવે છે."},
+            "content": {"en": "Life at Shivdhara Care Home follows a structured yet nurturing routine that provides stability and comfort to our residents.\n\nMorning (6:00 AM - 9:00 AM):\nOur day begins gently. Caregivers assist residents with bathing, grooming, and getting dressed. This personal care is done with patience and respect, ensuring each person feels dignified. A nutritious breakfast follows, accommodating individual dietary needs.\n\nMid-Morning (9:00 AM - 12:00 PM):\nResidents engage in light activities based on their abilities — simple exercises, music therapy, sensory activities, or just sitting in the garden enjoying fresh air. Our staff provides constant supervision and companionship.\n\nAfternoon (12:00 PM - 4:00 PM):\nA healthy lunch is served, followed by rest time. The afternoon includes any required medical check-ups, medication administration, and gentle activities.\n\nEvening (4:00 PM - 8:00 PM):\nTea time is a social hour. Residents watch TV together, listen to devotional songs, or simply enjoy each other's company. Dinner is served early to allow for a relaxed evening routine.\n\nNight (8:00 PM onwards):\nCaregivers help residents prepare for bed. Night staff remains on duty for any needs that arise.\n\nThroughout the day, our focus is simple: ensure every resident feels safe, cared for, and valued.", "gu": "શિવધારા કેર હોમમાં જીવન એક સંરચિત છતાં પોષણકારી રૂટિન અનુસરે છે જે અમારા નિવાસીઓને સ્થિરતા અને આરામ પ્રદાન કરે છે.\n\nસવાર (સવારે 6:00 - 9:00):\nઅમારો દિવસ હળવાશથી શરૂ થાય છે. સંભાળ રાખનારાઓ નિવાસીઓને સ્નાન, ગ્રૂમિંગ અને કપડાં પહેરવામાં મદદ કરે છે. આ વ્યક્તિગત સંભાળ ધીરજ અને આદર સાથે કરવામાં આવે છે, ખાતરી કરીને કે દરેક વ્યક્તિ ગૌરવ અનુભવે. વ્યક્તિગત આહારની જરૂરિયાતોને અનુરૂપ પૌષ્ટિક નાસ્તો આવે છે.\n\nમધ્ય-સવાર (સવારે 9:00 - બપોરે 12:00):\nનિવાસીઓ તેમની ક્ષમતાઓ અનુસાર હળવી પ્રવૃત્તિઓમાં જોડાય છે — સરળ કસરતો, મ્યુઝિક થેરાપી, સંવેદનાત્મક પ્રવૃત્તિઓ, અથવા ફક્ત બગીચામાં બેસીને તાજી હવાનો આનંદ માણવો.\n\nબપોર (બપોરે 12:00 - 4:00):\nસ્વસ્થ લંચ પીરસવામાં આવે છે, ત્યારબાદ આરામનો સમય. બપોરે જરૂરી તબીબી તપાસ, દવા વહીવટ અને હળવી પ્રવૃત્તિઓ શામેલ છે.\n\nસાંજ (સાંજે 4:00 - 8:00):\nચાનો સમય સામાજિક કલાક છે. નિવાસીઓ સાથે ટીવી જુએ છે, ભક્તિ ગીતો સાંભળે છે, અથવા ફક્ત એકબીજાની કંપનીનો આનંદ માણે છે.\n\nરાત (રાત્રે 8:00 થી):\nસંભાળ રાખનારાઓ નિવાસીઓને સૂવા માટે તૈયાર થવામાં મદદ કરે છે. કોઈપણ જરૂરિયાતો માટે રાત્રિ સ્ટાફ ડ્યુટી પર રહે છે.\n\nઆખા દિવસ દરમિયાન, અમારું ધ્યાન સરળ છે: ખાતરી કરો કે દરેક નિવાસી સુરક્ષિત, સંભાળવામાં આવેલ અને મૂલ્યવાન અનુભવે."},
+            "cover_image": "https://images.pexels.com/photos/7551668/pexels-photo-7551668.jpeg",
+            "author": "Shivdhara Team",
+            "tags": ["daily life", "care home", "routine"],
+            "is_published": True,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "published_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "title": {"en": "The Importance of Nutrition in Disability Care", "gu": "વિકલાંગતા સંભાળમાં પોષણનું મહત્વ"},
+            "slug": "nutrition-in-disability-care",
+            "excerpt": {"en": "Proper nutrition is vital for the health and well-being of individuals with intellectual disabilities. Learn how we ensure our residents receive balanced, nourishing meals every day.", "gu": "બૌદ્ધિક વિકલાંગતા ધરાવતી વ્યક્તિઓના આરોગ્ય અને સુખાકારી માટે યોગ્ય પોષણ મહત્વપૂર્ણ છે. જાણો કેવી રીતે અમે ખાતરી કરીએ છીએ કે અમારા નિવાસીઓને દરરોજ સંતુલિત, પોષણક્ષમ ભોજન મળે."},
+            "content": {"en": "Nutrition plays a critical role in the overall health of individuals with intellectual disabilities. Many of our residents have specific dietary needs due to medication interactions, swallowing difficulties, or metabolic conditions.\n\nOur nutrition program ensures:\n\n- Balanced Meals: Three nutritious meals daily plus healthy snacks, designed to meet caloric and nutritional needs.\n\n- Special Diets: Accommodation for diabetic, soft food, or pureed diets as medically required.\n\n- Hydration: Regular water and fluid intake is monitored throughout the day.\n\n- Supplements: Vitamins and supplements as prescribed by physicians.\n\n- Dignity in Dining: Residents who need feeding assistance receive it with patience and care.\n\nOur kitchen staff prepares fresh, home-style meals that are both nutritious and comforting. Mealtimes are also social occasions where residents can enjoy companionship.\n\nYour donations directly support our food program, ensuring no resident goes hungry and everyone receives the nourishment they need to thrive.", "gu": "બૌદ્ધિક વિકલાંગતા ધરાવતી વ્યક્તિઓના એકંદર આરોગ્યમાં પોષણ મહત્વપૂર્ણ ભૂમિકા ભજવે છે. અમારા ઘણા નિવાસીઓને દવાની ક્રિયાપ્રતિક્રિયાઓ, ગળવામાં મુશ્કેલીઓ અથવા મેટાબોલિક પરિસ્થિતિઓને કારણે વિશિષ્ટ આહારની જરૂરિયાતો છે.\n\nઅમારો પોષણ કાર્યક્રમ સુનિશ્ચિત કરે છે:\n\n- સંતુલિત ભોજન: દરરોજ ત્રણ પૌષ્ટિક ભોજન વત્તા સ્વસ્થ નાસ્તા.\n\n- વિશેષ આહાર: ડાયાબિટીક, નરમ ખોરાક, અથવા પ્યુરીડ આહાર માટે જરૂરિયાત મુજબ.\n\n- હાઇડ્રેશન: આખા દિવસ દરમિયાન નિયમિત પાણી અને પ્રવાહી સેવનનું નિરીક્ષણ.\n\n- સપ્લિમેન્ટ્સ: ચિકિત્સકો દ્વારા સૂચવ્યા મુજબ વિટામિન્સ અને સપ્લિમેન્ટ્સ.\n\n- ભોજનમાં ગૌરવ: જે નિવાસીઓને ખવડાવવામાં સહાયની જરૂર છે તેઓને ધીરજ અને સંભાળ સાથે મળે છે.\n\nતમારા દાન સીધા અમારા ખોરાક કાર્યક્રમને સપોર્ટ કરે છે, ખાતરી કરીને કે કોઈ નિવાસી ભૂખ્યો ન રહે."},
+            "cover_image": "https://images.pexels.com/photos/7551619/pexels-photo-7551619.jpeg",
+            "author": "Shivdhara Team",
+            "tags": ["nutrition", "health", "care"],
+            "is_published": True,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "published_at": datetime.now(timezone.utc).isoformat()
+        }
+    ]
+    
+    for post in blog_posts:
+        await db.blog.insert_one(post)
+    
+    # New gallery albums
+    albums = [
+        {
+            "id": str(uuid.uuid4()),
+            "title": {"en": "Daily Care & Support", "gu": "દૈનિક સંભાળ અને સહાય"},
+            "category": "daily-care",
+            "images": [
+                {"id": str(uuid.uuid4()), "url": "https://images.pexels.com/photos/7551617/pexels-photo-7551617.jpeg", "caption": {"en": "Morning care routine", "gu": "સવારની સંભાળ રૂટિન"}, "order": 0},
+                {"id": str(uuid.uuid4()), "url": "https://images.pexels.com/photos/7551668/pexels-photo-7551668.jpeg", "caption": {"en": "Residents enjoying activities", "gu": "નિવાસીઓ પ્રવૃત્તિઓનો આનંદ માણી રહ્યા છે"}, "order": 1}
+            ],
+            "is_active": True,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "title": {"en": "Medical Care", "gu": "તબીબી સંભાળ"},
+            "category": "medical-care",
+            "images": [
+                {"id": str(uuid.uuid4()), "url": "https://images.pexels.com/photos/7551619/pexels-photo-7551619.jpeg", "caption": {"en": "Health checkup for residents", "gu": "નિવાસીઓ માટે આરોગ્ય તપાસ"}, "order": 0}
+            ],
+            "is_active": True,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "title": {"en": "Our Facility", "gu": "અમારી સુવિધા"},
+            "category": "shelter",
+            "images": [
+                {"id": str(uuid.uuid4()), "url": "https://images.pexels.com/photos/7551617/pexels-photo-7551617.jpeg", "caption": {"en": "Clean and comfortable living spaces", "gu": "સ્વચ્છ અને આરામદાયક રહેવાની જગ્યાઓ"}, "order": 0}
+            ],
+            "is_active": True,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+    ]
+    
+    for album in albums:
+        await db.gallery.insert_one(album)
+    
+    return {"message": "Content reseeded successfully for intellectual disability care focus"}
+
 # ================ ROOT ROUTE ================
 
 @api_router.get("/")
