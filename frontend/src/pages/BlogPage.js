@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import axios from 'axios';
-import { Calendar, User, Tag, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Calendar, User, ArrowLeft } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -87,7 +87,7 @@ const BlogPage = () => {
 
             <h1 className="text-3xl md:text-4xl font-bold text-[#1F2937] mb-6">{t(currentPost.title)}</h1>
 
-            {currentPost.tags?.length > 0 && (
+            {currentPost.tags && currentPost.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-8">
                 {currentPost.tags.map((tag, i) => (
                   <span key={i} className="px-3 py-1 bg-[#F7F1E6] text-[#8B1E1E] text-sm font-medium rounded-full">
@@ -98,7 +98,7 @@ const BlogPage = () => {
             )}
 
             <div className="prose prose-lg max-w-none">
-              {t(currentPost.content)?.split('\n\n').map((paragraph, i) => (
+              {t(currentPost.content) && t(currentPost.content).split('\n\n').map((paragraph, i) => (
                 <p key={i} className="text-[#6B7280] leading-relaxed mb-6">{paragraph}</p>
               ))}
             </div>
@@ -145,13 +145,13 @@ const BlogPage = () => {
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {posts.map((post) => (
-                <Link key={post.id} to={`/blog/${post.slug}`} className="blog-card group" data-testid={`blog-card-${post.slug}`}>
+                <Link key={post.id} to={`/blog/${post.slug}`} className="block bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1" data-testid={`blog-card-${post.slug}`}>
                   <div className="relative overflow-hidden">
                     {post.cover_image ? (
-                      <img src={post.cover_image} alt={t(post.title)} className="blog-card-image group-hover:scale-105 transition-transform duration-500" />
+                      <img src={post.cover_image} alt={t(post.title)} className="h-48 w-full object-cover hover:scale-105 transition-transform duration-500" />
                     ) : (
                       <div className="h-48 bg-[#F7F1E6] flex items-center justify-center">
-                        <span className="text-[#C9A24A] text-4xl font-bold">{t(post.title)?.[0]}</span>
+                        <span className="text-[#C9A24A] text-4xl font-bold">{t(post.title) ? t(post.title)[0] : 'B'}</span>
                       </div>
                     )}
                   </div>
@@ -170,11 +170,11 @@ const BlogPage = () => {
                         </span>
                       )}
                     </div>
-                    <h2 className="text-xl font-semibold text-[#1F2937] mb-3 group-hover:text-[#8B1E1E] transition-colors line-clamp-2">
+                    <h2 className="text-xl font-semibold text-[#1F2937] mb-3 hover:text-[#8B1E1E] transition-colors line-clamp-2">
                       {t(post.title)}
                     </h2>
                     <p className="text-[#6B7280] text-sm line-clamp-3 mb-4">{t(post.excerpt)}</p>
-                    {post.tags?.length > 0 && (
+                    {post.tags && post.tags.length > 0 && (
                       <div className="flex flex-wrap gap-2">
                         {post.tags.slice(0, 2).map((tag, i) => (
                           <span key={i} className="px-2 py-1 bg-[#F7F1E6] text-[#8B1E1E] text-xs font-medium rounded-full">
