@@ -42,7 +42,7 @@ UPLOAD_DIR = ROOT_DIR / "uploads"
 UPLOAD_DIR.mkdir(exist_ok=True)
 
 # Create the main app
-app = FastAPI(title="Shivdhara Charitable Trust API")
+app = FastAPI(title="Shivdhara Charitable API")
 
 # Mount static files for uploads
 app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
@@ -687,8 +687,8 @@ async def send_donation_confirmation_email(donation: dict):
             {"<p><em>Your 80G receipt will be sent separately. / આપની 80G રસીદ અલગથી મોકલવામાં આવશે.</em></p>" if donation.get('needs_80g') else ""}
             
             <p>With gratitude / આભાર સાથે,<br>
-            <strong>Shivdhara Charitable Trust</strong><br>
-            <strong>શિવધારા ચેરીટેબલ ટ્રસ્ટ</strong></p>
+            <strong>Shivdhara Charitable</strong><br>
+            <strong>શિવધારા ચેરીટેબલ</strong></p>
         </div>
     </body>
     </html>
@@ -1686,7 +1686,7 @@ async def reseed_content():
 
 @api_router.get("/")
 async def root():
-    return {"message": "Shivdhara Charitable Trust API", "version": "1.0.0"}
+    return {"message": "Shivdhara Charitable API", "version": "1.0.0"}
 
 # Include the router in the main app
 app.include_router(api_router)
