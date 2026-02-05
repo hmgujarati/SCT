@@ -49,6 +49,25 @@ const PublicLayout = ({ children }) => {
   );
 };
 
+// Protected page wrapper - redirects if page is disabled
+const ProtectedPage = ({ pageKey, children }) => {
+  const { isPageVisible, loading } = usePageVisibility();
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#F7F1E6]">
+        <div className="w-12 h-12 border-4 border-[#8B1E1E] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+  
+  if (!isPageVisible(pageKey)) {
+    return <Navigate to="/" replace />;
+  }
+  
+  return children;
+};
+
 // Seed data on first load
 const useSeedData = () => {
   useEffect(() => {
