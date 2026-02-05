@@ -305,7 +305,7 @@ const HomePage = () => {
             
             <div className="relative">
               <img
-                src="https://images.pexels.com/photos/7904406/pexels-photo-7904406.jpeg"
+                src={getCtaImage()}
                 alt="Medical camp"
                 className="rounded-2xl shadow-xl w-full h-[400px] object-cover"
               />
