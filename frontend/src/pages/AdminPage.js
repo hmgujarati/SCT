@@ -594,22 +594,7 @@ const SettingsSection = () => {
         )}
 
         {activeTab === 'upi' && (
-          <div className="grid md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">UPI ID</label>
-              <Input value={settings.upi_details?.upi_id || ''} onChange={(e) => updateNestedField('upi_details', 'upi_id', e.target.value)} placeholder="name@bank" className="input-field" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">{language === 'en' ? 'QR Code URL' : 'QR કોડ URL'}</label>
-              <Input value={settings.upi_details?.qr_code_url || ''} onChange={(e) => updateNestedField('upi_details', 'qr_code_url', e.target.value)} placeholder="https://..." className="input-field" />
-            </div>
-            {settings.upi_details?.qr_code_url && (
-              <div className="md:col-span-2">
-                <p className="text-sm text-[#6B7280] mb-2">{language === 'en' ? 'QR Preview' : 'QR પૂર્વાવલોકન'}</p>
-                <img src={settings.upi_details.qr_code_url} alt="UPI QR" className="w-32 h-32 border rounded-lg" />
-              </div>
-            )}
-          </div>
+          <UPISettingsSection settings={settings} setSettings={setSettings} language={language} />
         )}
 
         {activeTab === 'branding' && (
