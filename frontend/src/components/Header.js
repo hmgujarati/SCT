@@ -3,15 +3,15 @@ import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { usePageVisibility } from '../contexts/PageVisibilityContext';
+import { useSiteSettings } from '../contexts/SiteSettingsContext';
 import { Menu, X, ChevronDown, Globe } from 'lucide-react';
 import { Button } from './ui/button';
-
-const LOGO_URL = 'https://customer-assets.emergentagent.com/job_81b02de3-3cd6-4707-8173-e23f16017522/artifacts/zjn72wsr_Shivdhara%20Charitable.png';
 
 const Header = () => {
   const { language, toggleLanguage, ui } = useLanguage();
   const { user, logout } = useAuth();
   const { isPageVisible } = usePageVisibility();
+  const { getLogo } = useSiteSettings();
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -52,7 +52,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group" data-testid="logo-link">
             <img
-              src={LOGO_URL}
+              src={getLogo()}
               alt="Shivdhara Charitable"
               className="h-12 md:h-14 w-auto transition-transform duration-300 group-hover:scale-105"
             />
