@@ -674,6 +674,65 @@ async def export_80g_data(user: dict = Depends(get_admin_user)):
         headers={"Content-Disposition": "attachment; filename=80g_requests.csv"}
     )
 
+# ================ FILE UPLOAD ROUTES ================
+
+@api_router.post("/upload")
+async def upload_file(file: UploadFile = File(...), user: dict = Depends(get_current_user)):
+    """Upload image file and return URL"""
+    # Validate file type
+    allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+    if file.content_type not in allowed_types:
+        raise HTTPException(status_code=400, detail="Invalid file type. Only JPEG, PNG, GIF, WebP allowed.")
+    
+    # Generate unique filename
+    ext = file.filename.split('.')[-1] if '.' in file.filename else 'jpg'
+    filename = f"{uuid.uuid4()}.{ext}"
+    filepath = UPLOAD_DIR / filename
+    
+    # Save file
+    with open(filepath, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    # Return URL path
+    return {
+        "url": f"/uploads/{filename}",
+        "filename": filename
+    }
+
+@api_router.post("/upload/multiple")
+async def upload_multiple_files(files: List[UploadFile] = File(...), user: dict = Depends(get_current_user)):
+    """Upload multiple image files"""
+    allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+    uploaded = []
+    
+    for file in files:
+        if file.content_type not in allowed_types:
+            continue
+        
+        ext = file.filename.split('.')[-1] if '.' in file.filename else 'jpg'
+        filename = f"{uuid.uuid4()}.{ext}"
+        filepath = UPLOAD_DIR / filename
+        
+        with open(filepath, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        
+        uploaded.append({
+            "url": f"/uploads/{filename}",
+            "filename": filename,
+            "original_name": file.filename
+        })
+    
+    return {"uploaded": uploaded}
+
+@api_router.delete("/upload/{filename}")
+async def delete_file(filename: str, user: dict = Depends(get_current_user)):
+    """Delete an uploaded file"""
+    filepath = UPLOAD_DIR / filename
+    if filepath.exists():
+        filepath.unlink()
+        return {"message": "File deleted"}
+    raise HTTPException(status_code=404, detail="File not found")
+
 # ================ GALLERY ROUTES ================
 
 @api_router.get("/gallery")
