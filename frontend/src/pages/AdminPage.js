@@ -280,6 +280,8 @@ const SettingsSection = () => {
     { id: 'bank', label: language === 'en' ? 'Bank Details' : 'બેંક વિગતો' },
     { id: 'trust', label: language === 'en' ? 'Trust Details' : 'ટ્રસ્ટ વિગતો' },
     { id: 'upi', label: 'UPI' },
+    { id: 'branding', label: language === 'en' ? 'Logo & Images' : 'લોગો અને ફોટા' },
+    { id: 'social', label: language === 'en' ? 'Social Links' : 'સોશિયલ લિંક્સ' },
     { id: 'smtp', label: language === 'en' ? 'Email (SMTP)' : 'ઈમેઈલ (SMTP)' },
     { id: 'razorpay', label: 'Razorpay' },
     { id: 'impact', label: language === 'en' ? 'Impact Stats' : 'પ્રભાવ આંકડા' }
