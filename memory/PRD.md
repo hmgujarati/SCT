@@ -1,4 +1,9 @@
-# Shivdhara Charitable - Bilingual NGO Website
+# Shivdhara Charitable - Product Requirements Document
+
+## Latest Update: February 5, 2025
+### Bug Fixes Completed:
+1. **UPI ID now shows in footer** - Fixed conditional rendering to display UPI ID even without QR code
+2. **UPI QR Code upload in admin** - Added file upload component replacing URL-only input
 
 ## Project Overview
 Professional bilingual (English + Gujarati) website for Shivdhara Charitable with donation optimization, admin panel, and full content management.
