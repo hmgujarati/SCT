@@ -1,0 +1,141 @@
+{
+  "identity": {
+    "name": "Shivdhara Charitable Trust",
+    "tone": "Compassionate, Trustworthy, Transparent, Traditional yet Modern",
+    "mission": "Empowering communities through education, healthcare, and relief.",
+    "languages": ["en", "gu"]
+  },
+  "typography": {
+    "font_family": {
+      "english_heading": "Poppins, sans-serif",
+      "english_body": "Inter, sans-serif",
+      "gujarati": "Noto Sans Gujarati, sans-serif"
+    },
+    "scale": {
+      "h1": "text-4xl md:text-6xl font-bold tracking-tight",
+      "h2": "text-3xl md:text-5xl font-semibold tracking-tight",
+      "h3": "text-2xl md:text-3xl font-medium",
+      "body": "text-base md:text-lg leading-relaxed",
+      "small": "text-sm font-medium tracking-wide"
+    }
+  },
+  "colors": {
+    "primary": "#8B1E1E",
+    "primary_foreground": "#FFFFFF",
+    "secondary": "#F7F1E6",
+    "secondary_foreground": "#1F2937",
+    "accent": "#C9A24A",
+    "accent_foreground": "#FFFFFF",
+    "background": "#FFFFFF",
+    "surface": "#F7F1E6",
+    "text_main": "#1F2937",
+    "text_muted": "#6B7280",
+    "border": "#E5E7EB",
+    "success": "#059669",
+    "warning": "#D97706",
+    "error": "#DC2626"
+  },
+  "visual_enhancers": {
+    "radius": "rounded-lg",
+    "shadows": {
+      "card": "shadow-md hover:shadow-xl transition-shadow duration-300",
+      "button": "shadow-sm hover:shadow-md"
+    },
+    "gradients": {
+      "hero": "bg-gradient-to-b from-cream-50 to-white",
+      "gold_accent": "bg-gradient-to-r from-gold-400 to-gold-600"
+    },
+    "textures": "bg-[url('/texture-paper.png')] opacity-5"
+  },
+  "layout": {
+    "container": "container mx-auto px-4 md:px-8 max-w-7xl",
+    "section_spacing": "py-16 md:py-24",
+    "grid_gap": "gap-8 md:gap-12",
+    "bento_grid": "grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#8B1E1E] text-white hover:bg-[#701616] px-8 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-xl hover:-translate-y-1",
+      "secondary": "bg-[#F7F1E6] text-[#8B1E1E] border border-[#8B1E1E]/20 hover:bg-[#EFE5D5] px-6 py-3 rounded-full font-medium transition-all",
+      "outline": "border-2 border-[#8B1E1E] text-[#8B1E1E] hover:bg-[#8B1E1E] hover:text-white px-6 py-3 rounded-full font-medium transition-all"
+    },
+    "cards": {
+      "feature": "bg-white p-8 rounded-xl border border-stone-100 shadow-sm hover:shadow-md transition-all group",
+      "donation": "bg-white p-6 rounded-2xl border-t-4 border-[#8B1E1E] shadow-lg"
+    },
+    "inputs": "bg-stone-50 border-stone-200 focus:border-[#8B1E1E] focus:ring-[#8B1E1E]/20 rounded-lg"
+  },
+  "image_urls": {
+    "hero": [
+      {
+        "url": "https://images.unsplash.com/photo-1659451336016-00d62d32f677?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "Happy children in rural education program",
+        "category": "education"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1735966329265-6b57ed8dd2ef?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "Group of smiling children",
+        "category": "education"
+      }
+    ],
+    "medical": [
+      {
+        "url": "https://images.pexels.com/photos/7904406/pexels-photo-7904406.jpeg",
+        "alt": "Doctor examining patient at medical camp",
+        "category": "health"
+      },
+      {
+        "url": "https://images.pexels.com/photos/7579824/pexels-photo-7579824.jpeg",
+        "alt": "Medical checkup in rural area",
+        "category": "health"
+      }
+    ],
+    "food_distribution": [
+      {
+        "url": "https://images.unsplash.com/photo-1663069107186-5e9be9c750f4?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "Child receiving food",
+        "category": "relief"
+      },
+      {
+        "url": "https://images.pexels.com/photos/6995221/pexels-photo-6995221.jpeg",
+        "alt": "Community food distribution",
+        "category": "relief"
+      }
+    ],
+    "community": [
+      {
+        "url": "https://images.unsplash.com/photo-1548972774-1d09980f8e8e?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "alt": "Toddlers playing",
+        "category": "community"
+      }
+    ]
+  },
+  "bilingual_strategy": {
+    "default_lang": "en",
+    "supported_langs": ["en", "gu"],
+    "font_class_map": {
+      "en": "font-sans",
+      "gu": "font-gujarati"
+    },
+    "instructions": "All text components must accept a 'lang' prop or use a context hook to switch between English and Gujarati content. Ensure Gujarati font 'Noto Sans Gujarati' is loaded."
+  },
+  "instructions_to_main_agent": [
+    "Implement a 'LanguageContext' to manage global language state (en/gu).",
+    "Use the 'Noto Sans Gujarati' font from Google Fonts for all Gujarati text.",
+    "Ensure the 'Donate' button is always visible and prominent (Sticky or in Header).",
+    "The 'Impact' section should use the Bento grid layout defined in layout settings.",
+    "Forms (Contact, Donation) must be bilingual - labels change based on selected language.",
+    "Footer must display Trust Registration No, 80G, 12A, and FCRA details clearly.",
+    "Use 'sonner' for all toast notifications (success/error).",
+    "Do not use generic 'Lorem Ipsum'. Use realistic NGO content in English and Gujarati.",
+    "For the 'Success Stories', use an asymmetrical layout with image on one side and text on the other, alternating per story.",
+    "Ensure high contrast for accessibility, especially for elderly donors."
+  ],
+  "universal_guidelines": [
+    "Avoid 'AI slop' - no generic centered layouts without purpose.",
+    "Use 2-3x more spacing than typical designs.",
+    "Every interaction needs micro-animations (hover, focus, active).",
+    "No 'transition: all'. Animate specific properties.",
+    "Use 'data-testid' for all interactive elements."
+  ]
+}
