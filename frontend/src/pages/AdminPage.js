@@ -225,19 +225,26 @@ const SettingsSection = () => {
     bank_details: {}, trust_details: {}, contact_info: {}, upi_details: {},
     smtp_config: {}, razorpay_config: {}, impact_stats: {}
   });
+  const [pageVisibility, setPageVisibility] = useState({
+    home: true, about: true, gallery: true, stories: true, blog: true, donate: true, contact: true
+  });
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState('contact');
+  const [activeTab, setActiveTab] = useState('pages');
 
   useEffect(() => {
-    const fetchSettings = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`${API}/settings/admin`);
-        setSettings(response.data);
+        const [settingsRes, visibilityRes] = await Promise.all([
+          axios.get(`${API}/settings/admin`),
+          axios.get(`${API}/pages/visibility`)
+        ]);
+        setSettings(settingsRes.data);
+        setPageVisibility(visibilityRes.data);
       } catch (error) {
         console.error('Error fetching settings:', error);
       }
     };
-    fetchSettings();
+    fetchData();
   }, []);
 
   const handleSave = async () => {
@@ -252,11 +259,23 @@ const SettingsSection = () => {
     }
   };
 
+  const togglePageVisibility = async (pageKey) => {
+    const newValue = !pageVisibility[pageKey];
+    try {
+      await axios.put(`${API}/pages/visibility`, { page_key: pageKey, is_visible: newValue });
+      setPageVisibility({ ...pageVisibility, [pageKey]: newValue });
+      toast.success(language === 'en' ? `${pageKey} page ${newValue ? 'enabled' : 'disabled'}` : `${pageKey} પેજ ${newValue ? 'સક્ષમ' : 'અક્ષમ'}`);
+    } catch (error) {
+      toast.error(language === 'en' ? 'Failed to update' : 'અપડેટ નિષ્ફળ');
+    }
+  };
+
   const updateNestedField = (section, field, value) => {
     setSettings({ ...settings, [section]: { ...settings[section], [field]: value }});
   };
 
   const tabs = [
+    { id: 'pages', label: language === 'en' ? 'Page Visibility' : 'પેજ દૃશ્યતા' },
     { id: 'contact', label: language === 'en' ? 'Contact Info' : 'સંપર્ક માહિતી' },
     { id: 'bank', label: language === 'en' ? 'Bank Details' : 'બેંક વિગતો' },
     { id: 'trust', label: language === 'en' ? 'Trust Details' : 'ટ્રસ્ટ વિગતો' },
