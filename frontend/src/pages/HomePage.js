@@ -146,7 +146,7 @@ const HomePage = () => {
             <div className="relative animate-fade-in hidden lg:block">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1659451336016-00d62d32f677?crop=entropy&cs=srgb&fm=jpg&q=85&w=800"
+                  src={getHeroImage()}
                   alt="Children in education program"
                   className="w-full h-[500px] object-cover"
                 />
