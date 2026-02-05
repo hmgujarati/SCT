@@ -765,9 +765,9 @@ async def upload_file(file: UploadFile = File(...), user: dict = Depends(get_cur
     with open(filepath, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
     
-    # Return URL path
+    # Return URL path (using /api/uploads for proper routing)
     return {
-        "url": f"/uploads/{filename}",
+        "url": f"/api/uploads/{filename}",
         "filename": filename
     }
 
@@ -789,7 +789,7 @@ async def upload_multiple_files(files: List[UploadFile] = File(...), user: dict 
             shutil.copyfileobj(file.file, buffer)
         
         uploaded.append({
-            "url": f"/uploads/{filename}",
+            "url": f"/api/uploads/{filename}",
             "filename": filename,
             "original_name": file.filename
         })
