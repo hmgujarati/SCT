@@ -302,17 +302,21 @@ const ContactPage = () => {
         </div>
       </section>
 
-      {/* Map Section (Placeholder) */}
-      <section className="h-[400px] bg-[#E5E7EB]" data-testid="map-section">
-        <div className="w-full h-full flex items-center justify-center">
-          <div className="text-center">
-            <MapPin className="w-12 h-12 text-[#8B1E1E] mx-auto mb-4" />
-            <p className="text-[#6B7280]">
-              {language === 'en' ? 'Map will be displayed here' : 'નકશો અહીં દર્શાવવામાં આવશે'}
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* Map Section - Only shows if maps_embed URL is configured */}
+      {contactInfo.maps_embed && (
+        <section className="h-[400px]" data-testid="map-section">
+          <iframe
+            src={contactInfo.maps_embed}
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title={language === 'en' ? 'Our Location' : 'અમારું સ્થાન'}
+          ></iframe>
+        </section>
+      )}
     </div>
   );
 };
