@@ -419,6 +419,44 @@ const SettingsSection = () => {
           </div>
         )}
 
+        {activeTab === 'branding' && (
+          <BrandingSection settings={settings} setSettings={setSettings} language={language} />
+        )}
+
+        {activeTab === 'social' && (
+          <div className="space-y-4">
+            <p className="text-sm text-[#6B7280] mb-4">
+              {language === 'en' ? 'Add your social media links. Leave empty to hide the icon.' : 'તમારી સોશિયલ મીડિયા લિંક્સ ઉમેરો. આઇકન છુપાવવા માટે ખાલી છોડો.'}
+            </p>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Facebook</label>
+                <Input value={settings.social_links?.facebook || ''} onChange={(e) => updateNestedField('social_links', 'facebook', e.target.value)} placeholder="https://facebook.com/yourpage" className="input-field" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Instagram</label>
+                <Input value={settings.social_links?.instagram || ''} onChange={(e) => updateNestedField('social_links', 'instagram', e.target.value)} placeholder="https://instagram.com/yourpage" className="input-field" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Twitter / X</label>
+                <Input value={settings.social_links?.twitter || ''} onChange={(e) => updateNestedField('social_links', 'twitter', e.target.value)} placeholder="https://twitter.com/yourpage" className="input-field" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">YouTube</label>
+                <Input value={settings.social_links?.youtube || ''} onChange={(e) => updateNestedField('social_links', 'youtube', e.target.value)} placeholder="https://youtube.com/yourchannel" className="input-field" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">LinkedIn</label>
+                <Input value={settings.social_links?.linkedin || ''} onChange={(e) => updateNestedField('social_links', 'linkedin', e.target.value)} placeholder="https://linkedin.com/company/yourcompany" className="input-field" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">WhatsApp ({language === 'en' ? 'with country code' : 'દેશ કોડ સાથે'})</label>
+                <Input value={settings.social_links?.whatsapp || ''} onChange={(e) => updateNestedField('social_links', 'whatsapp', e.target.value)} placeholder="+919876543210" className="input-field" />
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'smtp' && (
           <div className="grid md:grid-cols-2 gap-4">
             <div>
