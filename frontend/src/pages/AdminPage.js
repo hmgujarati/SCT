@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
@@ -9,7 +9,7 @@ import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
 import { 
   LayoutDashboard, Settings, Image, FileText, Heart, Users, Mail, BookOpen,
-  LogOut, Menu, X, Save, Download
+  LogOut, Menu, X, Save, Download, Upload
 } from 'lucide-react';
 
 // Import admin sections from separate files
