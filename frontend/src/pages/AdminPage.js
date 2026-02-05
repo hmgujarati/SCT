@@ -546,7 +546,7 @@ const SettingsSection = () => {
   const { language } = useLanguage();
   const [settings, setSettings] = useState({
     bank_details: {}, trust_details: {}, contact_info: {}, upi_details: {},
-    smtp_config: {}, razorpay_config: {}, impact_stats: {}, social_links: {}, site_images: {}
+    smtp_config: {}, razorpay_config: {}, impact_stats: {}, social_links: {}, site_images: {}, footer_text: {}
   });
   const [pageVisibility, setPageVisibility] = useState({
     home: true, about: true, gallery: true, stories: true, blog: true, donate: true, contact: true
