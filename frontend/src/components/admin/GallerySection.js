@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { Image, Plus, Trash2, Edit, X, Save } from 'lucide-react';
+import { Image, Plus, Trash2, Edit, X, Save, Upload, Loader2 } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
 const GalleryForm = ({ album, onSave, onCancel, language }) => {
   const [formData, setFormData] = useState({
@@ -15,25 +16,53 @@ const GalleryForm = ({ album, onSave, onCancel, language }) => {
     images: album?.images || [],
     is_active: album?.is_active ?? true
   });
-  const [newImageUrl, setNewImageUrl] = useState('');
   const [newImageCaption, setNewImageCaption] = useState({ en: '', gu: '' });
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const categories = [
     { id: 'education', label: language === 'en' ? 'Education' : 'શિક્ષણ' },
     { id: 'health', label: language === 'en' ? 'Health' : 'આરોગ્ય' },
     { id: 'relief', label: language === 'en' ? 'Relief' : 'રાહત' },
-    { id: 'community', label: language === 'en' ? 'Community' : 'સમુદાય' }
+    { id: 'community', label: language === 'en' ? 'Community' : 'સમુદાય' },
+    { id: 'facility', label: language === 'en' ? 'Facility' : 'સુવિધા' },
+    { id: 'events', label: language === 'en' ? 'Events' : 'ઇવેન્ટ્સ' }
   ];
 
-  const addImage = () => {
-    if (!newImageUrl) return;
-    setFormData({
-      ...formData,
-      images: [...formData.images, { id: Date.now().toString(), url: newImageUrl, caption: newImageCaption, order: formData.images.length }]
-    });
-    setNewImageUrl('');
-    setNewImageCaption({ en: '', gu: '' });
+  const handleFileUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    setUploading(true);
+    try {
+      const formDataUpload = new FormData();
+      files.forEach(file => formDataUpload.append('files', file));
+      
+      const response = await axios.post(`${API}/upload/multiple`, formDataUpload, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      
+      const newImages = response.data.uploaded.map((img, idx) => ({
+        id: Date.now().toString() + idx,
+        url: `${BASE_URL}${img.url}`,
+        caption: { ...newImageCaption },
+        order: formData.images.length + idx
+      }));
+      
+      setFormData({
+        ...formData,
+        images: [...formData.images, ...newImages]
+      });
+      setNewImageCaption({ en: '', gu: '' });
+      toast.success(language === 'en' ? `${files.length} image(s) uploaded!` : `${files.length} ફોટો અપલોડ થયા!`);
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error(language === 'en' ? 'Upload failed' : 'અપલોડ નિષ્ફળ');
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   const removeImage = (imageId) => {
@@ -74,7 +103,7 @@ const GalleryForm = ({ album, onSave, onCancel, language }) => {
             {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.label}</option>)}
           </select>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pt-7">
           <input type="checkbox" id="is_active" checked={formData.is_active} onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })} className="w-4 h-4" data-testid="album-active" />
           <label htmlFor="is_active" className="text-sm">{language === 'en' ? 'Active (visible on website)' : 'સક્રિય (વેબસાઈટ પર દેખાય)'}</label>
         </div>
@@ -87,38 +116,59 @@ const GalleryForm = ({ album, onSave, onCancel, language }) => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
             {formData.images.map((img) => (
               <div key={img.id} className="relative group">
-                <img src={img.url} alt="" className="w-full aspect-square object-cover rounded-lg" />
+                <img src={img.url} alt="" className="w-full aspect-square object-cover rounded-lg border" onError={(e) => e.target.src = 'https://via.placeholder.com/150?text=Image'} />
                 <button onClick={() => removeImage(img.id)} className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                   <X className="w-3 h-3" />
                 </button>
+                {img.caption?.en && <p className="text-xs text-center mt-1 truncate">{img.caption.en}</p>}
               </div>
             ))}
           </div>
         )}
 
         <div className="p-4 bg-stone-50 rounded-lg">
-          <div className="mb-3">
-            <label className="block text-sm font-medium mb-2">{language === 'en' ? 'Image URL' : 'ફોટો URL'}</label>
-            <Input value={newImageUrl} onChange={(e) => setNewImageUrl(e.target.value)} placeholder="https://..." className="input-field" data-testid="new-image-url" />
-          </div>
-          <div className="grid md:grid-cols-2 gap-3 mb-3">
+          <div className="grid md:grid-cols-2 gap-3 mb-4">
             <div>
-              <label className="block text-sm font-medium mb-2">{language === 'en' ? 'Caption (English)' : 'કેપ્શન (English)'}</label>
-              <Input value={newImageCaption.en} onChange={(e) => setNewImageCaption({ ...newImageCaption, en: e.target.value })} className="input-field" />
+              <label className="block text-sm font-medium mb-2">{language === 'en' ? 'Caption (English) - Optional' : 'કેપ્શન (English) - વૈકલ્પિક'}</label>
+              <Input value={newImageCaption.en} onChange={(e) => setNewImageCaption({ ...newImageCaption, en: e.target.value })} className="input-field" placeholder={language === 'en' ? 'Caption for uploaded images' : 'અપલોડ ફોટા માટે કેપ્શન'} />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">{language === 'en' ? 'Caption (Gujarati)' : 'કેપ્શન (ગુજરાતી)'}</label>
+              <label className="block text-sm font-medium mb-2">{language === 'en' ? 'Caption (Gujarati) - Optional' : 'કેપ્શન (ગુજરાતી) - વૈકલ્પિક'}</label>
               <Input value={newImageCaption.gu} onChange={(e) => setNewImageCaption({ ...newImageCaption, gu: e.target.value })} className="input-field font-gujarati" />
             </div>
           </div>
-          <Button onClick={addImage} variant="outline" size="sm" data-testid="add-image-btn">
-            <Plus className="w-4 h-4 mr-1" /> {language === 'en' ? 'Add Image' : 'ફોટો ઉમેરો'}
-          </Button>
+          
+          <div className="border-2 border-dashed border-stone-300 rounded-lg p-6 text-center hover:border-[#8B1E1E] transition-colors">
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleFileUpload}
+              className="hidden"
+              id="image-upload"
+              data-testid="image-upload-input"
+            />
+            <label htmlFor="image-upload" className="cursor-pointer">
+              {uploading ? (
+                <div className="flex flex-col items-center">
+                  <Loader2 className="w-8 h-8 text-[#8B1E1E] animate-spin mb-2" />
+                  <span className="text-sm text-[#6B7280]">{language === 'en' ? 'Uploading...' : 'અપલોડ થઈ રહ્યું છે...'}</span>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center">
+                  <Upload className="w-8 h-8 text-[#8B1E1E] mb-2" />
+                  <span className="text-sm font-medium text-[#1F2937]">{language === 'en' ? 'Click to upload images' : 'ફોટા અપલોડ કરવા ક્લિક કરો'}</span>
+                  <span className="text-xs text-[#6B7280] mt-1">{language === 'en' ? 'JPG, PNG, GIF, WebP (multiple allowed)' : 'JPG, PNG, GIF, WebP (બહુવિધ મંજૂરી)'}</span>
+                </div>
+              )}
+            </label>
+          </div>
         </div>
       </div>
 
       <div className="flex gap-2 mt-6">
-        <Button onClick={handleSubmit} disabled={saving} className="btn-primary" data-testid="save-album-btn">
+        <Button onClick={handleSubmit} disabled={saving || uploading} className="btn-primary" data-testid="save-album-btn">
           {saving ? <span className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>{language === 'en' ? 'Saving...' : 'સાચવી રહ્યું છે...'}</span> : <><Save className="w-4 h-4 mr-2" />{language === 'en' ? 'Save Album' : 'આલ્બમ સાચવો'}</>}
         </Button>
         <Button onClick={onCancel} variant="outline" className="btn-secondary">{language === 'en' ? 'Cancel' : 'રદ કરો'}</Button>
@@ -175,6 +225,14 @@ export const GallerySection = () => {
     }
   };
 
+  const getImageUrl = (album) => {
+    const img = album.images?.[0];
+    if (!img?.url) return null;
+    // Handle both relative and absolute URLs
+    if (img.url.startsWith('http')) return img.url;
+    return `${BASE_URL}${img.url}`;
+  };
+
   return (
     <div data-testid="gallery-section">
       <div className="flex justify-between items-center mb-6">
@@ -198,7 +256,11 @@ export const GallerySection = () => {
           {albums.map((album) => (
             <div key={album.id} className="bg-white rounded-xl shadow-sm overflow-hidden">
               <div className="aspect-video bg-stone-100 relative">
-                {album.images?.[0]?.url ? <img src={album.images[0].url} alt="" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center"><Image className="w-12 h-12 text-stone-300" /></div>}
+                {getImageUrl(album) ? (
+                  <img src={getImageUrl(album)} alt="" className="w-full h-full object-cover" onError={(e) => e.target.style.display = 'none'} />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center"><Image className="w-12 h-12 text-stone-300" /></div>
+                )}
                 <span className={`absolute top-2 right-2 px-2 py-1 rounded text-xs font-medium ${album.is_active ? 'bg-green-100 text-green-700' : 'bg-stone-100 text-stone-600'}`}>
                   {album.is_active ? (language === 'en' ? 'Active' : 'સક્રિય') : (language === 'en' ? 'Hidden' : 'છુપાયેલ')}
                 </span>
