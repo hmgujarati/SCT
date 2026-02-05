@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import axios from 'axios';
 import { Button } from '../components/ui/button';
-import { ArrowRight, Heart, GraduationCap, Stethoscope, HandHeart, Users, ShieldCheck, FileCheck, ChevronRight } from 'lucide-react';
+import { ArrowRight, Heart, Home, Droplets, Stethoscope, Utensils, HeartHandshake, Shield, ShieldCheck, FileCheck, ChevronRight } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -40,38 +40,56 @@ const HomePage = () => {
 
   const programs = [
     {
-      icon: GraduationCap,
-      title: { en: 'Education', gu: 'શિક્ષણ' },
+      icon: Home,
+      title: { en: 'Shelter & Housing', gu: 'આશ્રય અને રહેઠાણ' },
       description: { 
-        en: 'Sponsoring education for underprivileged children, providing school supplies, uniforms, and scholarships to help them build a brighter future.', 
-        gu: 'વંચિત બાળકોના શિક્ષણને સ્પોન્સર કરવું, શાળા સામગ્રી, ગણવેશ અને શિષ્યવૃત્તિ પ્રદાન કરવી જેથી તેઓ ઉજ્જવળ ભવિષ્ય બનાવી શકે.' 
+        en: 'Safe, clean, and comfortable living spaces providing permanent homes for individuals with intellectual disabilities who have nowhere else to go.', 
+        gu: 'બૌદ્ધિક વિકલાંગતા ધરાવતી વ્યક્તિઓ માટે સુરક્ષિત, સ્વચ્છ અને આરામદાયક રહેવાની જગ્યાઓ જેમની પાસે બીજે ક્યાંય જવાનું નથી.' 
       },
       color: 'bg-blue-50 text-blue-600'
     },
     {
-      icon: Stethoscope,
-      title: { en: 'Healthcare', gu: 'આરોગ્ય સેવા' },
+      icon: Droplets,
+      title: { en: 'Hygiene & Daily Care', gu: 'સ્વચ્છતા અને દૈનિક સંભાળ' },
       description: { 
-        en: 'Organizing free medical camps, eye checkups, and providing essential medicines to those who cannot afford healthcare services.', 
-        gu: 'મફત તબીબી શિબિરો, આંખની તપાસ અને આરોગ્ય સેવાઓ પરવડી ન શકે તેવા લોકોને આવશ્યક દવાઓ પૂરી પાડવી.' 
+        en: 'Assistance with bathing, grooming, dressing, and personal hygiene — ensuring every resident maintains their dignity and cleanliness.', 
+        gu: 'સ્નાન, ગ્રૂમિંગ, કપડાં પહેરવા અને વ્યક્તિગત સ્વચ્છતામાં સહાય — દરેક નિવાસી તેમનું ગૌરવ અને સ્વચ્છતા જાળવે તેની ખાતરી કરવી.' 
+      },
+      color: 'bg-cyan-50 text-cyan-600'
+    },
+    {
+      icon: Stethoscope,
+      title: { en: 'Medical Care', gu: 'તબીબી સંભાળ' },
+      description: { 
+        en: 'Regular health checkups, medication management, psychiatric consultations, and emergency medical care available round the clock.', 
+        gu: 'નિયમિત આરોગ્ય તપાસ, દવા વ્યવસ્થાપન, માનસિક પરામર્શ અને ચોવીસ કલાક ઉપલબ્ધ કટોકટી તબીબી સંભાળ.' 
       },
       color: 'bg-green-50 text-green-600'
     },
     {
-      icon: HandHeart,
-      title: { en: 'Relief Services', gu: 'રાહત સેવાઓ' },
+      icon: Utensils,
+      title: { en: 'Nutrition', gu: 'પોષણ' },
       description: { 
-        en: 'Providing immediate relief during natural disasters and emergencies with food, clothing, shelter, and rehabilitation support.', 
-        gu: 'કુદરતી આફતો અને કટોકટી દરમિયાન ખોરાક, કપડાં, આશ્રય અને પુનર્વસન સહાય સાથે તાત્કાલિક રાહત પૂરી પાડવી.' 
+        en: 'Three nutritious meals daily plus snacks, prepared fresh with attention to individual dietary needs and medical requirements.', 
+        gu: 'દરરોજ ત્રણ પૌષ્ટિક ભોજન વત્તા નાસ્તો, વ્યક્તિગત આહારની જરૂરિયાતો અને તબીબી આવશ્યકતાઓ પર ધ્યાન આપીને તાજા તૈયાર કરવામાં આવે છે.' 
       },
       color: 'bg-orange-50 text-orange-600'
     },
     {
-      icon: Users,
-      title: { en: 'Community Development', gu: 'સમુદાય વિકાસ' },
+      icon: HeartHandshake,
+      title: { en: 'Emotional Support', gu: 'ભાવનાત્મક સહાય' },
       description: { 
-        en: 'Empowering communities through skill development, women empowerment programs, and sustainable livelihood initiatives.', 
-        gu: 'કૌશલ્ય વિકાસ, મહિલા સશક્તિકરણ કાર્યક્રમો અને ટકાઉ આજીવિકા પહેલ દ્વારા સમુદાયોને સશક્ત બનાવવા.' 
+        en: 'Compassionate caregivers provide companionship, emotional comfort, and a loving environment where every resident feels valued.', 
+        gu: 'કરુણાશીલ સંભાળ રાખનારાઓ સાથીપણું, ભાવનાત્મક આરામ અને પ્રેમાળ વાતાવરણ પ્રદાન કરે છે જ્યાં દરેક નિવાસી મૂલ્યવાન અનુભવે.' 
+      },
+      color: 'bg-pink-50 text-pink-600'
+    },
+    {
+      icon: Shield,
+      title: { en: 'Safety & Security', gu: 'સલામતી અને સુરક્ષા' },
+      description: { 
+        en: '24/7 supervision and care ensuring residents are safe, protected, and never alone in times of need.', 
+        gu: 'ચોવીસ કલાક દેખરેખ અને સંભાળ ખાતરી કરે છે કે નિવાસીઓ સુરક્ષિત, સંરક્ષિત છે અને જરૂરિયાતના સમયે ક્યારેય એકલા નથી.' 
       },
       color: 'bg-purple-50 text-purple-600'
     }
