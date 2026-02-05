@@ -59,6 +59,8 @@ Build a professional bilingual website for a charitable trust with:
 - [x] Full CRUD in admin for Blog posts
 - [x] Full CRUD in admin for Success Stories
 - [x] Page content editing from admin (bilingual EN/GU)
+- [x] Local image upload for gallery (replaces URL-only)
+- [x] Page visibility toggle (turn pages on/off)
 
 ### P1 - High Priority
 - [ ] Add real Razorpay live keys from admin
@@ -80,16 +82,19 @@ Build a professional bilingual website for a charitable trust with:
 ## Completed Work (February 2026)
 - Admin Panel fully functional with all CRUD sections:
   - Page Content editing (Home, About, Donate, Contact pages in EN/GU)
-  - Gallery management with album creation, images, categories
+  - Gallery management with local image upload (JPG, PNG, GIF, WebP)
   - Success Stories management with bilingual fields
   - Blog post management with tags and publish status
-  - Site Settings (Contact, Bank, Trust, UPI, SMTP, Razorpay, Impact Stats)
+  - Site Settings with 8 tabs: Page Visibility, Contact, Bank, Trust, UPI, SMTP, Razorpay, Impact Stats
+  - **Page Visibility** - Toggle any of 7 pages on/off (Home, About, Gallery, Stories, Blog, Donate, Contact)
   - Donations list with 80G CSV export
   - Contact Messages with read/unread tracking
+- File upload system: images stored locally in /app/backend/uploads/
 
 ## Next Action Items
-1. Login to admin (/login) and add trust registration details
-2. Add bank details and UPI QR code from admin settings
-3. Configure SMTP for email notifications
-4. Replace test Razorpay keys with live keys when ready
-5. Upload real gallery images and stories
+1. Login to admin (/login) with admin@admin.com / admin@123
+2. Add trust registration details in Site Settings > Trust Details
+3. Add bank details and UPI QR code in Site Settings
+4. Configure SMTP for email notifications
+5. Upload real gallery images using the new upload feature
+6. Replace test Razorpay keys with live keys when ready
