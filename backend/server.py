@@ -104,6 +104,7 @@ class ContactInfo(BaseModel):
     phone: str = ""
     email: str = ""
     whatsapp: str = ""
+    maps_embed: str = ""  # Google Maps embed URL
 
 class UPIDetails(BaseModel):
     upi_id: str = ""
