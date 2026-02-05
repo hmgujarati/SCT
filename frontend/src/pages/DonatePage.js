@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import axios from 'axios';
 import { Button } from '../components/ui/button';
@@ -6,7 +6,7 @@ import { Input } from '../components/ui/input';
 import { Checkbox } from '../components/ui/checkbox';
 import { toast } from 'sonner';
 import { Heart, Check, Shield, Gift, Users, Stethoscope, GraduationCap } from 'lucide-react';
-import { useRazorpay } from 'react-razorpay';
+import useRazorpay from 'react-razorpay';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -15,7 +15,6 @@ const DonatePage = () => {
   const [Razorpay] = useRazorpay();
   const [settings, setSettings] = useState(null);
   const [content, setContent] = useState({});
-  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   
