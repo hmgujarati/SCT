@@ -142,6 +142,10 @@ class SiteImages(BaseModel):
     cta_image: str = ""
     donate_image: str = ""
 
+class FooterText(BaseModel):
+    en: str = ""
+    gu: str = ""
+
 class SiteSettings(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     bank_details: BankDetails = Field(default_factory=BankDetails)
@@ -152,6 +156,7 @@ class SiteSettings(BaseModel):
     razorpay_config: RazorpayConfig = Field(default_factory=RazorpayConfig)
     social_links: SocialLinks = Field(default_factory=SocialLinks)
     site_images: SiteImages = Field(default_factory=SiteImages)
+    footer_text: FooterText = Field(default_factory=FooterText)
     impact_stats: Dict[str, Any] = Field(default_factory=dict)
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -164,6 +169,7 @@ class SiteSettingsUpdate(BaseModel):
     razorpay_config: Optional[RazorpayConfig] = None
     social_links: Optional[SocialLinks] = None
     site_images: Optional[SiteImages] = None
+    footer_text: Optional[FooterText] = None
     impact_stats: Optional[Dict[str, Any]] = None
 
 # Page Visibility Settings
