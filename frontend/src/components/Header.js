@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAuth } from '../contexts/AuthContext';
+import { usePageVisibility } from '../contexts/PageVisibilityContext';
 import { Menu, X, ChevronDown, Globe } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -10,6 +11,7 @@ const LOGO_URL = 'https://customer-assets.emergentagent.com/job_81b02de3-3cd6-47
 const Header = () => {
   const { language, toggleLanguage, ui } = useLanguage();
   const { user, logout } = useAuth();
+  const { isPageVisible } = usePageVisibility();
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -22,14 +24,17 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
-    { path: '/', label: ui.home },
-    { path: '/about', label: ui.about },
-    { path: '/gallery', label: ui.gallery },
-    { path: '/stories', label: ui.stories },
-    { path: '/blog', label: ui.blog },
-    { path: '/contact', label: ui.contact },
+  const allNavItems = [
+    { path: '/', label: ui.home, pageKey: 'home' },
+    { path: '/about', label: ui.about, pageKey: 'about' },
+    { path: '/gallery', label: ui.gallery, pageKey: 'gallery' },
+    { path: '/stories', label: ui.stories, pageKey: 'stories' },
+    { path: '/blog', label: ui.blog, pageKey: 'blog' },
+    { path: '/contact', label: ui.contact, pageKey: 'contact' },
   ];
+  
+  // Filter nav items based on visibility
+  const navItems = allNavItems.filter(item => isPageVisible(item.pageKey));
 
   const isActive = (path) => {
     if (path === '/') return location.pathname === '/' || location.pathname === '/en' || location.pathname === '/gu';
