@@ -218,12 +218,177 @@ const DashboardSection = () => {
   );
 };
 
+// Branding Section Component - For Logo and Site Images
+const BrandingSection = ({ settings, setSettings, language }) => {
+  const [uploading, setUploading] = useState({});
+  const fileInputRefs = {
+    logo: React.useRef(null),
+    logo_dark: React.useRef(null),
+    hero_image: React.useRef(null),
+    hero_image_2: React.useRef(null),
+    about_image: React.useRef(null),
+    cta_image: React.useRef(null),
+    donate_image: React.useRef(null)
+  };
+
+  const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+
+  const handleUpload = async (field, file) => {
+    if (!file) return;
+    
+    setUploading(prev => ({ ...prev, [field]: true }));
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await axios.post(`${API}/upload`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      
+      const imageUrl = response.data.url;
+      setSettings(prev => ({
+        ...prev,
+        site_images: {
+          ...prev.site_images,
+          [field]: imageUrl
+        }
+      }));
+      toast.success(language === 'en' ? 'Image uploaded!' : 'ફોટો અપલોડ થયો!');
+    } catch (error) {
+      toast.error(language === 'en' ? 'Upload failed' : 'અપલોડ નિષ્ફળ');
+    } finally {
+      setUploading(prev => ({ ...prev, [field]: false }));
+    }
+  };
+
+  const clearImage = (field) => {
+    setSettings(prev => ({
+      ...prev,
+      site_images: {
+        ...prev.site_images,
+        [field]: ''
+      }
+    }));
+  };
+
+  const getImageUrl = (url) => {
+    if (!url) return null;
+    if (url.startsWith('http')) return url;
+    return `${BASE_URL}${url}`;
+  };
+
+  const ImageUploadCard = ({ field, label, description, aspectRatio = 'aspect-video' }) => {
+    const currentImage = settings.site_images?.[field];
+    return (
+      <div className="border rounded-lg p-4">
+        <div className="flex justify-between items-start mb-3">
+          <div>
+            <h4 className="font-medium text-[#1F2937]">{label}</h4>
+            <p className="text-xs text-[#6B7280]">{description}</p>
+          </div>
+          {currentImage && (
+            <button onClick={() => clearImage(field)} className="text-red-500 hover:text-red-700 text-xs">
+              {language === 'en' ? 'Remove' : 'દૂર કરો'}
+            </button>
+          )}
+        </div>
+        
+        <div className={`${aspectRatio} bg-stone-100 rounded-lg overflow-hidden mb-3 relative`}>
+          {currentImage ? (
+            <img src={getImageUrl(currentImage)} alt={label} className="w-full h-full object-contain" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-stone-400">
+              <Image className="w-8 h-8" />
+            </div>
+          )}
+          {uploading[field] && (
+            <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
+              <div className="w-6 h-6 border-2 border-[#8B1E1E] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
+        </div>
+        
+        <input
+          ref={fileInputRefs[field]}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => handleUpload(field, e.target.files[0])}
+        />
+        <Button
+          onClick={() => fileInputRefs[field].current?.click()}
+          variant="outline"
+          size="sm"
+          className="w-full"
+          disabled={uploading[field]}
+        >
+          <Upload className="w-4 h-4 mr-2" />
+          {currentImage ? (language === 'en' ? 'Change' : 'બદલો') : (language === 'en' ? 'Upload' : 'અપલોડ')}
+        </Button>
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h3 className="font-semibold text-lg mb-4">{language === 'en' ? 'Logo' : 'લોગો'}</h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          <ImageUploadCard 
+            field="logo" 
+            label={language === 'en' ? 'Main Logo' : 'મુખ્ય લોગો'} 
+            description={language === 'en' ? 'Used in header and footer' : 'હેડર અને ફૂટરમાં વપરાય છે'}
+            aspectRatio="aspect-[3/1]"
+          />
+          <ImageUploadCard 
+            field="logo_dark" 
+            label={language === 'en' ? 'Logo (Dark Background)' : 'લોગો (ડાર્ક બેકગ્રાઉન્ડ)'} 
+            description={language === 'en' ? 'Optional - for dark sections' : 'વૈકલ્પિક - ડાર્ક વિભાગો માટે'}
+            aspectRatio="aspect-[3/1]"
+          />
+        </div>
+      </div>
+
+      <div className="border-t pt-6">
+        <h3 className="font-semibold text-lg mb-4">{language === 'en' ? 'Page Images' : 'પેજ ફોટા'}</h3>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <ImageUploadCard 
+            field="hero_image" 
+            label={language === 'en' ? 'Hero Image 1' : 'હીરો ઈમેજ 1'} 
+            description={language === 'en' ? 'Main homepage banner' : 'મુખ્ય હોમપેજ બેનર'}
+          />
+          <ImageUploadCard 
+            field="hero_image_2" 
+            label={language === 'en' ? 'Hero Image 2' : 'હીરો ઈમેજ 2'} 
+            description={language === 'en' ? 'Secondary banner image' : 'ગૌણ બેનર ઈમેજ'}
+          />
+          <ImageUploadCard 
+            field="about_image" 
+            label={language === 'en' ? 'About Page Image' : 'અમારા વિશે પેજ ઈમેજ'} 
+            description={language === 'en' ? 'Featured on about page' : 'અમારા વિશે પેજ પર'}
+          />
+          <ImageUploadCard 
+            field="cta_image" 
+            label={language === 'en' ? 'CTA Section Image' : 'CTA વિભાગ ઈમેજ'} 
+            description={language === 'en' ? 'Call to action background' : 'કોલ ટુ એક્શન બેકગ્રાઉન્ડ'}
+          />
+          <ImageUploadCard 
+            field="donate_image" 
+            label={language === 'en' ? 'Donate Page Image' : 'દાન પેજ ઈમેજ'} 
+            description={language === 'en' ? 'Featured on donate page' : 'દાન પેજ પર'}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Settings Section
 const SettingsSection = () => {
   const { language } = useLanguage();
   const [settings, setSettings] = useState({
     bank_details: {}, trust_details: {}, contact_info: {}, upi_details: {},
-    smtp_config: {}, razorpay_config: {}, impact_stats: {}
+    smtp_config: {}, razorpay_config: {}, impact_stats: {}, social_links: {}, site_images: {}
   });
   const [pageVisibility, setPageVisibility] = useState({
     home: true, about: true, gallery: true, stories: true, blog: true, donate: true, contact: true
