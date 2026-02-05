@@ -61,7 +61,7 @@ const Header = () => {
                 {language === 'en' ? 'Shivdhara' : 'શિવધારા'}
               </h1>
               <p className={`text-xs transition-colors duration-300 ${isScrolled ? 'text-[#6B7280]' : 'text-[#6B7280]'} ${language === 'gu' ? 'font-gujarati' : ''}`}>
-                {language === 'en' ? 'Charitable Trust' : 'ચેરીટેબલ ટ્રસ્ટ'}
+                {language === 'en' ? 'Charitable' : 'ચેરીટેબલ'}
               </p>
             </div>
           </Link>
