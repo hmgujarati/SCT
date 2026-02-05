@@ -52,18 +52,38 @@ const AboutPage = () => {
       {/* Hero Section */}
       <section className="py-20 bg-[#F7F1E6]" data-testid="about-hero">
         <div className="container-custom">
-          <div className="max-w-3xl mx-auto text-center">
-            <span className="inline-block px-4 py-2 bg-[#8B1E1E]/10 text-[#8B1E1E] rounded-full text-sm font-medium mb-6">
-              {language === 'en' ? 'About Us' : 'અમારા વિશે'}
-            </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-[#1F2937] mb-6">
-              {t(content.title) || (language === 'en' ? 'About Shivdhara Charitable' : 'શિવધારા ચેરીટેબલ વિશે')}
-            </h1>
-            <p className="text-lg text-[#6B7280] leading-relaxed">
-              {t(content.intro) || (language === 'en' 
-                ? 'Shivdhara Charitable was established with a sacred mission to serve humanity through selfless action. Inspired by the eternal flow of Lord Shiva\'s grace, we believe that true worship lies in serving those in need.'
-                : 'શિવધારા ચેરીટેબલની સ્થાપના નિઃસ્વાર્થ સેવા દ્વારા માનવતાની સેવા કરવાના પવિત્ર મિશન સાથે કરવામાં આવી હતી. ભગવાન શિવની કૃપાના શાશ્વત પ્રવાહથી પ્રેરિત, અમે માનીએ છીએ કે સાચી પૂજા જરૂરિયાતમંદોની સેવામાં છે.')}
-            </p>
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-center lg:text-left">
+              <span className="inline-block px-4 py-2 bg-[#8B1E1E]/10 text-[#8B1E1E] rounded-full text-sm font-medium mb-6">
+                {language === 'en' ? 'About Us' : 'અમારા વિશે'}
+              </span>
+              <h1 className="text-4xl md:text-5xl font-bold text-[#1F2937] mb-6">
+                {t(content.title) || (language === 'en' ? 'About Shivdhara Charitable' : 'શિવધારા ચેરીટેબલ વિશે')}
+              </h1>
+              <p className="text-lg text-[#6B7280] leading-relaxed">
+                {t(content.intro) || (language === 'en' 
+                  ? 'Shivdhara Charitable was established with a sacred mission to serve humanity through selfless action. Inspired by the eternal flow of Lord Shiva\'s grace, we believe that true worship lies in serving those in need.'
+                  : 'શિવધારા ચેરીટેબલની સ્થાપના નિઃસ્વાર્થ સેવા દ્વારા માનવતાની સેવા કરવાના પવિત્ર મિશન સાથે કરવામાં આવી હતી. ભગવાન શિવની કૃપાના શાશ્વત પ્રવાહથી પ્રેરિત, અમે માનીએ છીએ કે સાચી પૂજા જરૂરિયાતમંદોની સેવામાં છે.')}
+              </p>
+            </div>
+            {/* About Image */}
+            {getAboutImage() && (
+              <div className="relative">
+                <div className="rounded-2xl overflow-hidden shadow-xl">
+                  <img
+                    src={getAboutImage()}
+                    alt={language === 'en' ? 'About Shivdhara Charitable' : 'શિવધારા ચેરીટેબલ વિશે'}
+                    className="w-full h-[400px] object-cover"
+                  />
+                </div>
+                <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-[#8B1E1E] rounded-xl flex items-center justify-center shadow-lg">
+                  <div className="text-center text-white">
+                    <p className="text-2xl font-bold">10+</p>
+                    <p className="text-xs">{language === 'en' ? 'Years' : 'વર્ષ'}</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
