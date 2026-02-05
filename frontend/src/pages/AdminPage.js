@@ -297,6 +297,42 @@ const SettingsSection = () => {
       </div>
 
       <div className="bg-white rounded-xl p-6 shadow-sm">
+        {activeTab === 'pages' && (
+          <div className="space-y-4">
+            <p className="text-sm text-[#6B7280] mb-4">
+              {language === 'en' ? 'Enable or disable pages on your website. Disabled pages will not be accessible to visitors.' : 'તમારી વેબસાઇટ પરના પૃષ્ઠો સક્ષમ અથવા અક્ષમ કરો. અક્ષમ પૃષ્ઠો મુલાકાતીઓ માટે ઉપલબ્ધ રહેશે નહીં.'}
+            </p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                { key: 'home', label: { en: 'Home Page', gu: 'હોમ પેજ' }, desc: { en: 'Main landing page', gu: 'મુખ્ય લેન્ડિંગ પેજ' } },
+                { key: 'about', label: { en: 'About Us', gu: 'અમારા વિશે' }, desc: { en: 'Organization info', gu: 'સંસ્થાની માહિતી' } },
+                { key: 'gallery', label: { en: 'Gallery', gu: 'ગેલેરી' }, desc: { en: 'Photo albums', gu: 'ફોટો આલ્બમ' } },
+                { key: 'stories', label: { en: 'Success Stories', gu: 'સફળતાની વાર્તાઓ' }, desc: { en: 'Beneficiary stories', gu: 'લાભાર્થી વાર્તાઓ' } },
+                { key: 'blog', label: { en: 'Blog', gu: 'બ્લોગ' }, desc: { en: 'News & updates', gu: 'સમાચાર અને અપડેટ્સ' } },
+                { key: 'donate', label: { en: 'Donate', gu: 'દાન' }, desc: { en: 'Donation page', gu: 'દાન પેજ' } },
+                { key: 'contact', label: { en: 'Contact Us', gu: 'સંપર્ક કરો' }, desc: { en: 'Contact form', gu: 'સંપર્ક ફોર્મ' } }
+              ].map((page) => (
+                <div key={page.key} className={`p-4 rounded-lg border-2 transition-colors ${pageVisibility[page.key] ? 'border-green-200 bg-green-50' : 'border-stone-200 bg-stone-50'}`}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-medium text-[#1F2937]">{page.label[language]}</span>
+                    <button
+                      onClick={() => togglePageVisibility(page.key)}
+                      data-testid={`toggle-${page.key}`}
+                      className={`relative w-12 h-6 rounded-full transition-colors ${pageVisibility[page.key] ? 'bg-green-500' : 'bg-stone-300'}`}
+                    >
+                      <span className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${pageVisibility[page.key] ? 'left-7' : 'left-1'}`}></span>
+                    </button>
+                  </div>
+                  <p className="text-xs text-[#6B7280]">{page.desc[language]}</p>
+                  <span className={`inline-block mt-2 px-2 py-0.5 rounded text-xs font-medium ${pageVisibility[page.key] ? 'bg-green-100 text-green-700' : 'bg-stone-200 text-stone-600'}`}>
+                    {pageVisibility[page.key] ? (language === 'en' ? 'Visible' : 'દૃશ્યમાન') : (language === 'en' ? 'Hidden' : 'છુપાયેલ')}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {activeTab === 'contact' && (
           <div className="space-y-4">
             <div className="grid md:grid-cols-2 gap-4">
