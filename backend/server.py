@@ -491,6 +491,7 @@ async def get_settings():
         "impact_stats": settings.get('impact_stats', {}),
         "social_links": settings.get('social_links', {}),
         "site_images": settings.get('site_images', {}),
+        "footer_text": settings.get('footer_text', {}),
         "razorpay_key_id": settings.get('razorpay_config', {}).get('key_id', os.environ.get('RAZORPAY_KEY_ID', ''))
     }
     return public_settings
