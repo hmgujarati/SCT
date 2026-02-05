@@ -477,6 +477,40 @@ async def update_settings(updates: SiteSettingsUpdate, user: dict = Depends(get_
     await db.site_settings.update_one({}, {"$set": update_dict}, upsert=True)
     return {"message": "Settings updated successfully"}
 
+# ================ PAGE VISIBILITY ROUTES ================
+
+@api_router.get("/pages/visibility")
+async def get_page_visibility():
+    """Get page visibility settings (public)"""
+    settings = await db.page_visibility.find_one({}, {"_id": 0})
+    if not settings:
+        # Default all pages visible
+        default = PageVisibility().model_dump()
+        default['id'] = str(uuid.uuid4())
+        await db.page_visibility.insert_one(default)
+        return default
+    return settings
+
+@api_router.put("/pages/visibility")
+async def update_page_visibility(update: PageVisibilityUpdate, user: dict = Depends(get_admin_user)):
+    """Toggle page visibility"""
+    await db.page_visibility.update_one(
+        {},
+        {"$set": {update.page_key: update.is_visible}},
+        upsert=True
+    )
+    return {"message": f"Page '{update.page_key}' visibility set to {update.is_visible}"}
+
+@api_router.put("/pages/visibility/bulk")
+async def update_all_page_visibility(visibility: PageVisibility, user: dict = Depends(get_admin_user)):
+    """Update all page visibility settings"""
+    await db.page_visibility.update_one(
+        {},
+        {"$set": visibility.model_dump()},
+        upsert=True
+    )
+    return {"message": "Page visibility updated"}
+
 # ================ CONTENT ROUTES (Bilingual) ================
 
 @api_router.get("/content")
