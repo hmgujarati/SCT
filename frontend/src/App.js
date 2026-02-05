@@ -9,6 +9,7 @@ import { Toaster } from "sonner";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { PageVisibilityProvider, usePageVisibility } from "./contexts/PageVisibilityContext";
+import { SiteSettingsProvider } from "./contexts/SiteSettingsContext";
 
 // Components
 import Header from "./components/Header";
