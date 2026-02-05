@@ -91,30 +91,30 @@ function AppRoutes() {
       <ScrollToTop />
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
-        <Route path="/en" element={<PublicLayout><HomePage /></PublicLayout>} />
-        <Route path="/gu" element={<PublicLayout><HomePage /></PublicLayout>} />
-        <Route path="/about" element={<PublicLayout><AboutPage /></PublicLayout>} />
-        <Route path="/en/about" element={<PublicLayout><AboutPage /></PublicLayout>} />
-        <Route path="/gu/about" element={<PublicLayout><AboutPage /></PublicLayout>} />
-        <Route path="/gallery" element={<PublicLayout><GalleryPage /></PublicLayout>} />
-        <Route path="/en/gallery" element={<PublicLayout><GalleryPage /></PublicLayout>} />
-        <Route path="/gu/gallery" element={<PublicLayout><GalleryPage /></PublicLayout>} />
-        <Route path="/stories" element={<PublicLayout><StoriesPage /></PublicLayout>} />
-        <Route path="/en/stories" element={<PublicLayout><StoriesPage /></PublicLayout>} />
-        <Route path="/gu/stories" element={<PublicLayout><StoriesPage /></PublicLayout>} />
-        <Route path="/blog" element={<PublicLayout><BlogPage /></PublicLayout>} />
-        <Route path="/blog/:slug" element={<PublicLayout><BlogPage /></PublicLayout>} />
-        <Route path="/en/blog" element={<PublicLayout><BlogPage /></PublicLayout>} />
-        <Route path="/en/blog/:slug" element={<PublicLayout><BlogPage /></PublicLayout>} />
-        <Route path="/gu/blog" element={<PublicLayout><BlogPage /></PublicLayout>} />
-        <Route path="/gu/blog/:slug" element={<PublicLayout><BlogPage /></PublicLayout>} />
-        <Route path="/donate" element={<PublicLayout><DonatePage /></PublicLayout>} />
-        <Route path="/en/donate" element={<PublicLayout><DonatePage /></PublicLayout>} />
-        <Route path="/gu/donate" element={<PublicLayout><DonatePage /></PublicLayout>} />
-        <Route path="/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
-        <Route path="/en/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
-        <Route path="/gu/contact" element={<PublicLayout><ContactPage /></PublicLayout>} />
+        <Route path="/" element={<ProtectedPage pageKey="home"><PublicLayout><HomePage /></PublicLayout></ProtectedPage>} />
+        <Route path="/en" element={<ProtectedPage pageKey="home"><PublicLayout><HomePage /></PublicLayout></ProtectedPage>} />
+        <Route path="/gu" element={<ProtectedPage pageKey="home"><PublicLayout><HomePage /></PublicLayout></ProtectedPage>} />
+        <Route path="/about" element={<ProtectedPage pageKey="about"><PublicLayout><AboutPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/en/about" element={<ProtectedPage pageKey="about"><PublicLayout><AboutPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/gu/about" element={<ProtectedPage pageKey="about"><PublicLayout><AboutPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/gallery" element={<ProtectedPage pageKey="gallery"><PublicLayout><GalleryPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/en/gallery" element={<ProtectedPage pageKey="gallery"><PublicLayout><GalleryPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/gu/gallery" element={<ProtectedPage pageKey="gallery"><PublicLayout><GalleryPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/stories" element={<ProtectedPage pageKey="stories"><PublicLayout><StoriesPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/en/stories" element={<ProtectedPage pageKey="stories"><PublicLayout><StoriesPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/gu/stories" element={<ProtectedPage pageKey="stories"><PublicLayout><StoriesPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/blog" element={<ProtectedPage pageKey="blog"><PublicLayout><BlogPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/blog/:slug" element={<ProtectedPage pageKey="blog"><PublicLayout><BlogPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/en/blog" element={<ProtectedPage pageKey="blog"><PublicLayout><BlogPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/en/blog/:slug" element={<ProtectedPage pageKey="blog"><PublicLayout><BlogPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/gu/blog" element={<ProtectedPage pageKey="blog"><PublicLayout><BlogPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/gu/blog/:slug" element={<ProtectedPage pageKey="blog"><PublicLayout><BlogPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/donate" element={<ProtectedPage pageKey="donate"><PublicLayout><DonatePage /></PublicLayout></ProtectedPage>} />
+        <Route path="/en/donate" element={<ProtectedPage pageKey="donate"><PublicLayout><DonatePage /></PublicLayout></ProtectedPage>} />
+        <Route path="/gu/donate" element={<ProtectedPage pageKey="donate"><PublicLayout><DonatePage /></PublicLayout></ProtectedPage>} />
+        <Route path="/contact" element={<ProtectedPage pageKey="contact"><PublicLayout><ContactPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/en/contact" element={<ProtectedPage pageKey="contact"><PublicLayout><ContactPage /></PublicLayout></ProtectedPage>} />
+        <Route path="/gu/contact" element={<ProtectedPage pageKey="contact"><PublicLayout><ContactPage /></PublicLayout></ProtectedPage>} />
         
         {/* Auth Routes */}
         <Route path="/login" element={<LoginPage />} />
