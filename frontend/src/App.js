@@ -147,7 +147,8 @@ function App() {
                   }
                 }}
               />
-            </PageVisibilityProvider>
+              </PageVisibilityProvider>
+            </SiteSettingsProvider>
           </LanguageProvider>
         </AuthProvider>
       </BrowserRouter>
