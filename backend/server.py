@@ -487,7 +487,7 @@ async def get_page_visibility():
         # Default all pages visible
         default = PageVisibility().model_dump()
         default['id'] = str(uuid.uuid4())
-        await db.page_visibility.insert_one(default)
+        await db.page_visibility.insert_one(default.copy())
         return default
     return settings
 
