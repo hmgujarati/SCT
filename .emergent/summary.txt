@@ -1,71 +1,81 @@
 <analysis>**original_problem_statement:**
-Build a professional bilingual (English + Gujarati) website for a charitable trust named “Shivdhara Charitable”. The site must have a clean, trust-driven, donation-optimized NGO design. Initially, the scope was general charity, but it was later updated to focus exclusively on providing full-time care (shelter, hygiene, medical, nutrition, emotional support) for people with intellectual/mental disabilities.
+Build a professional bilingual (English + Gujarati) website for a charitable trust named “Shivdhara Charitable”. The site must have a clean, trust-driven, donation-optimized NGO design. The scope is to provide full-time care (shelter, hygiene, medical, nutrition, emotional support) for people with intellectual/mental disabilities.
 
 **PRODUCT REQUIREMENTS:**
 - **Bilingual:** Full English and Gujarati support with a language switcher.
-- **Pages:** Home, About Us, Gallery, Success Stories, Blog, Donate, Contact Us.
-- **Donation Page:** High-conversion form with preset amounts, an 80G exemption checkbox that reveals a detailed form (Name, Email, Phone, PAN, Address), and Razorpay integration.
-- **Admin Panel:** Must allow editing of all page content in both languages, management of Gallery, Blog, and Success Stories, updating site settings (bank details, UPI), and exporting 80G donation data as CSV.
-- **Content:** All content must be professionally written (not placeholder), emotionally compelling, and reflect the trust's mission of caring for intellectually disabled individuals respectfully.
-- **Branding & Tech:** Use the provided logo, a specific color scheme (Maroon, Cream, Charcoal, Gold), and fonts (Inter/Poppins for English, Noto Sans Gujarati/Hind Vadodara for Gujarati). The site must be responsive, fast, and SEO-ready.
+- **Pages:** Home, About Us, Gallery, Success Stories, Blog, Donate, Contact Us. Pages should be toggleable (on/off) from the admin panel.
+- **Donation Page:** High-conversion form with preset amounts, an 80G exemption checkbox, and Razorpay integration.
+- **Admin Panel:** Must allow editing of all page content (text and images), management of Gallery (with local image uploads), Blog, and Success Stories. Admins must be able to update site settings (logo, social links, bank details, UPI, map embed link) and export 80G donation data as CSV.
+- **Content:** All content must be professionally written, emotionally compelling, and reflect the trust's mission.
+- **Branding & Tech:** Use a provided logo, a specific color scheme (Maroon, Cream, Charcoal, Gold), and fonts. The site must be responsive, fast, and SEO-ready.
 
 **User's preferred language**: English
 
 **what currently exists?**
-A full-stack application has been created with a FastAPI backend and a React frontend. The backend in  includes MongoDB models and API endpoints for pages, donations, auth, gallery, blog, and site settings. The frontend has the complete page structure, routing, and a functional language switcher for English and Gujarati.
+A full-stack application with a FastAPI backend and a React frontend. A comprehensive admin panel is now fully functional, allowing CRUD operations for nearly all site content, including page text, gallery albums (with local image uploads), success stories, and blog posts.
 
-The entire website's content, initially for general charity, has been rewritten and re-seeded into the database to reflect the new, specific mission of caring for individuals with intellectual disabilities. The UI on pages like Home, About, and Stories reflects this updated content.
+Key features implemented in the last session:
+- A complete, functional Admin Panel.
+- Local image upload system for the gallery, site logo, and key page images.
+- A page visibility system to enable/disable pages from the admin panel, which updates the navigation dynamically.
+- Admin controls for site branding (logo, images) and social media links.
+- Conditional display of an embedded Google Map on the Contact page, managed from the admin panel.
+- The entire application has been renamed from Shivdhara Charitable Trust to Shivdhara Charitable.
 
 **Last working item**:
-    - Last item agent was working: The agent completed a major content pivot. It updated all backend seed data and frontend components (, , ) to align the website's messaging with its new focus on caring for individuals with intellectual and mental disabilities. This included adding a  endpoint, calling it to update the database, and visually verifying the changes on the main pages.
+    - Last item agent was working: Adding a Google Maps embed link input in the admin panel and conditionally rendering the map on the Contact Us page. The map section only appears if a URL is provided in the admin settings.
     - Status: USER VERIFICATION PENDING
-    - Agent Testing Done: Y (Visual verification via screenshots only. No functional or regression testing post-content update.)
-    - Which testing method agent to use? both
+    - Agent Testing Done: Y (Visual verification via screenshot showing the map is hidden when no URL is present).
+    - Which testing method agent to use? frontend testing agent
     - User Testing Done: N
 
 **All Pending/In progress Issue list**:
-  - There are no specific bugs. The main pending items are incomplete features.
+  - Issue 1: (P0) Complete the end-to-end donation flow.
+  
+  Issues Detail:
+  - Issue 1: 
+     - Attempted fixes: None in this session. The UI exists but is not connected to the backend.
+     - Next debug checklist:
+        - File: .
+        - Connect the Proceed to Donate button to call the backend API ().
+        - Implement the Razorpay checkout modal logic using the response.
+        - Handle the successful payment callback from Razorpay.
+        - On callback, verify the payment signature by calling the backend ().
+        - If verified, save the donation details (including 80G form data) to the database via the  endpoint.
+     - Why fix this issue and what will be achieved with the fix?: This is the primary call-to-action for the website. Completing it will allow the organization to accept online donations, which is a core requirement.
+     - Status: IN PROGRESS
+     - Is recurring issue? N
+     - Should Test frontend/backend/both after fix?: both
+     - Blocked on other issue: None
 
 **In progress Task List**:
-  - Task 1:  (P0) Complete the end-to-end donation flow
-     - Where to resume: . The UI and Razorpay script loading are done. The next step is to connect the Proceed to Donate button to the backend API (), handle the payment callback to verify the payment (), and save the donation details (including 80G form data) to the database.
-     - What will be achieved with this?: Users will be able to make real test donations, and the data will be stored for admin access. This is a core feature of the website.
-     - Status:  IN PROGRESS
-     - Should Test frontend/backend/both after fix?: both
-     - Blocked on something: None
+- There are no other tasks in progress. The focus is on the pending issue above.
 
 **Upcoming and Future Tasks**
     Upcoming Tasks:
-    - **P0: Implement Admin Panel - Phase 1 (Auth & Content):**
-        - Build the login functionality in  to connect with .
-        - Create the UI in  to fetch and update the main content for the Home and About pages using the  endpoints. This will replace the current hardcoded content approach.
-    - **P1: Implement Dynamic Pages:**
-        - **Gallery:** In , fetch and display albums/images from the  endpoint.
-        - **Blog & Stories:** In  and , fetch and display lists of posts/stories, and create a view for single items.
-    - **P1: Implement Admin Panel - Phase 2 (CRUD & Exports):**
-        - Add sections to the admin panel for full CRUD (Create, Read, Update, Delete) management of the Gallery, Blog, and Success Stories.
-        - Create the interface to view all donations and export 80G requests as a CSV file.
-        - Create an interface to manage site-wide settings (e.g., Bank Details, UPI QR code, Trust registration info) that are displayed in the footer.
-    
+    - **P1: Implement Contact Form Submission & Email:**
+        - Wire up the contact form in  to a backend endpoint.
+        - Create a backend endpoint to save contact messages to the database.
+        - Implement email notifications to admins for new messages using the SMTP settings configured in the admin panel.
+
     Future Tasks:
-    - **P2: Implement Contact Form & Email:**
-        - Wire up the form on  to submit data to the backend.
-        - Implement the email sending functionality for donation confirmations using the SMTP details configured in the admin panel.
-    - **P2: Finalize Admin Panel:**
-        - Implement role-based access control (Admin/Editor).
-        - Create a simple documentation page or instructions for admin usage.
+    - **P2: Donation Confirmation Email:**
+        - After a successful donation is verified and saved, trigger an email to the donor confirming their contribution.
+    - **P2: Finalize Admin Panel (Advanced Features):**
+        - Implement role-based access control (RBAC) to enforce permissions for different user roles (e.g., Admin vs. Editor).
+        - Add a simple help/documentation section within the admin panel.
 
 **Completed work in this session**
-- **Full Stack Scaffolding:** Set up FastAPI backend, React frontend, and MongoDB connection.
-- **UI and Pages:** Created all required pages and components (, ) with routing and styling.
-- **Bilingual System:** Implemented a  for seamless EN/GU language switching.
-- **Initial Content Seeding:** Populated the application with initial content and structure.
-- **Critical Content Pivot:** Successfully rewrote and redeployed all website content to focus on care for intellectually disabled individuals, as requested by the user.
-- **Bug Fixes:** Resolved multiple frontend issues, including a CSS build error, a React component causing a stack overflow, and a faulty  implementation (switching to a manual script-load).
-- **Initial Testing:** Ran a full test suite using  which passed *before* the content pivot.
+- **Full Admin Panel Implementation:** Refactored a monolithic  into modular components, fixing a critical build error, and implemented full CRUD for Page Content, Gallery, Stories, and Blog.
+- **Local Image Uploads:** Implemented and fixed a robust file upload system () for all site images (logo, hero images, gallery), replacing the previous URL-based approach.
+- **Page Visibility Toggles:** Added a feature in the admin panel to show/hide pages, which dynamically updates the site's navigation bar.
+- **Site Branding Controls:** Created admin sections to manage the site logo, key page images, and social media links, making them fully dynamic.
+- **Conditional Google Map:** Added an admin input for a Google Maps embed URL, which is only rendered on the Contact page if the link is present.
+- **Site-wide Renaming:** Renamed Shivdhara Charitable Trust to Shivdhara Charitable across the entire application stack (frontend, backend, DB).
+- **Bug Fixes:** Resolved multiple critical issues, including the frontend build crash (Maximum call stack size exceeded), broken image paths (by adding  prefix and migrating data), and missing image on the About Us page.
 
 **Earlier issues found/mentioned but not fixed**
-   - None. All identified issues during the session were addressed.
+   - None.
 
 **Known issue recurrence from previous fork**
   - None.
@@ -74,79 +84,88 @@ The entire website's content, initially for general charity, has been rewritten 
 
 
 **Key Technical Concepts**
-- **Frontend:** React, React Router, TailwindCSS, Context API for state management.
-- **Backend:** FastAPI, Motor (async MongoDB driver), Pydantic for data validation.
+- **Frontend:** React, React Router, TailwindCSS, Axios.
+- **Backend:** FastAPI, Motor (async MongoDB driver), Pydantic.
 - **Database:** MongoDB.
-- **Bilingual Implementation:** A React Context () holds the current language ('en' or 'gu'). Components render text conditionally based on this context. Content is stored in the database with fields for each language (e.g., , ).
-- **Payment Integration:** A direct script-loading approach for Razorpay on the frontend, with backend endpoints for creating orders and verifying payments to prevent client-side manipulation.
+- **State Management:** React Context API for Language, Auth, Page Visibility, and global Site Settings.
+- **Image Handling:** Backend endpoint  saves files locally to . A static route  serves them.
 
 **key DB schema**
-  - **settings**: 
+  - **settings**: Document now includes , , and .
   - **donations**: 
   - **users**: 
   - **gallery**: 
   - **blog**: 
   - **stories**: 
+  - **page_visibility**: 
 
 **changes in tech stack**
   - None.
 
 **All files of reference**
-- : Contains all backend logic, API endpoints, and database models.
-- : The main landing page, heavily updated during the content pivot.
-- : Contains the donation form and Razorpay logic.
-- : Core of the bilingual functionality.
-- : Defines all frontend routes.
-- : Contains the detailed project requirements.
+- : Heavily modified to add endpoints for file uploads, page visibility, and extended site settings.
+- : Refactored and updated with new tabs for Branding, Social Links, and Page Visibility.
+- : New directory containing modular admin components.
+- : New context to manage which pages are visible.
+- : New context to provide global settings like logos and social links.
+- : Updated to wrap the app in new context providers and use protected routes.
+- : Updated to dynamically render navigation based on .
+- : Updated to conditionally render the Google Map.
+- : The next file to be worked on for the donation flow.
 
 **Areas that need refactoring**:
-- The static content on pages like Home and About is still partially hardcoded in the React components. This should be refactored to be fetched exclusively from the database via the  endpoint to allow for full admin control.
+- The contact form on  is a UI-only component and needs its submission logic implemented.
 
 **key api endpoints**
-- : A one-time endpoint used to update all database content.
-- : Admin login.
-- : Creates a Razorpay payment order.
-- : Verifies a completed payment.
-- : Saves donation details to the database.
-- CRUD endpoints for , , .
+- : Handles multipart/form-data for image uploads.
+- : Fetches the visibility status of all pages.
+- : Updates the visibility status of a page.
+- : Returns all public-facing settings, including new branding and social links.
 
 **Critical Info for New Agent**
-- **Content is Key:** The project's mission pivoted to focus *exclusively* on lifelong care for individuals with intellectual disabilities. All new features and content must align with this specific, respectful, and compassionate tone.
-- **Admin Panel is Priority:** The highest priority is to build out the Admin Panel, starting with content management for static pages. This will move the project from a semi-static state to a fully dynamic and manageable CMS.
-- **Razorpay Implementation:** The  library was abandoned for a manual script-loading method in  due to build issues. Refer to this file for the correct implementation pattern.
-- **Testing Needed:** A full regression test using  was not performed after the major content pivot. This should be done after the next significant feature implementation to ensure no regressions were introduced.
+- **Admin Panel is Feature-Complete:** The user's main priority of a functional admin panel has been delivered. It now controls text, images, page visibility, branding, and more. Future work should focus on user-facing features.
+- **Donation Flow is the #1 Priority:** The most critical incomplete feature is the Razorpay donation flow. This should be the immediate next task.
+- **Image Uploads are Fixed:** The image upload system is fully functional. Images are saved locally and served via the  path.
+- **Admin Credentials:** Use  with password  to access the admin panel at .
+- **Check Admin Settings First:** If a page or element (like the map) appears to be missing, first check its corresponding setting in the admin panel (e.g., Page Visibility, Contact Info tab) before debugging the code.
 
 **documents and test reports created in this job**
   - /app/memory/PRD.md
-  - /app/test_reports/iteration_1.json
-  - /app/design_guidelines.json
+  - /app/test_reports/iteration_2.json
+  - /app/test_reports/iteration_3.json
+  - /app/test_reports/iteration_4.json
 
 **Last 10 User Messages and any pending HUMAN messages** 
- -  User requested a major content update for the entire site to focus exclusively on caring for people with intellectual/mental disabilities. All subsequent agent actions were to implement this change. This task is visually complete but requires full testing and user verification.
+- User requested a comprehensive fix for the admin panel, including editing content and images. **(Completed)**
+- User requested local image storage instead of URL inputs. **(Completed)**
+- User requested an option to toggle pages on and off. **(Completed)**
+- User requested options to change the logo, site images, and social links. **(Completed)**
+- User requested to rename the trust to Shivdhara Charitable. **(Completed)**
+- User reported that image uploads were not working well. **(Fixed)**
+- User reported that the About Us page image was not showing up. **(Fixed)**
+- User requested an admin option for a Google Maps embed link, with conditional visibility on the website. **(Completed)**
 
 **Project Health Check:**
 - **Broken:**
-  - **Admin Panel:** UI exists, but there is no functionality.
-  - **Donation Flow:** Payment processing and data saving are not implemented.
-  - **Dynamic Pages:** Gallery, Blog, and Success Stories pages are UI shells without data-fetching logic.
-  - **Contact Form:** Not functional.
+  - **Donation Flow:** The UI exists, but payment processing and data saving are not implemented.
+  - **Contact Form:** The UI form exists, but it does not submit data to the backend.
 - **Mocked:**
-  - Much of the page content is still hardcoded in frontend components, despite being available in the database. The system is ready to be fully dynamic but isn't yet.
+  - None.
 
 **3rd Party Integrations**
 - Razorpay (Payments) — requires User API Key.
 
 **Testing status**
-  - Testing agent used after significant changes: YES (but only once, *before* the major content pivot. No testing was done after.)
+  - Testing agent used after significant changes: YES (multiple times after major feature additions).
   - Troubleshoot agent used after agent stuck in loop: NO
-  - Test files created: []
-  - Known regressions: None confirmed, but a high possibility exists after the content pivot.
+  - Test files created: Yes, in .
+  - Known regressions: None.
 
 **Credentials to test flow:**
-- Admin credentials can be created via the backend  endpoint. The login form is not yet functional.
-- Razorpay is configured for test mode.
+- **Admin Login:**
+  - **URL:** 
+  - **Email:** 
+  - **Password:** 
 
 **What agent forgot to execute**
-- The agent did not run a comprehensive test with  after the significant content pivot, which changed text and structure across the entire application.
-- The agent created dynamic page shells (, , ) but did not implement the logic to fetch and display data from the backend APIs.
-- The agent hardcoded new content in several frontend components instead of refactoring them to fetch the content from the newly updated database, creating technical debt.</analysis>
+- The donation flow, which was in progress in the previous session, remains the main unimplemented feature from the original product requirements.</analysis>
