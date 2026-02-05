@@ -593,8 +593,8 @@ async def send_donation_confirmation_email(donation: dict):
             <p>Your generous donation of <strong>₹{amount:,}</strong> has been received successfully.</p>
             <p>આપનું ₹{amount:,} નું ઉદાર દાન સફળતાપૂર્વક પ્રાપ્ત થયું છે.</p>
             
-            <p>Your contribution will help us continue our mission of serving the community through education, healthcare, and relief services.</p>
-            <p>આપનું યોગદાન શિક્ષણ, આરોગ્ય સેવા અને રાહત સેવાઓ દ્વારા સમુદાયની સેવા કરવાના અમારા મિશનમાં મદદ કરશે.</p>
+            <p>Your contribution will help us continue our mission of providing lifelong care, dignity, and support to individuals with intellectual disabilities.</p>
+            <p>આપનું યોગદાન બૌદ્ધિક વિકલાંગતા ધરાવતી વ્યક્તિઓને આજીવન સંભાળ, ગૌરવ અને સહાય પ્રદાન કરવાના અમારા મિશનમાં મદદ કરશે.</p>
             
             <div style="background: white; padding: 15px; border-radius: 8px; margin: 20px 0;">
                 <h3>Donation Details / દાનની વિગતો:</h3>
