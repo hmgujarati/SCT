@@ -123,6 +123,24 @@ class RazorpayConfig(BaseModel):
     webhook_secret: str = ""
     is_live: bool = False
 
+class SocialLinks(BaseModel):
+    facebook: str = ""
+    instagram: str = ""
+    twitter: str = ""
+    youtube: str = ""
+    linkedin: str = ""
+    whatsapp: str = ""
+
+class SiteImages(BaseModel):
+    logo: str = ""
+    logo_dark: str = ""  # For dark backgrounds
+    favicon: str = ""
+    hero_image: str = ""
+    hero_image_2: str = ""
+    about_image: str = ""
+    cta_image: str = ""
+    donate_image: str = ""
+
 class SiteSettings(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     bank_details: BankDetails = Field(default_factory=BankDetails)
@@ -131,6 +149,8 @@ class SiteSettings(BaseModel):
     upi_details: UPIDetails = Field(default_factory=UPIDetails)
     smtp_config: SMTPConfig = Field(default_factory=SMTPConfig)
     razorpay_config: RazorpayConfig = Field(default_factory=RazorpayConfig)
+    social_links: SocialLinks = Field(default_factory=SocialLinks)
+    site_images: SiteImages = Field(default_factory=SiteImages)
     impact_stats: Dict[str, Any] = Field(default_factory=dict)
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -141,6 +161,8 @@ class SiteSettingsUpdate(BaseModel):
     upi_details: Optional[UPIDetails] = None
     smtp_config: Optional[SMTPConfig] = None
     razorpay_config: Optional[RazorpayConfig] = None
+    social_links: Optional[SocialLinks] = None
+    site_images: Optional[SiteImages] = None
     impact_stats: Optional[Dict[str, Any]] = None
 
 # Page Visibility Settings
