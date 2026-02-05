@@ -526,6 +526,34 @@ const SettingsSection = () => {
                 <Input value={settings.contact_info?.whatsapp || ''} onChange={(e) => updateNestedField('contact_info', 'whatsapp', e.target.value)} placeholder="+91..." className="input-field" />
               </div>
             </div>
+            <div className="border-t pt-4 mt-4">
+              <label className="block text-sm font-medium mb-2">{language === 'en' ? 'Google Maps Embed URL' : 'Google Maps એમ્બેડ URL'}</label>
+              <Input 
+                value={settings.contact_info?.maps_embed || ''} 
+                onChange={(e) => updateNestedField('contact_info', 'maps_embed', e.target.value)} 
+                placeholder="https://www.google.com/maps/embed?pb=..." 
+                className="input-field" 
+              />
+              <p className="text-xs text-[#6B7280] mt-1">
+                {language === 'en' 
+                  ? 'Paste the embed URL from Google Maps. Leave empty to hide the map section on contact page.' 
+                  : 'Google Maps માંથી embed URL પેસ્ટ કરો. સંપર્ક પેજ પર map સેક્શન છુપાવવા માટે ખાલી છોડો.'}
+              </p>
+              {settings.contact_info?.maps_embed && (
+                <div className="mt-3 rounded-lg overflow-hidden border">
+                  <iframe
+                    src={settings.contact_info.maps_embed}
+                    width="100%"
+                    height="200"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Map Preview"
+                  ></iframe>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
