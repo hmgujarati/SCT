@@ -87,11 +87,22 @@ Build a professional bilingual website for a charitable trust with:
   - Gallery management with local image upload (JPG, PNG, GIF, WebP)
   - Success Stories management with bilingual fields
   - Blog post management with tags and publish status
-  - Site Settings with 8 tabs: Page Visibility, Contact, Bank, Trust, UPI, SMTP, Razorpay, Impact Stats
-  - **Page Visibility** - Toggle any of 7 pages on/off (Home, About, Gallery, Stories, Blog, Donate, Contact)
+  - Site Settings with 10 tabs:
+    1. Page Visibility - Toggle any of 7 pages on/off
+    2. Contact Info
+    3. Bank Details
+    4. Trust Details
+    5. UPI
+    6. **Logo & Images** - Upload/change: Main Logo, Logo Dark, Hero Image 1 & 2, About Image, CTA Image, Donate Image
+    7. **Social Links** - Facebook, Instagram, Twitter/X, YouTube, LinkedIn, WhatsApp
+    8. Email (SMTP)
+    9. Razorpay
+    10. Impact Stats
   - Donations list with 80G CSV export
   - Contact Messages with read/unread tracking
 - File upload system: images stored locally in /app/backend/uploads/
+- Dynamic site images: Homepage hero, CTA section, logo all update from admin settings
+- Social media icons in footer only show when links are configured
 
 ## Next Action Items
 1. Login to admin (/login) with admin@admin.com / admin@123
