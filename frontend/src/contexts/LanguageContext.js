@@ -80,15 +80,15 @@ export const LanguageProvider = ({ children }) => {
     error: language === 'en' ? 'Something went wrong' : 'કંઈક ખોટું થયું',
     success: language === 'en' ? 'Success!' : 'સફળતા!',
     // Impact stats labels
-    families_helped: language === 'en' ? 'Families Helped' : 'મદદ પામેલ પરિવારો',
-    education_drives: language === 'en' ? 'Education Drives' : 'શિક્ષણ અભિયાનો',
-    medical_camps: language === 'en' ? 'Medical Camps' : 'મેડિકલ કેમ્પ',
+    families_helped: language === 'en' ? 'Residents in Care' : 'સંભાળમાં નિવાસીઓ',
+    education_drives: language === 'en' ? 'Trained Caregivers' : 'પ્રશિક્ષિત સંભાળ રાખનારાઓ',
+    medical_camps: language === 'en' ? 'Days of Care' : 'સંભાળના દિવસો',
     years_of_service: language === 'en' ? 'Years of Service' : 'સેવાના વર્ષો',
     // Programs
-    education: language === 'en' ? 'Education' : 'શિક્ષણ',
+    daily_care: language === 'en' ? 'Daily Care' : 'દૈનિક સંભાળ',
     healthcare: language === 'en' ? 'Healthcare' : 'આરોગ્ય સેવા',
-    relief: language === 'en' ? 'Relief Services' : 'રાહત સેવાઓ',
-    community: language === 'en' ? 'Community Development' : 'સમુદાય વિકાસ',
+    nutrition: language === 'en' ? 'Nutrition' : 'પોષણ',
+    emotional_support: language === 'en' ? 'Emotional Support' : 'ભાવનાત્મક સહાય',
     // Donation
     custom_amount: language === 'en' ? 'Custom Amount' : 'કસ્ટમ રકમ',
     your_donation: language === 'en' ? 'Your Donation' : 'તમારું દાન',
