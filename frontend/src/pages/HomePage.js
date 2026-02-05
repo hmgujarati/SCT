@@ -96,10 +96,10 @@ const HomePage = () => {
   ];
 
   const impactStats = settings?.impact_stats || {
-    families_helped: 5000,
-    education_drives: 150,
-    medical_camps: 75,
-    years_of_service: 12
+    families_helped: 150,
+    education_drives: 12,
+    medical_camps: 365,
+    years_of_service: 10
   };
 
   return (
