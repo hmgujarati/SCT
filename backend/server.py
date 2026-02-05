@@ -143,6 +143,20 @@ class SiteSettingsUpdate(BaseModel):
     razorpay_config: Optional[RazorpayConfig] = None
     impact_stats: Optional[Dict[str, Any]] = None
 
+# Page Visibility Settings
+class PageVisibility(BaseModel):
+    home: bool = True
+    about: bool = True
+    gallery: bool = True
+    stories: bool = True
+    blog: bool = True
+    donate: bool = True
+    contact: bool = True
+
+class PageVisibilityUpdate(BaseModel):
+    page_key: str
+    is_visible: bool
+
 # Content Models (Bilingual)
 class BilingualContent(BaseModel):
     en: str = ""
