@@ -592,7 +592,13 @@ async def update_content(page_key: str, section_key: str, content: BilingualCont
 async def create_donation_order(donation: DonationCreate):
     """Create Razorpay order for donation"""
     try:
-        razorpay_client = get_razorpay_client()
+        # Get credentials from database
+        key_id, key_secret = await get_razorpay_credentials()
+        
+        if not key_id or not key_secret:
+            raise HTTPException(status_code=400, detail="Razorpay not configured. Please add API keys in admin settings.")
+        
+        razorpay_client = get_razorpay_client_sync(key_id, key_secret)
         
         # Create order (amount in paise)
         order_data = {
@@ -625,6 +631,8 @@ async def create_donation_order(donation: DonationCreate):
             "currency": order['currency'],
             "donation_id": donation_record.id
         }
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error creating order: {e}")
         raise HTTPException(status_code=500, detail=str(e))
