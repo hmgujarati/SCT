@@ -646,7 +646,9 @@ async def verify_donation(
 ):
     """Verify Razorpay payment"""
     try:
-        razorpay_client = get_razorpay_client()
+        # Get credentials from database
+        key_id, key_secret = await get_razorpay_credentials()
+        razorpay_client = get_razorpay_client_sync(key_id, key_secret)
         
         # Verify signature
         params = {
