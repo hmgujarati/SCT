@@ -375,11 +375,19 @@ async def get_site_settings():
         return default_settings.model_dump()
     return settings
 
-def get_razorpay_client():
-    """Get Razorpay client with current settings"""
-    # Try environment variables first, then fall back to test keys
-    key_id = os.environ.get('RAZORPAY_KEY_ID', 'rzp_test_dPABC1234WXYZ')
-    key_secret = os.environ.get('RAZORPAY_KEY_SECRET', 'test_secret_key_placeholder')
+async def get_razorpay_credentials():
+    """Get Razorpay credentials from database settings or environment"""
+    settings = await get_site_settings()
+    razorpay_config = settings.get('razorpay_config', {})
+    
+    # Try database settings first, then environment variables
+    key_id = razorpay_config.get('key_id') or os.environ.get('RAZORPAY_KEY_ID', '')
+    key_secret = razorpay_config.get('key_secret') or os.environ.get('RAZORPAY_KEY_SECRET', '')
+    
+    return key_id, key_secret
+
+def get_razorpay_client_sync(key_id: str, key_secret: str):
+    """Get Razorpay client with provided credentials"""
     return razorpay.Client(auth=(key_id, key_secret))
 
 async def send_email(to_email: str, subject: str, html_content: str, text_content: str = ""):
