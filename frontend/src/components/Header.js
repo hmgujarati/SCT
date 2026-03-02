@@ -106,7 +106,7 @@ const Header = () => {
             {/* Donate Button */}
             {isPageVisible('donate') && (
               <Link to="/donate" data-testid="header-donate-btn">
-                <Button className="hidden sm:flex btn-gold text-sm px-6 py-2">
+                <Button className="hidden sm:flex bg-[#C9A24A] hover:bg-[#A58230] text-white text-sm px-6 py-2 rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5">
                   {ui.donate_now}
                 </Button>
               </Link>
