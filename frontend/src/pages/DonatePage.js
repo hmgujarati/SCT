@@ -448,7 +448,7 @@ const DonatePage = () => {
                   onClick={proceedToPayment}
                   disabled={loading}
                   data-testid="proceed-to-pay"
-                  className="w-full py-6 text-lg rounded-xl bg-[#C9A24A] hover:bg-[#A58230] text-white font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                  className="w-full py-6 text-lg rounded-xl bg-[#C9A24A] hover:bg-[#8B6914] text-white font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:scale-100"
                 >
                   {loading ? (
                     <span className="flex items-center gap-2">
