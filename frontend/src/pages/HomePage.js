@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useSiteSettings } from '../contexts/SiteSettingsContext';
+import { usePageVisibility } from '../contexts/PageVisibilityContext';
 import axios from 'axios';
 import { Button } from '../components/ui/button';
 import { ArrowRight, Heart, Home, Droplets, Stethoscope, Utensils, HeartHandshake, Shield, ShieldCheck, FileCheck, ChevronRight } from 'lucide-react';
