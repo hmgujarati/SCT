@@ -423,38 +423,28 @@ async def send_email(to_email: str, subject: str, html_content: str, text_conten
 
 # ================ AUTH ROUTES ================
 
-@api_router.post("/auth/register", response_model=TokenResponse)
-async def register(user_data: UserCreate):
-    existing = await db.users.find_one({"email": user_data.email})
-    if existing:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    
-    # Check if this is first user (make them admin)
-    user_count = await db.users.count_documents({})
-    role = "admin" if user_count == 0 else user_data.role
-    
-    user_id = str(uuid.uuid4())
-    user_doc = {
-        "id": user_id,
-        "email": user_data.email,
-        "password": hash_password(user_data.password),
-        "name": user_data.name,
-        "role": role,
-        "created_at": datetime.now(timezone.utc).isoformat()
-    }
-    await db.users.insert_one(user_doc)
-    
-    token = create_token(user_id, user_data.email, role)
-    return TokenResponse(
-        access_token=token,
-        user=UserResponse(
-            id=user_id,
-            email=user_data.email,
-            name=user_data.name,
-            role=role,
-            created_at=datetime.fromisoformat(user_doc['created_at'])
-        )
-    )
+# Master Admin Setup - No public registration allowed
+MASTER_ADMIN_EMAIL = os.environ.get('MASTER_ADMIN_EMAIL', 'admin@shivdhara.org')
+MASTER_ADMIN_PASSWORD = os.environ.get('MASTER_ADMIN_PASSWORD', 'ShivdharaAdmin@2024')
+
+async def ensure_master_admin():
+    """Create master admin if not exists. No other registration allowed."""
+    existing = await db.users.find_one({"role": "admin"})
+    if not existing:
+        user_id = str(uuid.uuid4())
+        user_doc = {
+            "id": user_id,
+            "email": MASTER_ADMIN_EMAIL,
+            "password": hash_password(MASTER_ADMIN_PASSWORD),
+            "name": "Master Admin",
+            "role": "admin",
+            "is_master": True,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.users.insert_one(user_doc)
+        logger.info(f"Master admin created with email: {MASTER_ADMIN_EMAIL}")
+    else:
+        logger.info("Master admin already exists")
 
 @api_router.post("/auth/login", response_model=TokenResponse)
 async def login(credentials: UserLogin):
