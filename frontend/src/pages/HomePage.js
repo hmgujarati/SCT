@@ -131,7 +131,7 @@ const HomePage = () => {
               <div className="flex flex-wrap gap-4">
                 {isPageVisible('donate') && (
                   <Link to="/donate" data-testid="hero-donate-btn">
-                    <Button className="btn-gold text-lg px-8 py-4">
+                    <Button className="bg-[#C9A24A] hover:bg-[#A58230] text-white text-lg px-8 py-4 rounded-full font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1">
                       <Heart className="w-5 h-5 mr-2" />
                       {language === 'en' ? 'Support Our Residents' : 'અમારા નિવાસીઓને સહાય કરો'}
                     </Button>
@@ -139,7 +139,7 @@ const HomePage = () => {
                 )}
                 {isPageVisible('about') && (
                   <Link to="/about" data-testid="hero-learn-more-btn">
-                    <Button variant="outline" className="btn-outline text-lg px-8 py-4">
+                    <Button className="border-2 border-[#8B1E1E] text-[#8B1E1E] hover:bg-[#8B1E1E] hover:text-white bg-transparent text-lg px-8 py-4 rounded-full font-medium transition-all duration-300">
                       {ui.learn_more}
                       <ArrowRight className="w-5 h-5 ml-2" />
                     </Button>
