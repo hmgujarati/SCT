@@ -110,6 +110,12 @@ export const SiteSettingsProvider = ({ children }) => {
     return img ? getImageUrl(img) : null;
   };
 
+  // Get favicon with fallback
+  const getFavicon = () => {
+    const favicon = settings?.site_images?.favicon;
+    return favicon ? getImageUrl(favicon) : DEFAULT_FAVICON;
+  };
+
   // Social links
   const getSocialLinks = () => {
     return settings?.social_links || {};
