@@ -141,6 +141,7 @@ export const SiteSettingsProvider = ({ children }) => {
       loading,
       getLogo,
       getLogoDark,
+      getFavicon,
       getHeroImage,
       getHeroImage2,
       getAboutImage,
