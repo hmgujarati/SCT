@@ -629,8 +629,8 @@ const BrandingSection = ({ settings, setSettings, language }) => {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="font-semibold text-lg mb-4">{language === 'en' ? 'Logo' : 'લોગો'}</h3>
-        <div className="grid md:grid-cols-2 gap-4">
+        <h3 className="font-semibold text-lg mb-4">{language === 'en' ? 'Logo & Favicon' : 'લોગો અને ફેવીકોન'}</h3>
+        <div className="grid md:grid-cols-3 gap-4">
           <ImageUploadCard 
             field="logo" 
             label={language === 'en' ? 'Main Logo' : 'મુખ્ય લોગો'} 
@@ -642,6 +642,12 @@ const BrandingSection = ({ settings, setSettings, language }) => {
             label={language === 'en' ? 'Logo (Dark Background)' : 'લોગો (ડાર્ક બેકગ્રાઉન્ડ)'} 
             description={language === 'en' ? 'Optional - for dark sections' : 'વૈકલ્પિક - ડાર્ક વિભાગો માટે'}
             aspectRatio="aspect-[3/1]"
+          />
+          <ImageUploadCard 
+            field="favicon" 
+            label={language === 'en' ? 'Favicon' : 'ફેવીકોન'} 
+            description={language === 'en' ? 'Browser tab icon (square image recommended)' : 'બ્રાઉઝર ટેબ આઇકોન (ચોરસ ઈમેજ ભલામણ)'}
+            aspectRatio="aspect-square"
           />
         </div>
       </div>
