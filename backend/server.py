@@ -474,6 +474,72 @@ async def get_me(user: dict = Depends(get_current_user)):
         created_at=datetime.fromisoformat(user['created_at']) if isinstance(user['created_at'], str) else user['created_at']
     )
 
+# Admin Credentials Update Models
+class AdminCredentialsUpdate(BaseModel):
+    current_password: str
+    new_email: Optional[str] = None
+    new_password: Optional[str] = None
+    new_name: Optional[str] = None
+
+@api_router.put("/auth/update-credentials")
+async def update_admin_credentials(update: AdminCredentialsUpdate, user: dict = Depends(get_admin_user)):
+    """Update admin email/password - only for the logged-in admin"""
+    # Verify current password
+    admin = await db.users.find_one({"id": user['id']}, {"_id": 0})
+    if not admin or not verify_password(update.current_password, admin['password']):
+        raise HTTPException(status_code=401, detail="Current password is incorrect")
+    
+    # Build update dict
+    updates = {}
+    if update.new_email and update.new_email != admin['email']:
+        # Check if email is already taken
+        existing = await db.users.find_one({"email": update.new_email, "id": {"$ne": user['id']}})
+        if existing:
+            raise HTTPException(status_code=400, detail="Email already in use")
+        updates['email'] = update.new_email
+    
+    if update.new_password:
+        if len(update.new_password) < 6:
+            raise HTTPException(status_code=400, detail="Password must be at least 6 characters")
+        updates['password'] = hash_password(update.new_password)
+    
+    if update.new_name:
+        updates['name'] = update.new_name
+    
+    if not updates:
+        raise HTTPException(status_code=400, detail="No changes provided")
+    
+    # Update the admin
+    await db.users.update_one({"id": user['id']}, {"$set": updates})
+    
+    # Get updated user and create new token
+    updated_user = await db.users.find_one({"id": user['id']}, {"_id": 0})
+    new_token = create_token(updated_user['id'], updated_user['email'], updated_user['role'])
+    
+    return {
+        "message": "Credentials updated successfully",
+        "access_token": new_token,
+        "user": {
+            "id": updated_user['id'],
+            "email": updated_user['email'],
+            "name": updated_user['name'],
+            "role": updated_user['role']
+        }
+    }
+
+@api_router.delete("/auth/cleanup-admins")
+async def cleanup_admin_accounts(user: dict = Depends(get_admin_user)):
+    """Remove all admin accounts except the current one"""
+    # Delete all users except the current admin
+    result = await db.users.delete_many({"id": {"$ne": user['id']}})
+    return {"message": f"Removed {result.deleted_count} other account(s). Only your account remains."}
+
+@api_router.get("/auth/admin-count")
+async def get_admin_count(user: dict = Depends(get_admin_user)):
+    """Get count of admin accounts"""
+    count = await db.users.count_documents({})
+    return {"count": count}
+
 # ================ SITE SETTINGS ROUTES ================
 
 @api_router.get("/settings")
