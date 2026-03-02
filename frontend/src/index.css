@@ -62,7 +62,15 @@
 @layer components {
   /* Button Styles */
   .btn-primary {
-    @apply bg-[#8B1E1E] text-white hover:bg-[#701616] px-8 py-3 rounded-full font-medium transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1;
+    @apply bg-[#8B1E1E] text-white px-8 py-3 rounded-full font-medium transition-all duration-300 shadow-lg;
+  }
+  
+  .btn-primary:hover:not(:disabled) {
+    @apply bg-[#701616] shadow-xl -translate-y-1;
+  }
+  
+  .btn-primary:active:not(:disabled) {
+    @apply bg-[#5a1212] translate-y-0;
   }
   
   .btn-secondary {
