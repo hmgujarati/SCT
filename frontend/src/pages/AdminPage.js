@@ -538,8 +538,14 @@ const BrandingSection = ({ settings, setSettings, language }) => {
       const formData = new FormData();
       formData.append('file', file);
       
+      // Get token from localStorage for upload requests
+      const token = localStorage.getItem('shivdhara_token');
+      
       const response = await axios.post(`${API}/upload`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
       });
       
       const imageUrl = response.data.url;
@@ -552,6 +558,7 @@ const BrandingSection = ({ settings, setSettings, language }) => {
       }));
       toast.success(language === 'en' ? 'Image uploaded!' : 'ફોટો અપલોડ થયો!');
     } catch (error) {
+      console.error('Upload error:', error);
       toast.error(language === 'en' ? 'Upload failed' : 'અપલોડ નિષ્ફળ');
     } finally {
       setUploading(prev => ({ ...prev, [field]: false }));
