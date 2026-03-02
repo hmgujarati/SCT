@@ -1783,8 +1783,38 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    """Initialize master admin on startup"""
+    """Initialize master admin and seed data on startup"""
     await ensure_master_admin()
+    # Seed initial data if not exists
+    await seed_data_on_startup()
+
+async def seed_data_on_startup():
+    """Seed all initial data on startup"""
+    # Check if page content exists
+    content_count = await db.page_content.count_documents({})
+    if content_count == 0:
+        logger.info("Seeding initial page content...")
+        # Call the seed endpoint logic directly
+        await seed_initial_data()
+        logger.info("Initial data seeded successfully")
+    else:
+        logger.info(f"Database already has {content_count} content items")
+    
+    # Ensure default settings exist
+    settings_count = await db.settings.count_documents({})
+    if settings_count == 0:
+        logger.info("Creating default settings...")
+        default_settings = SiteSettings().model_dump()
+        await db.settings.insert_one(default_settings)
+        logger.info("Default settings created")
+    
+    # Ensure page visibility exists
+    visibility_count = await db.page_visibility.count_documents({})
+    if visibility_count == 0:
+        logger.info("Creating default page visibility...")
+        default_visibility = PageVisibility().model_dump()
+        await db.page_visibility.insert_one(default_visibility)
+        logger.info("Default page visibility created")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
