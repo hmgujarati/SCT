@@ -520,6 +520,7 @@ const BrandingSection = ({ settings, setSettings, language }) => {
   const fileInputRefs = {
     logo: React.useRef(null),
     logo_dark: React.useRef(null),
+    favicon: React.useRef(null),
     hero_image: React.useRef(null),
     hero_image_2: React.useRef(null),
     about_image: React.useRef(null),
