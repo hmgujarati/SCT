@@ -144,6 +144,299 @@ const AdminPage = () => {
   );
 };
 
+// Account Settings Section - Change Admin Credentials
+const AccountSettingsSection = () => {
+  const { language } = useLanguage();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [adminCount, setAdminCount] = useState(0);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [credentials, setCredentials] = useState({
+    currentPassword: '',
+    newEmail: '',
+    newPassword: '',
+    confirmPassword: '',
+    newName: ''
+  });
+
+  useEffect(() => {
+    // Get admin count
+    const fetchAdminCount = async () => {
+      try {
+        const response = await axios.get(`${API}/auth/admin-count`);
+        setAdminCount(response.data.count);
+      } catch (error) {
+        console.error('Error fetching admin count:', error);
+      }
+    };
+    fetchAdminCount();
+    
+    // Pre-fill current email and name
+    if (user) {
+      setCredentials(prev => ({
+        ...prev,
+        newEmail: user.email || '',
+        newName: user.name || ''
+      }));
+    }
+  }, [user]);
+
+  const handleUpdateCredentials = async () => {
+    if (!credentials.currentPassword) {
+      toast.error(language === 'en' ? 'Please enter your current password' : 'કૃપા કરીને વર્તમાન પાસવર્ડ દાખલ કરો');
+      return;
+    }
+
+    if (credentials.newPassword && credentials.newPassword !== credentials.confirmPassword) {
+      toast.error(language === 'en' ? 'New passwords do not match' : 'નવા પાસવર્ડ મેળ ખાતા નથી');
+      return;
+    }
+
+    if (credentials.newPassword && credentials.newPassword.length < 6) {
+      toast.error(language === 'en' ? 'Password must be at least 6 characters' : 'પાસવર્ડ ઓછામાં ઓછો 6 અક્ષરનો હોવો જોઈએ');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.put(`${API}/auth/update-credentials`, {
+        current_password: credentials.currentPassword,
+        new_email: credentials.newEmail !== user?.email ? credentials.newEmail : null,
+        new_password: credentials.newPassword || null,
+        new_name: credentials.newName !== user?.name ? credentials.newName : null
+      });
+
+      // Update token in localStorage
+      localStorage.setItem('shivdhara_token', response.data.access_token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
+
+      toast.success(language === 'en' ? 'Credentials updated successfully!' : 'ક્રેડેન્શિયલ્સ સફળતાપૂર્વક અપડેટ થયા!');
+      
+      // Clear password fields
+      setCredentials(prev => ({
+        ...prev,
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      }));
+
+      // If email changed, user needs to re-login
+      if (credentials.newEmail !== user?.email) {
+        toast.info(language === 'en' ? 'Please login with your new email' : 'કૃપા કરીને નવા ઈમેઈલ સાથે લોગિન કરો');
+        logout();
+        navigate('/login');
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.detail || (language === 'en' ? 'Update failed' : 'અપડેટ નિષ્ફળ'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCleanupAdmins = async () => {
+    if (!window.confirm(language === 'en' 
+      ? 'This will remove all other admin accounts. Only your account will remain. Continue?' 
+      : 'આ અન્ય તમામ એડમિન એકાઉન્ટ્સ દૂર કરશે. માત્ર તમારું એકાઉન્ટ રહેશે. ચાલુ રાખો?')) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.delete(`${API}/auth/cleanup-admins`);
+      toast.success(response.data.message);
+      setAdminCount(1);
+    } catch (error) {
+      toast.error(error.response?.data?.detail || (language === 'en' ? 'Cleanup failed' : 'ક્લીનઅપ નિષ્ફળ'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6" data-testid="account-settings-section">
+      {/* Current Admin Info */}
+      <div className="bg-white rounded-xl p-6 shadow-sm">
+        <h3 className="text-lg font-semibold text-[#1F2937] mb-4">
+          {language === 'en' ? 'Current Admin Account' : 'વર્તમાન એડમિન એકાઉન્ટ'}
+        </h3>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <p className="text-sm text-[#6B7280]">{language === 'en' ? 'Email' : 'ઈમેઈલ'}</p>
+            <p className="font-medium text-[#1F2937]">{user?.email}</p>
+          </div>
+          <div>
+            <p className="text-sm text-[#6B7280]">{language === 'en' ? 'Name' : 'નામ'}</p>
+            <p className="font-medium text-[#1F2937]">{user?.name}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Update Credentials Form */}
+      <div className="bg-white rounded-xl p-6 shadow-sm">
+        <h3 className="text-lg font-semibold text-[#1F2937] mb-4">
+          {language === 'en' ? 'Update Credentials' : 'ક્રેડેન્શિયલ્સ અપડેટ કરો'}
+        </h3>
+        
+        <div className="space-y-4">
+          {/* Current Password - Required */}
+          <div>
+            <label className="block text-sm font-medium text-[#1F2937] mb-1.5">
+              {language === 'en' ? 'Current Password *' : 'વર્તમાન પાસવર્ડ *'}
+            </label>
+            <div className="relative">
+              <Input
+                type={showCurrentPassword ? 'text' : 'password'}
+                value={credentials.currentPassword}
+                onChange={(e) => setCredentials({ ...credentials, currentPassword: e.target.value })}
+                placeholder="••••••••"
+                className="pr-10 input-field"
+              />
+              <button
+                type="button"
+                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6B7280] hover:text-[#1F2937]"
+              >
+                {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
+            <p className="text-xs text-[#6B7280] mt-1">
+              {language === 'en' ? 'Required to make any changes' : 'કોઈપણ ફેરફાર માટે જરૂરી'}
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {/* New Name */}
+            <div>
+              <label className="block text-sm font-medium text-[#1F2937] mb-1.5">
+                {language === 'en' ? 'Name' : 'નામ'}
+              </label>
+              <Input
+                type="text"
+                value={credentials.newName}
+                onChange={(e) => setCredentials({ ...credentials, newName: e.target.value })}
+                placeholder="Admin Name"
+                className="input-field"
+              />
+            </div>
+
+            {/* New Email */}
+            <div>
+              <label className="block text-sm font-medium text-[#1F2937] mb-1.5">
+                {language === 'en' ? 'Email' : 'ઈમેઈલ'}
+              </label>
+              <Input
+                type="email"
+                value={credentials.newEmail}
+                onChange={(e) => setCredentials({ ...credentials, newEmail: e.target.value })}
+                placeholder="admin@example.com"
+                className="input-field"
+              />
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {/* New Password */}
+            <div>
+              <label className="block text-sm font-medium text-[#1F2937] mb-1.5">
+                {language === 'en' ? 'New Password' : 'નવો પાસવર્ડ'}
+              </label>
+              <div className="relative">
+                <Input
+                  type={showNewPassword ? 'text' : 'password'}
+                  value={credentials.newPassword}
+                  onChange={(e) => setCredentials({ ...credentials, newPassword: e.target.value })}
+                  placeholder="••••••••"
+                  className="pr-10 input-field"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6B7280] hover:text-[#1F2937]"
+                >
+                  {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              <p className="text-xs text-[#6B7280] mt-1">
+                {language === 'en' ? 'Leave blank to keep current password' : 'વર્તમાન પાસવર્ડ રાખવા માટે ખાલી છોડો'}
+              </p>
+            </div>
+
+            {/* Confirm Password */}
+            <div>
+              <label className="block text-sm font-medium text-[#1F2937] mb-1.5">
+                {language === 'en' ? 'Confirm New Password' : 'નવો પાસવર્ડ કન્ફર્મ કરો'}
+              </label>
+              <Input
+                type="password"
+                value={credentials.confirmPassword}
+                onChange={(e) => setCredentials({ ...credentials, confirmPassword: e.target.value })}
+                placeholder="••••••••"
+                className="input-field"
+              />
+            </div>
+          </div>
+
+          <Button
+            onClick={handleUpdateCredentials}
+            disabled={loading || !credentials.currentPassword}
+            className="w-full md:w-auto bg-[#8B1E1E] hover:bg-[#701616] text-white"
+          >
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                {language === 'en' ? 'Updating...' : 'અપડેટ થઈ રહ્યું છે...'}
+              </span>
+            ) : (
+              <span className="flex items-center gap-2">
+                <Save className="w-4 h-4" />
+                {language === 'en' ? 'Update Credentials' : 'ક્રેડેન્શિયલ્સ અપડેટ કરો'}
+              </span>
+            )}
+          </Button>
+        </div>
+      </div>
+
+      {/* Cleanup Other Admins */}
+      {adminCount > 1 && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+          <div className="flex items-start gap-4">
+            <AlertTriangle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="text-lg font-semibold text-red-800 mb-2">
+                {language === 'en' ? 'Multiple Admin Accounts Detected' : 'બહુવિધ એડમિન એકાઉન્ટ્સ મળ્યા'}
+              </h3>
+              <p className="text-sm text-red-700 mb-4">
+                {language === 'en' 
+                  ? `There are ${adminCount} admin accounts. Click below to remove all other accounts and keep only yours.`
+                  : `${adminCount} એડમિન એકાઉન્ટ્સ છે. અન્ય તમામ એકાઉન્ટ્સ દૂર કરવા અને માત્ર તમારું રાખવા માટે નીચે ક્લિક કરો.`}
+              </p>
+              <Button
+                onClick={handleCleanupAdmins}
+                disabled={loading}
+                variant="destructive"
+                className="bg-red-600 hover:bg-red-700"
+              >
+                {language === 'en' ? 'Remove Other Admin Accounts' : 'અન્ય એડમિન એકાઉન્ટ્સ દૂર કરો'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {adminCount === 1 && (
+        <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+          <p className="text-sm text-green-700 flex items-center gap-2">
+            <Lock className="w-4 h-4" />
+            {language === 'en' ? 'You are the only admin. No other accounts exist.' : 'તમે એકમાત્ર એડમિન છો. અન્ય કોઈ એકાઉન્ટ અસ્તિત્વમાં નથી.'}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
 // Dashboard Section
 const DashboardSection = () => {
   const { language } = useLanguage();
