@@ -9,7 +9,7 @@ import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
 import { 
   LayoutDashboard, Settings, Image, FileText, Heart, Users, Mail, BookOpen,
-  LogOut, Menu, X, Save, Download, Upload
+  LogOut, Menu, X, Save, Download, Upload, Lock, Eye, EyeOff, AlertTriangle
 } from 'lucide-react';
 
 // Import admin sections from separate files
