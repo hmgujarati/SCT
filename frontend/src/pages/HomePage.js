@@ -228,7 +228,7 @@ const HomePage = () => {
       </section>
 
       {/* Success Stories Section */}
-      {stories.length > 0 && (
+      {stories.length > 0 && isPageVisible('stories') && (
         <section className="section bg-[#F7F1E6]" data-testid="stories-section">
           <div className="container-custom">
             <div className="text-center mb-16">
