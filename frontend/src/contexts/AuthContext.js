@@ -49,15 +49,8 @@ export const AuthProvider = ({ children }) => {
     return userData;
   };
 
-  const register = async (name, email, password) => {
-    const response = await axios.post(`${API}/auth/register`, { name, email, password });
-    const { access_token, user: userData } = response.data;
-    localStorage.setItem('shivdhara_token', access_token);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
-    setToken(access_token);
-    setUser(userData);
-    return userData;
-  };
+  // Register function removed - only master admin allowed
+  // Keep for potential future use if needed
 
   const logout = () => {
     localStorage.removeItem('shivdhara_token');
@@ -70,7 +63,7 @@ export const AuthProvider = ({ children }) => {
   const isEditor = user?.role === 'editor' || isAdmin;
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout, isAdmin, isEditor }}>
+    <AuthContext.Provider value={{ user, token, loading, login, logout, isAdmin, isEditor }}>
       {children}
     </AuthContext.Provider>
   );
