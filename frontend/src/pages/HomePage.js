@@ -365,25 +365,27 @@ const HomePage = () => {
       )}
 
       {/* CTA Section */}
-      <section className="py-20 bg-[#8B1E1E] relative overflow-hidden" data-testid="cta-section">
-        <div className="absolute inset-0 bg-pattern opacity-10"></div>
-        <div className="container-custom relative z-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            {t(content.cta_title) || (language === 'en' ? 'Join Our Mission Today' : 'આજે અમારા મિશનમાં જોડાઓ')}
-          </h2>
-          <p className="text-[#F7F1E6]/80 text-lg max-w-2xl mx-auto mb-10">
-            {t(content.cta_text) || (language === 'en' 
-              ? 'Your monthly donation ensures sustained support for families in need. Together, we can build a more compassionate society.'
-              : 'તમારું માસિક દાન જરૂરિયાતમંદ પરિવારોને સતત સહાયની ખાતરી આપે છે. સાથે મળીને, આપણે વધુ કરુણામય સમાજ બનાવી શકીએ છીએ.')}
-          </p>
-          <Link to="/donate" data-testid="cta-donate-btn">
-            <Button className="bg-[#C9A24A] hover:bg-[#B8923B] text-white text-lg px-10 py-5 rounded-full font-semibold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
-              <Heart className="w-5 h-5 mr-2" />
-              {ui.donate_now}
-            </Button>
-          </Link>
-        </div>
-      </section>
+      {isPageVisible('donate') && (
+        <section className="py-20 bg-[#8B1E1E] relative overflow-hidden" data-testid="cta-section">
+          <div className="absolute inset-0 bg-pattern opacity-10"></div>
+          <div className="container-custom relative z-10 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              {t(content.cta_title) || (language === 'en' ? 'Join Our Mission Today' : 'આજે અમારા મિશનમાં જોડાઓ')}
+            </h2>
+            <p className="text-[#F7F1E6]/80 text-lg max-w-2xl mx-auto mb-10">
+              {t(content.cta_text) || (language === 'en' 
+                ? 'Your monthly donation ensures sustained support for families in need. Together, we can build a more compassionate society.'
+                : 'તમારું માસિક દાન જરૂરિયાતમંદ પરિવારોને સતત સહાયની ખાતરી આપે છે. સાથે મળીને, આપણે વધુ કરુણામય સમાજ બનાવી શકીએ છીએ.')}
+            </p>
+            <Link to="/donate" data-testid="cta-donate-btn">
+              <Button className="bg-[#C9A24A] hover:bg-[#B8923B] text-white text-lg px-10 py-5 rounded-full font-semibold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                <Heart className="w-5 h-5 mr-2" />
+                {ui.donate_now}
+              </Button>
+            </Link>
+          </div>
+        </section>
+      )}
     </div>
   );
 };
