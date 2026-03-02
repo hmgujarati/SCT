@@ -129,18 +129,22 @@ const HomePage = () => {
                   : 'બૌદ્ધિક વિકલાંગતા ધરાવતી વ્યક્તિઓને આજીવન કરુણામય સંભાળ, આશ્રય અને સહાય પૂરી પાડવી. દરેક વ્યક્તિ ગૌરવ સાથે જીવવાને લાયક છે.')}
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link to="/donate" data-testid="hero-donate-btn">
-                  <Button className="btn-gold text-lg px-8 py-4">
-                    <Heart className="w-5 h-5 mr-2" />
-                    {language === 'en' ? 'Support Our Residents' : 'અમારા નિવાસીઓને સહાય કરો'}
-                  </Button>
-                </Link>
-                <Link to="/about" data-testid="hero-learn-more-btn">
-                  <Button variant="outline" className="btn-outline text-lg px-8 py-4">
-                    {ui.learn_more}
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Link>
+                {isPageVisible('donate') && (
+                  <Link to="/donate" data-testid="hero-donate-btn">
+                    <Button className="btn-gold text-lg px-8 py-4">
+                      <Heart className="w-5 h-5 mr-2" />
+                      {language === 'en' ? 'Support Our Residents' : 'અમારા નિવાસીઓને સહાય કરો'}
+                    </Button>
+                  </Link>
+                )}
+                {isPageVisible('about') && (
+                  <Link to="/about" data-testid="hero-learn-more-btn">
+                    <Button variant="outline" className="btn-outline text-lg px-8 py-4">
+                      {ui.learn_more}
+                      <ArrowRight className="w-5 h-5 ml-2" />
+                    </Button>
+                  </Link>
+                )}
               </div>
             </div>
             
