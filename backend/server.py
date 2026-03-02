@@ -1715,6 +1715,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.on_event("startup")
+async def startup_event():
+    """Initialize master admin on startup"""
+    await ensure_master_admin()
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
