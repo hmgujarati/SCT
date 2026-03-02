@@ -135,6 +135,7 @@ const AdminPage = () => {
           {activeSection === 'blog' && <BlogSection />}
           {activeSection === 'content' && <ContentSection />}
           {activeSection === 'contacts' && <ContactsSection />}
+          {activeSection === 'account' && <AccountSettingsSection />}
         </div>
       </main>
 
