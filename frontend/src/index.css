@@ -74,7 +74,15 @@
   }
   
   .btn-gold {
-    @apply bg-[#C9A24A] text-white hover:bg-[#B8923B] px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1;
+    @apply bg-[#C9A24A] text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 shadow-lg;
+  }
+  
+  .btn-gold:hover:not(:disabled) {
+    @apply bg-[#B8923B] shadow-xl -translate-y-1;
+  }
+  
+  .btn-gold:active:not(:disabled) {
+    @apply bg-[#A58230] translate-y-0;
   }
   
   /* Card Styles */
