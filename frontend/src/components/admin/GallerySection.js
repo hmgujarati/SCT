@@ -39,8 +39,14 @@ const GalleryForm = ({ album, onSave, onCancel, language }) => {
       const formDataUpload = new FormData();
       files.forEach(file => formDataUpload.append('files', file));
       
+      // Get token from localStorage for upload requests
+      const token = localStorage.getItem('shivdhara_token');
+      
       const response = await axios.post(`${API}/upload/multiple`, formDataUpload, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
       });
       
       const newImages = response.data.uploaded.map((img, idx) => ({
