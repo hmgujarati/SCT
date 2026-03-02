@@ -447,8 +447,8 @@ const DonatePage = () => {
                 <Button
                   onClick={proceedToPayment}
                   disabled={loading}
-                  className="w-full btn-gold text-lg py-4"
                   data-testid="proceed-to-pay"
+                  className="w-full py-6 text-lg rounded-xl bg-[#C9A24A] hover:bg-[#A58230] text-white font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                 >
                   {loading ? (
                     <span className="flex items-center gap-2">
