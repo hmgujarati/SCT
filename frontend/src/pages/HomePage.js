@@ -12,6 +12,7 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const HomePage = () => {
   const { language, t, ui } = useLanguage();
   const { getHeroImage, getCtaImage } = useSiteSettings();
+  const { isPageVisible } = usePageVisibility();
   const [content, setContent] = useState({});
   const [settings, setSettings] = useState(null);
   const [stories, setStories] = useState([]);
