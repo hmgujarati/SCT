@@ -78,7 +78,11 @@
   }
   
   .btn-outline {
-    @apply border-2 border-[#8B1E1E] text-[#8B1E1E] hover:bg-[#8B1E1E] hover:text-white px-6 py-3 rounded-full font-medium transition-all duration-300;
+    @apply border-2 border-[#8B1E1E] text-[#8B1E1E] px-6 py-3 rounded-full font-medium transition-all duration-300;
+  }
+  
+  .btn-outline:hover:not(:disabled) {
+    @apply bg-[#8B1E1E] text-white;
   }
   
   .btn-gold {
