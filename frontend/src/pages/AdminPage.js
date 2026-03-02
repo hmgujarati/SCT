@@ -56,6 +56,7 @@ const AdminPage = () => {
     { id: 'blog', icon: BookOpen, label: language === 'en' ? 'Blog' : 'બ્લોગ' },
     { id: 'content', icon: FileText, label: language === 'en' ? 'Page Content' : 'પૃષ્ઠ સામગ્રી' },
     { id: 'contacts', icon: Mail, label: language === 'en' ? 'Contact Messages' : 'સંપર્ક સંદેશા' },
+    { id: 'account', icon: Lock, label: language === 'en' ? 'Account Settings' : 'એકાઉન્ટ સેટિંગ્સ' },
   ];
 
   if (authLoading) {
