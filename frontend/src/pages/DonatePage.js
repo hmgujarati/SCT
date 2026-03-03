@@ -171,6 +171,8 @@ const DonatePage = () => {
               }
             });
             setSuccess(true);
+            // Scroll to top after successful donation
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             toast.success(language === 'en' ? 'Thank you for your donation!' : 'તમારા દાન માટે આભાર!');
           } catch (error) {
             toast.error(language === 'en' ? 'Payment verification failed' : 'ચુકવણી ચકાસણી નિષ્ફળ');
