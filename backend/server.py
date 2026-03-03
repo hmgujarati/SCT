@@ -169,7 +169,7 @@ class SiteSettings(BaseModel):
     site_images: SiteImages = Field(default_factory=SiteImages)
     footer_text: FooterText = Field(default_factory=FooterText)
     impact_stats: Dict[str, Any] = Field(default_factory=dict)
-    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: get_ist_now())
 
 class SiteSettingsUpdate(BaseModel):
     bank_details: Optional[BankDetails] = None
@@ -207,7 +207,7 @@ class PageContent(BaseModel):
     page_key: str  # home, about, donate, contact, etc.
     section_key: str  # hero_title, hero_subtitle, etc.
     content: BilingualContent
-    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: get_ist_now())
 
 class PageContentCreate(BaseModel):
     page_key: str
@@ -247,7 +247,7 @@ class DonationRecord(BaseModel):
     razorpay_payment_id: Optional[str] = None
     status: str = "pending"  # pending, paid, failed
     receipt_sent: bool = False
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: get_ist_now())
     paid_at: Optional[datetime] = None
 
 # Gallery Models
@@ -276,7 +276,7 @@ class GalleryAlbum(BaseModel):
     videos: List[GalleryVideo] = []
     embeds: List[GalleryEmbed] = []
     is_active: bool = True
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: get_ist_now())
 
 class GalleryAlbumCreate(BaseModel):
     title: BilingualContent
@@ -297,7 +297,7 @@ class BlogPost(BaseModel):
     author: str = ""
     tags: List[str] = []
     is_published: bool = False
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: get_ist_now())
     published_at: Optional[datetime] = None
 
 class BlogPostCreate(BaseModel):
@@ -324,7 +324,7 @@ class SuccessStory(BaseModel):
     category: str  # education, health, relief
     is_active: bool = True
     order: int = 0
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: get_ist_now())
 
 class SuccessStoryCreate(BaseModel):
     title: BilingualContent
@@ -349,7 +349,7 @@ class ContactSubmission(BaseModel):
     message: str
     is_volunteer: bool = False
     is_read: bool = False
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: get_ist_now())
 
 class ContactSubmissionCreate(BaseModel):
     name: str
@@ -372,7 +372,7 @@ def create_token(user_id: str, email: str, role: str) -> str:
         "sub": user_id,
         "email": email,
         "role": role,
-        "exp": datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRATION_HOURS)
+        "exp": get_ist_now() + timedelta(hours=JWT_EXPIRATION_HOURS)
     }
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
@@ -465,7 +465,7 @@ async def ensure_master_admin():
             "name": "Master Admin",
             "role": "admin",
             "is_master": True,
-            "created_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat()
         }
         await db.users.insert_one(user_doc)
         logger.info(f"Master admin created with email: {MASTER_ADMIN_EMAIL}")
@@ -594,7 +594,7 @@ async def get_admin_settings(user: dict = Depends(get_admin_user)):
 @api_router.put("/settings")
 async def update_settings(updates: SiteSettingsUpdate, user: dict = Depends(get_admin_user)):
     update_dict = {k: v.model_dump() if hasattr(v, 'model_dump') else v for k, v in updates.model_dump(exclude_none=True).items()}
-    update_dict['updated_at'] = datetime.now(timezone.utc).isoformat()
+    update_dict['updated_at'] = get_ist_now().isoformat()
     
     await db.site_settings.update_one({}, {"$set": update_dict}, upsert=True)
     return {"message": "Settings updated successfully"}
@@ -663,7 +663,7 @@ async def create_content(content: PageContentCreate, user: dict = Depends(get_cu
 async def update_content(page_key: str, section_key: str, content: BilingualContent, user: dict = Depends(get_current_user)):
     result = await db.page_content.update_one(
         {"page_key": page_key, "section_key": section_key},
-        {"$set": {"content": content.model_dump(), "updated_at": datetime.now(timezone.utc).isoformat()}},
+        {"$set": {"content": content.model_dump(), "updated_at": get_ist_now().isoformat()}},
         upsert=True
     )
     return {"message": "Content updated"}
@@ -741,7 +741,7 @@ async def verify_donation(
         razorpay_client.utility.verify_payment_signature(params)
         
         # Update donation record
-        now = datetime.now(timezone.utc).isoformat()
+        now = get_ist_now().isoformat()
         donation = await db.donations.find_one_and_update(
             {"razorpay_order_id": razorpay_order_id},
             {"$set": {
@@ -983,7 +983,7 @@ async def get_blog_post(slug: str):
 async def create_blog_post(post: BlogPostCreate, user: dict = Depends(get_current_user)):
     post_doc = BlogPost(**post.model_dump())
     if post.is_published:
-        post_doc.published_at = datetime.now(timezone.utc)
+        post_doc.published_at = get_ist_now()
     doc = post_doc.model_dump()
     doc['created_at'] = doc['created_at'].isoformat()
     if doc.get('published_at'):
@@ -998,7 +998,7 @@ async def update_blog_post(post_id: str, post: BlogPostCreate, user: dict = Depe
         # Check if it wasn't published before
         existing = await db.blog.find_one({"id": post_id}, {"_id": 0})
         if existing and not existing.get('is_published'):
-            update_data['published_at'] = datetime.now(timezone.utc).isoformat()
+            update_data['published_at'] = get_ist_now().isoformat()
     await db.blog.update_one({"id": post_id}, {"$set": update_data})
     return {"message": "Post updated"}
 
@@ -1293,7 +1293,7 @@ async def seed_initial_data():
     
     for content in all_content:
         content['id'] = str(uuid.uuid4())
-        content['updated_at'] = datetime.now(timezone.utc).isoformat()
+        content['updated_at'] = get_ist_now().isoformat()
         await db.page_content.insert_one(content)
     
     # Seed impact stats
@@ -1325,7 +1325,7 @@ async def seed_initial_data():
             "category": "education",
             "is_active": True,
             "order": 1,
-            "created_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat()
         },
         {
             "id": str(uuid.uuid4()),
@@ -1340,7 +1340,7 @@ async def seed_initial_data():
             "category": "health",
             "is_active": True,
             "order": 2,
-            "created_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat()
         },
         {
             "id": str(uuid.uuid4()),
@@ -1355,7 +1355,7 @@ async def seed_initial_data():
             "category": "relief",
             "is_active": True,
             "order": 3,
-            "created_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat()
         }
     ]
     
@@ -1374,8 +1374,8 @@ async def seed_initial_data():
             "author": "Shivdhara Team",
             "tags": ["education", "children", "empowerment"],
             "is_published": True,
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "published_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat(),
+            "published_at": get_ist_now().isoformat()
         },
         {
             "id": str(uuid.uuid4()),
@@ -1387,8 +1387,8 @@ async def seed_initial_data():
             "author": "Dr. Mehta",
             "tags": ["healthcare", "medical camps", "community"],
             "is_published": True,
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "published_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat(),
+            "published_at": get_ist_now().isoformat()
         }
     ]
     
@@ -1406,7 +1406,7 @@ async def seed_initial_data():
                 {"id": str(uuid.uuid4()), "url": "https://images.unsplash.com/photo-1735966329265-6b57ed8dd2ef?crop=entropy&cs=srgb&fm=jpg&q=85", "caption": {"en": "Book distribution drive", "gu": "પુસ્તક વિતરણ અભિયાન"}, "order": 1}
             ],
             "is_active": True,
-            "created_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat()
         },
         {
             "id": str(uuid.uuid4()),
@@ -1417,7 +1417,7 @@ async def seed_initial_data():
                 {"id": str(uuid.uuid4()), "url": "https://images.pexels.com/photos/7579824/pexels-photo-7579824.jpeg", "caption": {"en": "Health awareness session", "gu": "આરોગ્ય જાગૃતિ સત્ર"}, "order": 1}
             ],
             "is_active": True,
-            "created_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat()
         },
         {
             "id": str(uuid.uuid4()),
@@ -1428,7 +1428,7 @@ async def seed_initial_data():
                 {"id": str(uuid.uuid4()), "url": "https://images.pexels.com/photos/6995221/pexels-photo-6995221.jpeg", "caption": {"en": "Essential supplies for families", "gu": "પરિવારો માટે આવશ્યક પુરવઠો"}, "order": 1}
             ],
             "is_active": True,
-            "created_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat()
         }
     ]
     
@@ -1635,7 +1635,7 @@ async def reseed_content():
     
     for content in all_content:
         content['id'] = str(uuid.uuid4())
-        content['updated_at'] = datetime.now(timezone.utc).isoformat()
+        content['updated_at'] = get_ist_now().isoformat()
         await db.page_content.insert_one(content)
     
     # Update impact stats
@@ -1667,7 +1667,7 @@ async def reseed_content():
             "category": "daily-care",
             "is_active": True,
             "order": 1,
-            "created_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat()
         },
         {
             "id": str(uuid.uuid4()),
@@ -1682,7 +1682,7 @@ async def reseed_content():
             "category": "medical-care",
             "is_active": True,
             "order": 2,
-            "created_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat()
         },
         {
             "id": str(uuid.uuid4()),
@@ -1697,7 +1697,7 @@ async def reseed_content():
             "category": "daily-care",
             "is_active": True,
             "order": 3,
-            "created_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat()
         }
     ]
     
@@ -1716,8 +1716,8 @@ async def reseed_content():
             "author": "Shivdhara Team",
             "tags": ["awareness", "intellectual disability", "care"],
             "is_published": True,
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "published_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat(),
+            "published_at": get_ist_now().isoformat()
         },
         {
             "id": str(uuid.uuid4()),
@@ -1729,8 +1729,8 @@ async def reseed_content():
             "author": "Shivdhara Team",
             "tags": ["daily life", "care home", "routine"],
             "is_published": True,
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "published_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat(),
+            "published_at": get_ist_now().isoformat()
         },
         {
             "id": str(uuid.uuid4()),
@@ -1742,8 +1742,8 @@ async def reseed_content():
             "author": "Shivdhara Team",
             "tags": ["nutrition", "health", "care"],
             "is_published": True,
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "published_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat(),
+            "published_at": get_ist_now().isoformat()
         }
     ]
     
@@ -1761,7 +1761,7 @@ async def reseed_content():
                 {"id": str(uuid.uuid4()), "url": "https://images.pexels.com/photos/7551668/pexels-photo-7551668.jpeg", "caption": {"en": "Residents enjoying activities", "gu": "નિવાસીઓ પ્રવૃત્તિઓનો આનંદ માણી રહ્યા છે"}, "order": 1}
             ],
             "is_active": True,
-            "created_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat()
         },
         {
             "id": str(uuid.uuid4()),
@@ -1771,7 +1771,7 @@ async def reseed_content():
                 {"id": str(uuid.uuid4()), "url": "https://images.pexels.com/photos/7551619/pexels-photo-7551619.jpeg", "caption": {"en": "Health checkup for residents", "gu": "નિવાસીઓ માટે આરોગ્ય તપાસ"}, "order": 0}
             ],
             "is_active": True,
-            "created_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat()
         },
         {
             "id": str(uuid.uuid4()),
@@ -1781,7 +1781,7 @@ async def reseed_content():
                 {"id": str(uuid.uuid4()), "url": "https://images.pexels.com/photos/7551617/pexels-photo-7551617.jpeg", "caption": {"en": "Clean and comfortable living spaces", "gu": "સ્વચ્છ અને આરામદાયક રહેવાની જગ્યાઓ"}, "order": 0}
             ],
             "is_active": True,
-            "created_at": datetime.now(timezone.utc).isoformat()
+            "created_at": get_ist_now().isoformat()
         }
     ]
     
