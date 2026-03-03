@@ -3,6 +3,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useSiteSettings } from '../contexts/SiteSettingsContext';
 import axios from 'axios';
 import { Target, Eye, Heart, Shield, Users, Award, HandHeart, Clock } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
