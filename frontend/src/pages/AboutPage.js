@@ -50,6 +50,15 @@ const AboutPage = () => {
 
   return (
     <div className={`pt-24 ${language === 'gu' ? 'font-gujarati' : ''}`}>
+      <SEO 
+        title={language === 'en' ? 'About Us' : 'અમારા વિશે'}
+        description={language === 'en' 
+          ? 'Learn about Shivdhara Charitable\'s mission to provide compassionate care to individuals with intellectual disabilities. Our story, values, and impact.'
+          : 'બૌદ્ધિક વિકલાંગતા ધરાવતી વ્યક્તિઓને કરુણામય સંભાળ આપવાના શિવધારા ચેરીટેબલના મિશન વિશે જાણો.'}
+        keywords="about Shivdhara, NGO mission, disability care organization, charitable trust India"
+        url="/about"
+        language={language}
+      />
       {/* Hero Section */}
       <section className="py-20 bg-[#F7F1E6]" data-testid="about-hero">
         <div className="container-custom">
