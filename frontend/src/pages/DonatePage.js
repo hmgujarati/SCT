@@ -30,6 +30,7 @@ const DonatePage = () => {
   const [content, setContent] = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [paymentId, setPaymentId] = useState(null);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
   
   const [formData, setFormData] = useState({
