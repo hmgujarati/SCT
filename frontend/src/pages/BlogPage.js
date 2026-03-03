@@ -171,6 +171,15 @@ const BlogPage = () => {
   // Blog List View
   return (
     <div className={`pt-24 ${language === 'gu' ? 'font-gujarati' : ''}`}>
+      <SEO 
+        title={language === 'en' ? 'Blog' : 'બ્લોગ'}
+        description={language === 'en' 
+          ? 'Read our latest articles about disability care, mental health awareness, and community support initiatives at Shivdhara Charitable.'
+          : 'શિવધારા ચેરીટેબલ પર વિકલાંગ સંભાળ, માનસિક સ્વાસ્થ્ય જાગૃતિ અને સમુદાય સહાય પહેલ વિશેના અમારા નવીનતમ લેખો વાંચો.'}
+        keywords="NGO blog, disability care articles, mental health awareness, community support"
+        url="/blog"
+        language={language}
+      />
       <section className="py-20 bg-[#F7F1E6]" data-testid="blog-hero">
         <div className="container-custom text-center">
           <span className="inline-block px-4 py-2 bg-[#8B1E1E]/10 text-[#8B1E1E] rounded-full text-sm font-medium mb-6">
