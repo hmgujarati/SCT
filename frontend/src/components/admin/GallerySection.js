@@ -4,30 +4,53 @@ import { toast } from 'sonner';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { Image, Plus, Trash2, Edit, X, Save, Upload, Loader2 } from 'lucide-react';
+import { Textarea } from '../ui/textarea';
+import { Image, Plus, Trash2, Edit, X, Save, Upload, Loader2, Video, Instagram, Link as LinkIcon } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
 const GalleryForm = ({ album, onSave, onCancel, language }) => {
-  const [formData, setFormData] = useState({
+  // Initialize form data from album prop
+  const getInitialData = () => ({
     title: album?.title || { en: '', gu: '' },
-    category: album?.category || 'education',
+    category: album?.category || 'shelter',
     images: album?.images || [],
+    videos: album?.videos || [],
+    embeds: album?.embeds || [],
     is_active: album?.is_active ?? true
   });
+
+  const [formData, setFormData] = useState(getInitialData);
   const [newImageCaption, setNewImageCaption] = useState({ en: '', gu: '' });
+  const [newVideoUrl, setNewVideoUrl] = useState('');
+  const [newVideoCaption, setNewVideoCaption] = useState({ en: '', gu: '' });
+  const [newEmbedUrl, setNewEmbedUrl] = useState('');
+  const [newEmbedType, setNewEmbedType] = useState('instagram');
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [activeTab, setActiveTab] = useState('images');
   const fileInputRef = useRef(null);
+  const videoInputRef = useRef(null);
+
+  // Reset form when album changes
+  useEffect(() => {
+    setFormData(getInitialData());
+  }, [album?.id]);
 
   const categories = [
+    { id: 'shelter', label: language === 'en' ? 'Shelter & Care' : 'આશ્રય અને સંભાળ' },
     { id: 'education', label: language === 'en' ? 'Education' : 'શિક્ષણ' },
-    { id: 'health', label: language === 'en' ? 'Health' : 'આરોગ્ય' },
-    { id: 'relief', label: language === 'en' ? 'Relief' : 'રાહત' },
+    { id: 'health', label: language === 'en' ? 'Health & Medical' : 'આરોગ્ય અને તબીબી' },
+    { id: 'relief', label: language === 'en' ? 'Relief Work' : 'રાહત કાર્ય' },
+    { id: 'nutrition', label: language === 'en' ? 'Nutrition' : 'પોષણ' },
+    { id: 'rehabilitation', label: language === 'en' ? 'Rehabilitation' : 'પુનર્વસન' },
+    { id: 'therapy', label: language === 'en' ? 'Therapy' : 'થેરાપી' },
     { id: 'community', label: language === 'en' ? 'Community' : 'સમુદાય' },
     { id: 'facility', label: language === 'en' ? 'Facility' : 'સુવિધા' },
-    { id: 'events', label: language === 'en' ? 'Events' : 'ઇવેન્ટ્સ' }
+    { id: 'events', label: language === 'en' ? 'Events' : 'ઇવેન્ટ્સ' },
+    { id: 'activities', label: language === 'en' ? 'Activities' : 'પ્રવૃત્તિઓ' },
+    { id: 'celebrations', label: language === 'en' ? 'Celebrations' : 'ઉજવણી' }
   ];
 
   const handleFileUpload = async (e) => {
@@ -39,7 +62,6 @@ const GalleryForm = ({ album, onSave, onCancel, language }) => {
       const formDataUpload = new FormData();
       files.forEach(file => formDataUpload.append('files', file));
       
-      // Get token from localStorage for upload requests
       const token = localStorage.getItem('shivdhara_token');
       
       const response = await axios.post(`${API}/upload/multiple`, formDataUpload, {
@@ -51,15 +73,15 @@ const GalleryForm = ({ album, onSave, onCancel, language }) => {
       
       const newImages = response.data.uploaded.map((img, idx) => ({
         id: Date.now().toString() + idx,
-        url: `${BASE_URL}${img.url}`,
+        url: img.url,
         caption: { ...newImageCaption },
         order: formData.images.length + idx
       }));
       
-      setFormData({
-        ...formData,
-        images: [...formData.images, ...newImages]
-      });
+      setFormData(prev => ({
+        ...prev,
+        images: [...prev.images, ...newImages]
+      }));
       setNewImageCaption({ en: '', gu: '' });
       toast.success(language === 'en' ? `${files.length} image(s) uploaded!` : `${files.length} ફોટો અપલોડ થયા!`);
     } catch (error) {
@@ -71,8 +93,113 @@ const GalleryForm = ({ album, onSave, onCancel, language }) => {
     }
   };
 
+  const handleVideoUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    // Check file size (max 50MB)
+    const maxSize = 50 * 1024 * 1024;
+    for (const file of files) {
+      if (file.size > maxSize) {
+        toast.error(language === 'en' ? 'Video file too large (max 50MB)' : 'વિડિયો ફાઇલ ખૂબ મોટી છે (મહત્તમ 50MB)');
+        return;
+      }
+    }
+
+    setUploading(true);
+    try {
+      const formDataUpload = new FormData();
+      files.forEach(file => formDataUpload.append('files', file));
+      
+      const token = localStorage.getItem('shivdhara_token');
+      
+      const response = await axios.post(`${API}/upload/multiple`, formDataUpload, {
+        headers: { 
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      const newVideos = response.data.uploaded.map((vid, idx) => ({
+        id: Date.now().toString() + idx,
+        url: vid.url,
+        caption: { ...newVideoCaption },
+        type: 'upload'
+      }));
+      
+      setFormData(prev => ({
+        ...prev,
+        videos: [...prev.videos, ...newVideos]
+      }));
+      setNewVideoCaption({ en: '', gu: '' });
+      toast.success(language === 'en' ? `${files.length} video(s) uploaded!` : `${files.length} વિડિયો અપલોડ થયા!`);
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error(language === 'en' ? 'Upload failed' : 'અપલોડ નિષ્ફળ');
+    } finally {
+      setUploading(false);
+      if (videoInputRef.current) videoInputRef.current.value = '';
+    }
+  };
+
+  const addVideoUrl = () => {
+    if (!newVideoUrl.trim()) {
+      toast.error(language === 'en' ? 'Enter a video URL' : 'વિડિયો URL દાખલ કરો');
+      return;
+    }
+
+    const newVideo = {
+      id: Date.now().toString(),
+      url: newVideoUrl,
+      caption: { ...newVideoCaption },
+      type: 'url'
+    };
+
+    setFormData(prev => ({
+      ...prev,
+      videos: [...prev.videos, newVideo]
+    }));
+    setNewVideoUrl('');
+    setNewVideoCaption({ en: '', gu: '' });
+    toast.success(language === 'en' ? 'Video added!' : 'વિડિયો ઉમેર્યો!');
+  };
+
+  const addEmbed = () => {
+    if (!newEmbedUrl.trim()) {
+      toast.error(language === 'en' ? 'Enter an embed URL' : 'એમ્બેડ URL દાખલ કરો');
+      return;
+    }
+
+    // Validate Instagram URL
+    if (newEmbedType === 'instagram' && !newEmbedUrl.includes('instagram.com')) {
+      toast.error(language === 'en' ? 'Enter a valid Instagram URL' : 'માન્ય Instagram URL દાખલ કરો');
+      return;
+    }
+
+    const newEmbed = {
+      id: Date.now().toString(),
+      url: newEmbedUrl,
+      type: newEmbedType
+    };
+
+    setFormData(prev => ({
+      ...prev,
+      embeds: [...prev.embeds, newEmbed]
+    }));
+    setNewEmbedUrl('');
+    toast.success(language === 'en' ? 'Embed added!' : 'એમ્બેડ ઉમેર્યો!');
+  };
+
   const removeImage = (imageId) => {
-    setFormData({ ...formData, images: formData.images.filter(img => img.id !== imageId) });
+    setFormData(prev => ({ ...prev, images: prev.images.filter(img => img.id !== imageId) }));
+  };
+
+  const removeVideo = (videoId) => {
+    setFormData(prev => ({ ...prev, videos: prev.videos.filter(vid => vid.id !== videoId) }));
+  };
+
+  const removeEmbed = (embedId) => {
+    setFormData(prev => ({ ...prev, embeds: prev.embeds.filter(emb => emb.id !== embedId) }));
   };
 
   const handleSubmit = async () => {
@@ -81,120 +208,250 @@ const GalleryForm = ({ album, onSave, onCancel, language }) => {
       return;
     }
     setSaving(true);
-    await onSave(formData);
-    setSaving(false);
+    try {
+      await onSave(formData);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const getImageUrl = (url) => {
+    if (!url) return null;
+    if (url.startsWith('http')) return url;
+    return `${BASE_URL}${url}`;
+  };
+
+  const getInstagramEmbedId = (url) => {
+    // Extract Instagram post/reel ID from URL
+    const match = url.match(/instagram\.com\/(?:p|reel)\/([^\/\?]+)/);
+    return match ? match[1] : null;
   };
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm mb-6" data-testid="gallery-form">
-      <h3 className="font-semibold text-lg mb-4">
-        {album ? (language === 'en' ? 'Edit Album' : 'આલ્બમ સંપાદિત કરો') : (language === 'en' ? 'New Album' : 'નવું આલ્બમ')}
-      </h3>
-      
-      <div className="grid md:grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className="block text-sm font-medium mb-2">{language === 'en' ? 'Title (English)' : 'શીર્ષક (English)'}</label>
-          <Input value={formData.title.en} onChange={(e) => setFormData({ ...formData, title: { ...formData.title, en: e.target.value }})} className="input-field" data-testid="album-title-en" />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-2">{language === 'en' ? 'Title (Gujarati)' : 'શીર્ષક (ગુજરાતી)'}</label>
-          <Input value={formData.title.gu} onChange={(e) => setFormData({ ...formData, title: { ...formData.title, gu: e.target.value }})} className="input-field font-gujarati" data-testid="album-title-gu" />
-        </div>
+    <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="font-semibold text-lg text-[#1F2937]">
+          {album ? (language === 'en' ? 'Edit Album' : 'આલ્બમ સંપાદન') : (language === 'en' ? 'New Album' : 'નવું આલ્બમ')}
+        </h3>
+        <Button onClick={onCancel} variant="ghost" size="sm"><X className="w-4 h-4" /></Button>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className="block text-sm font-medium mb-2">{language === 'en' ? 'Category' : 'શ્રેણી'}</label>
-          <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} className="w-full input-field" data-testid="album-category">
-            {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.label}</option>)}
-          </select>
-        </div>
-        <div className="flex items-center gap-2 pt-7">
-          <input type="checkbox" id="is_active" checked={formData.is_active} onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })} className="w-4 h-4" data-testid="album-active" />
-          <label htmlFor="is_active" className="text-sm">{language === 'en' ? 'Active (visible on website)' : 'સક્રિય (વેબસાઈટ પર દેખાય)'}</label>
-        </div>
-      </div>
-
-      <div className="border-t pt-4 mt-4">
-        <h4 className="font-medium mb-3">{language === 'en' ? 'Images' : 'ફોટા'}</h4>
-        
-        {formData.images.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-            {formData.images.map((img) => (
-              <div key={img.id} className="relative group">
-                <img src={img.url} alt="" className="w-full aspect-square object-cover rounded-lg border" onError={(e) => e.target.src = 'https://via.placeholder.com/150?text=Image'} />
-                <button onClick={() => removeImage(img.id)} className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                  <X className="w-3 h-3" />
-                </button>
-                {img.caption?.en && <p className="text-xs text-center mt-1 truncate">{img.caption.en}</p>}
-              </div>
-            ))}
+      <div className="space-y-6">
+        {/* Basic Info */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">{language === 'en' ? 'Title (English)' : 'શીર્ષક (English)'}</label>
+            <Input value={formData.title.en} onChange={(e) => setFormData(prev => ({ ...prev, title: { ...prev.title, en: e.target.value } }))} placeholder="Album Title" />
           </div>
-        )}
-
-        <div className="p-4 bg-stone-50 rounded-lg">
-          <div className="grid md:grid-cols-2 gap-3 mb-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">{language === 'en' ? 'Caption (English) - Optional' : 'કેપ્શન (English) - વૈકલ્પિક'}</label>
-              <Input value={newImageCaption.en} onChange={(e) => setNewImageCaption({ ...newImageCaption, en: e.target.value })} className="input-field" placeholder={language === 'en' ? 'Caption for uploaded images' : 'અપલોડ ફોટા માટે કેપ્શન'} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">{language === 'en' ? 'Caption (Gujarati) - Optional' : 'કેપ્શન (ગુજરાતી) - વૈકલ્પિક'}</label>
-              <Input value={newImageCaption.gu} onChange={(e) => setNewImageCaption({ ...newImageCaption, gu: e.target.value })} className="input-field font-gujarati" />
-            </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">{language === 'en' ? 'Title (Gujarati)' : 'શીર્ષક (ગુજરાતી)'}</label>
+            <Input value={formData.title.gu} onChange={(e) => setFormData(prev => ({ ...prev, title: { ...prev.title, gu: e.target.value } }))} placeholder="આલ્બમ શીર્ષક" className="font-gujarati" />
           </div>
-          
-          <div className="border-2 border-dashed border-stone-300 rounded-lg p-6 text-center hover:border-[#8B1E1E] transition-colors">
-            <input
-              ref={fileInputRef}
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={handleFileUpload}
-              className="hidden"
-              id="image-upload"
-              data-testid="image-upload-input"
-            />
-            <label htmlFor="image-upload" className="cursor-pointer">
-              {uploading ? (
-                <div className="flex flex-col items-center">
-                  <Loader2 className="w-8 h-8 text-[#8B1E1E] animate-spin mb-2" />
-                  <span className="text-sm text-[#6B7280]">{language === 'en' ? 'Uploading...' : 'અપલોડ થઈ રહ્યું છે...'}</span>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center">
-                  <Upload className="w-8 h-8 text-[#8B1E1E] mb-2" />
-                  <span className="text-sm font-medium text-[#1F2937]">{language === 'en' ? 'Click to upload images' : 'ફોટા અપલોડ કરવા ક્લિક કરો'}</span>
-                  <span className="text-xs text-[#6B7280] mt-1">{language === 'en' ? 'JPG, PNG, GIF, WebP (multiple allowed)' : 'JPG, PNG, GIF, WebP (બહુવિધ મંજૂરી)'}</span>
-                </div>
-              )}
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">{language === 'en' ? 'Category' : 'શ્રેણી'}</label>
+            <select 
+              value={formData.category} 
+              onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-[#8B1E1E] focus:border-transparent"
+            >
+              {categories.map(cat => (
+                <option key={cat.id} value={cat.id}>{cat.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center gap-4 pt-6">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input 
+                type="checkbox" 
+                checked={formData.is_active} 
+                onChange={(e) => setFormData(prev => ({ ...prev, is_active: e.target.checked }))}
+                className="w-4 h-4 rounded border-gray-300 text-[#8B1E1E] focus:ring-[#8B1E1E]"
+              />
+              <span className="text-sm">{language === 'en' ? 'Active (visible on website)' : 'સક્રિય (વેબસાઇટ પર દેખાય)'}</span>
             </label>
           </div>
         </div>
-      </div>
 
-      <div className="flex gap-2 mt-6">
-        <Button onClick={handleSubmit} disabled={saving || uploading} className="btn-primary" data-testid="save-album-btn">
-          {saving ? <span className="flex items-center gap-2"><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>{language === 'en' ? 'Saving...' : 'સાચવી રહ્યું છે...'}</span> : <><Save className="w-4 h-4 mr-2" />{language === 'en' ? 'Save Album' : 'આલ્બમ સાચવો'}</>}
-        </Button>
-        <Button onClick={onCancel} variant="outline" className="btn-secondary">{language === 'en' ? 'Cancel' : 'રદ કરો'}</Button>
+        {/* Tabs for Images, Videos, Embeds */}
+        <div className="border-b border-stone-200">
+          <div className="flex gap-4">
+            <button
+              onClick={() => setActiveTab('images')}
+              className={`pb-3 px-1 text-sm font-medium border-b-2 transition-colors ${activeTab === 'images' ? 'border-[#8B1E1E] text-[#8B1E1E]' : 'border-transparent text-[#6B7280] hover:text-[#1F2937]'}`}
+            >
+              <Image className="w-4 h-4 inline mr-1" />
+              {language === 'en' ? 'Images' : 'ફોટા'} ({formData.images.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('videos')}
+              className={`pb-3 px-1 text-sm font-medium border-b-2 transition-colors ${activeTab === 'videos' ? 'border-[#8B1E1E] text-[#8B1E1E]' : 'border-transparent text-[#6B7280] hover:text-[#1F2937]'}`}
+            >
+              <Video className="w-4 h-4 inline mr-1" />
+              {language === 'en' ? 'Videos' : 'વિડિયો'} ({formData.videos.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('embeds')}
+              className={`pb-3 px-1 text-sm font-medium border-b-2 transition-colors ${activeTab === 'embeds' ? 'border-[#8B1E1E] text-[#8B1E1E]' : 'border-transparent text-[#6B7280] hover:text-[#1F2937]'}`}
+            >
+              <Instagram className="w-4 h-4 inline mr-1" />
+              {language === 'en' ? 'Instagram' : 'Instagram'} ({formData.embeds.length})
+            </button>
+          </div>
+        </div>
+
+        {/* Images Tab */}
+        {activeTab === 'images' && (
+          <div className="space-y-4">
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">{language === 'en' ? 'Caption (English)' : 'કેપ્શન (English)'}</label>
+                <Input value={newImageCaption.en} onChange={(e) => setNewImageCaption(prev => ({ ...prev, en: e.target.value }))} placeholder="Optional caption" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">{language === 'en' ? 'Caption (Gujarati)' : 'કેપ્શન (ગુજરાતી)'}</label>
+                <Input value={newImageCaption.gu} onChange={(e) => setNewImageCaption(prev => ({ ...prev, gu: e.target.value }))} placeholder="વૈકલ્પિક કેપ્શન" className="font-gujarati" />
+              </div>
+            </div>
+            <div>
+              <input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleFileUpload} className="hidden" />
+              <Button onClick={() => fileInputRef.current?.click()} variant="outline" disabled={uploading} className="w-full border-dashed border-2 py-8">
+                {uploading ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : <Upload className="w-5 h-5 mr-2" />}
+                {uploading ? (language === 'en' ? 'Uploading...' : 'અપલોડ થઈ રહ્યું છે...') : (language === 'en' ? 'Upload Images' : 'ફોટા અપલોડ કરો')}
+              </Button>
+            </div>
+            {formData.images.length > 0 && (
+              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                {formData.images.map((img) => (
+                  <div key={img.id} className="relative group">
+                    <img src={getImageUrl(img.url)} alt="" className="w-full aspect-square object-cover rounded-lg" />
+                    <button onClick={() => removeImage(img.id)} className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Videos Tab */}
+        {activeTab === 'videos' && (
+          <div className="space-y-4">
+            <div className="bg-stone-50 rounded-lg p-4">
+              <p className="text-sm font-medium mb-3">{language === 'en' ? 'Upload Video' : 'વિડિયો અપલોડ કરો'}</p>
+              <input ref={videoInputRef} type="file" accept="video/*" onChange={handleVideoUpload} className="hidden" />
+              <Button onClick={() => videoInputRef.current?.click()} variant="outline" disabled={uploading} className="w-full">
+                {uploading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Upload className="w-4 h-4 mr-2" />}
+                {language === 'en' ? 'Upload Video (max 50MB)' : 'વિડિયો અપલોડ કરો (મહત્તમ 50MB)'}
+              </Button>
+            </div>
+
+            <div className="bg-stone-50 rounded-lg p-4">
+              <p className="text-sm font-medium mb-3">{language === 'en' ? 'Or Add Video URL (YouTube, etc.)' : 'અથવા વિડિયો URL ઉમેરો'}</p>
+              <div className="flex gap-2">
+                <Input value={newVideoUrl} onChange={(e) => setNewVideoUrl(e.target.value)} placeholder="https://youtube.com/watch?v=..." className="flex-1" />
+                <Button onClick={addVideoUrl} variant="outline">
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+
+            {formData.videos.length > 0 && (
+              <div className="space-y-3">
+                {formData.videos.map((vid) => (
+                  <div key={vid.id} className="flex items-center gap-3 p-3 bg-stone-50 rounded-lg">
+                    <Video className="w-5 h-5 text-[#8B1E1E]" />
+                    <span className="flex-1 text-sm truncate">{vid.url}</span>
+                    <span className="text-xs text-[#6B7280] px-2 py-1 bg-white rounded">{vid.type}</span>
+                    <button onClick={() => removeVideo(vid.id)} className="p-1 text-red-500 hover:bg-red-50 rounded">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Embeds Tab (Instagram) */}
+        {activeTab === 'embeds' && (
+          <div className="space-y-4">
+            <div className="bg-stone-50 rounded-lg p-4">
+              <p className="text-sm font-medium mb-3">{language === 'en' ? 'Add Instagram Post/Reel' : 'Instagram પોસ્ટ/રીલ ઉમેરો'}</p>
+              <div className="space-y-3">
+                <Input 
+                  value={newEmbedUrl} 
+                  onChange={(e) => setNewEmbedUrl(e.target.value)} 
+                  placeholder="https://www.instagram.com/p/... or https://www.instagram.com/reel/..." 
+                />
+                <div className="flex gap-2">
+                  <select 
+                    value={newEmbedType}
+                    onChange={(e) => setNewEmbedType(e.target.value)}
+                    className="px-3 py-2 border rounded-lg text-sm"
+                  >
+                    <option value="instagram">Instagram Post</option>
+                    <option value="instagram_reel">Instagram Reel</option>
+                  </select>
+                  <Button onClick={addEmbed} className="btn-primary">
+                    <Plus className="w-4 h-4 mr-1" /> {language === 'en' ? 'Add' : 'ઉમેરો'}
+                  </Button>
+                </div>
+              </div>
+              <p className="text-xs text-[#6B7280] mt-2">
+                {language === 'en' 
+                  ? 'Copy the URL from Instagram post or reel and paste it here.'
+                  : 'Instagram પોસ્ટ અથવા રીલમાંથી URL કૉપી કરો અને અહીં પેસ્ટ કરો.'}
+              </p>
+            </div>
+
+            {formData.embeds.length > 0 && (
+              <div className="space-y-3">
+                {formData.embeds.map((emb) => (
+                  <div key={emb.id} className="flex items-center gap-3 p-3 bg-stone-50 rounded-lg">
+                    <Instagram className="w-5 h-5 text-pink-600" />
+                    <span className="flex-1 text-sm truncate">{emb.url}</span>
+                    <span className="text-xs text-[#6B7280] px-2 py-1 bg-white rounded">{emb.type}</span>
+                    <button onClick={() => removeEmbed(emb.id)} className="p-1 text-red-500 hover:bg-red-50 rounded">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Actions */}
+        <div className="flex justify-end gap-3 pt-4 border-t">
+          <Button onClick={onCancel} variant="outline">{language === 'en' ? 'Cancel' : 'રદ કરો'}</Button>
+          <Button onClick={handleSubmit} disabled={saving} className="btn-primary">
+            {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
+            {album ? (language === 'en' ? 'Update Album' : 'આલ્બમ અપડેટ') : (language === 'en' ? 'Create Album' : 'આલ્બમ બનાવો')}
+          </Button>
+        </div>
       </div>
     </div>
   );
 };
 
-export const GallerySection = () => {
+const GallerySection = () => {
   const { language } = useLanguage();
   const [albums, setAlbums] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editingAlbum, setEditingAlbum] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [editingAlbum, setEditingAlbum] = useState(null);
 
-  useEffect(() => { fetchAlbums(); }, []);
+  useEffect(() => {
+    fetchAlbums();
+  }, []);
 
   const fetchAlbums = async () => {
     try {
-      const response = await axios.get(`${API}/gallery/all`);
+      const response = await axios.get(`${API}/gallery`);
       setAlbums(response.data);
     } catch (error) {
       console.error('Error fetching albums:', error);
@@ -231,24 +488,54 @@ export const GallerySection = () => {
     }
   };
 
+  const handleEdit = (album) => {
+    setEditingAlbum(album);
+    setShowForm(true);
+  };
+
+  const handleCancel = () => {
+    setShowForm(false);
+    setEditingAlbum(null);
+  };
+
+  const handleAdd = () => {
+    setEditingAlbum(null);
+    setShowForm(true);
+  };
+
   const getImageUrl = (album) => {
     const img = album.images?.[0];
     if (!img?.url) return null;
-    // Handle both relative and absolute URLs
     if (img.url.startsWith('http')) return img.url;
     return `${BASE_URL}${img.url}`;
+  };
+
+  const getMediaCount = (album) => {
+    const images = album.images?.length || 0;
+    const videos = album.videos?.length || 0;
+    const embeds = album.embeds?.length || 0;
+    return { images, videos, embeds, total: images + videos + embeds };
   };
 
   return (
     <div data-testid="gallery-section">
       <div className="flex justify-between items-center mb-6">
         <p className="text-[#6B7280]">{albums.length} {language === 'en' ? 'albums' : 'આલ્બમ'}</p>
-        <Button onClick={() => { setShowForm(true); setEditingAlbum(null); }} className="btn-primary" data-testid="add-album-btn">
+        <Button onClick={handleAdd} className="btn-primary" data-testid="add-album-btn">
           <Plus className="w-4 h-4 mr-2" />{language === 'en' ? 'Add Album' : 'આલ્બમ ઉમેરો'}
         </Button>
       </div>
 
-      {(showForm || editingAlbum) && <GalleryForm album={editingAlbum} onSave={handleSave} onCancel={() => { setShowForm(false); setEditingAlbum(null); }} language={language} />}
+      {/* Use key to force re-render when editingAlbum changes */}
+      {showForm && (
+        <GalleryForm 
+          key={editingAlbum?.id || 'new'} 
+          album={editingAlbum} 
+          onSave={handleSave} 
+          onCancel={handleCancel} 
+          language={language} 
+        />
+      )}
 
       {loading ? (
         <div className="bg-white rounded-xl p-8 text-center"><div className="w-8 h-8 border-4 border-[#8B1E1E] border-t-transparent rounded-full animate-spin mx-auto"></div></div>
@@ -259,33 +546,40 @@ export const GallerySection = () => {
         </div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {albums.map((album) => (
-            <div key={album.id} className="bg-white rounded-xl shadow-sm overflow-hidden">
-              <div className="aspect-video bg-stone-100 relative">
-                {getImageUrl(album) ? (
-                  <img src={getImageUrl(album)} alt="" className="w-full h-full object-cover" onError={(e) => e.target.style.display = 'none'} />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center"><Image className="w-12 h-12 text-stone-300" /></div>
-                )}
-                <span className={`absolute top-2 right-2 px-2 py-1 rounded text-xs font-medium ${album.is_active ? 'bg-green-100 text-green-700' : 'bg-stone-100 text-stone-600'}`}>
-                  {album.is_active ? (language === 'en' ? 'Active' : 'સક્રિય') : (language === 'en' ? 'Hidden' : 'છુપાયેલ')}
-                </span>
-              </div>
-              <div className="p-4">
-                <h3 className="font-semibold text-[#1F2937]">{album.title?.[language] || album.title?.en}</h3>
-                <p className="text-sm text-[#6B7280] capitalize">{album.category}</p>
-                <p className="text-xs text-[#9CA3AF] mt-1">{album.images?.length || 0} {language === 'en' ? 'images' : 'ફોટા'}</p>
-                <div className="flex gap-2 mt-4">
-                  <Button onClick={() => setEditingAlbum(album)} variant="outline" size="sm" className="flex-1" data-testid={`edit-album-${album.id}`}>
-                    <Edit className="w-4 h-4 mr-1" /> {language === 'en' ? 'Edit' : 'સંપાદન'}
-                  </Button>
-                  <Button onClick={() => handleDelete(album.id)} variant="outline" size="sm" className="text-red-600 hover:bg-red-50" data-testid={`delete-album-${album.id}`}>
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+          {albums.map((album) => {
+            const counts = getMediaCount(album);
+            return (
+              <div key={album.id} className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="aspect-video bg-stone-100 relative">
+                  {getImageUrl(album) ? (
+                    <img src={getImageUrl(album)} alt="" className="w-full h-full object-cover" onError={(e) => e.target.style.display = 'none'} />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center"><Image className="w-12 h-12 text-stone-300" /></div>
+                  )}
+                  <span className={`absolute top-2 right-2 px-2 py-1 rounded text-xs font-medium ${album.is_active ? 'bg-green-100 text-green-700' : 'bg-stone-100 text-stone-600'}`}>
+                    {album.is_active ? (language === 'en' ? 'Active' : 'સક્રિય') : (language === 'en' ? 'Hidden' : 'છુપાયેલ')}
+                  </span>
+                </div>
+                <div className="p-4">
+                  <h3 className="font-semibold text-[#1F2937]">{album.title?.[language] || album.title?.en}</h3>
+                  <p className="text-sm text-[#6B7280] capitalize">{album.category}</p>
+                  <div className="flex gap-3 text-xs text-[#9CA3AF] mt-1">
+                    {counts.images > 0 && <span>{counts.images} {language === 'en' ? 'images' : 'ફોટા'}</span>}
+                    {counts.videos > 0 && <span>{counts.videos} {language === 'en' ? 'videos' : 'વિડિયો'}</span>}
+                    {counts.embeds > 0 && <span>{counts.embeds} {language === 'en' ? 'embeds' : 'એમ્બેડ્સ'}</span>}
+                  </div>
+                  <div className="flex gap-2 mt-4">
+                    <Button onClick={() => handleEdit(album)} variant="outline" size="sm" className="flex-1" data-testid={`edit-album-${album.id}`}>
+                      <Edit className="w-4 h-4 mr-1" /> {language === 'en' ? 'Edit' : 'સંપાદન'}
+                    </Button>
+                    <Button onClick={() => handleDelete(album.id)} variant="outline" size="sm" className="text-red-600 hover:bg-red-50" data-testid={`delete-album-${album.id}`}>
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
