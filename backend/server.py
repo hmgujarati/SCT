@@ -24,6 +24,17 @@ import shutil
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+# IST Timezone (UTC+5:30)
+IST = timezone(timedelta(hours=5, minutes=30))
+
+def get_ist_now():
+    """Get current datetime in IST"""
+    return datetime.now(IST)
+
+def get_ist_isoformat():
+    """Get current datetime in IST as ISO format string"""
+    return datetime.now(IST).isoformat()
+
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
