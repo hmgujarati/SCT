@@ -1269,6 +1269,7 @@ const DonationsSection = () => {
               <tr>
                 <th className="px-4 py-3 text-left text-sm font-medium text-[#6B7280]">{language === 'en' ? 'Date' : 'તારીખ'}</th>
                 <th className="px-4 py-3 text-left text-sm font-medium text-[#6B7280]">{language === 'en' ? 'Donor' : 'દાતા'}</th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-[#6B7280]">{language === 'en' ? 'Phone' : 'ફોન'}</th>
                 <th className="px-4 py-3 text-left text-sm font-medium text-[#6B7280]">{language === 'en' ? 'Amount' : 'રકમ'}</th>
                 <th className="px-4 py-3 text-left text-sm font-medium text-[#6B7280]">{language === 'en' ? 'Status' : 'સ્થિતિ'}</th>
                 <th className="px-4 py-3 text-left text-sm font-medium text-[#6B7280]">80G</th>
@@ -1276,17 +1277,18 @@ const DonationsSection = () => {
             </thead>
             <tbody className="divide-y">
               {loading ? (
-                <tr><td colSpan="5" className="px-4 py-8 text-center text-[#6B7280]">{language === 'en' ? 'Loading...' : 'લોડ થઈ રહ્યું છે...'}</td></tr>
+                <tr><td colSpan="6" className="px-4 py-8 text-center text-[#6B7280]">{language === 'en' ? 'Loading...' : 'લોડ થઈ રહ્યું છે...'}</td></tr>
               ) : donations.length === 0 ? (
-                <tr><td colSpan="5" className="px-4 py-8 text-center text-[#6B7280]">{language === 'en' ? 'No donations yet' : 'હજી સુધી કોઈ દાન નથી'}</td></tr>
+                <tr><td colSpan="6" className="px-4 py-8 text-center text-[#6B7280]">{language === 'en' ? 'No donations yet' : 'હજી સુધી કોઈ દાન નથી'}</td></tr>
               ) : (
                 donations.map((donation) => (
                   <tr key={donation.id} className="hover:bg-stone-50">
                     <td className="px-4 py-3 text-sm">{formatDate(donation.paid_at || donation.created_at)}</td>
                     <td className="px-4 py-3">
-                      <p className="font-medium text-[#1F2937]">{donation.donor_info?.name}</p>
-                      <p className="text-xs text-[#6B7280]">{donation.donor_info?.email}</p>
+                      <p className="font-medium text-[#1F2937]">{donation.donor_info?.name || '-'}</p>
+                      <p className="text-xs text-[#6B7280]">{donation.donor_info?.email || '-'}</p>
                     </td>
+                    <td className="px-4 py-3 text-sm text-[#1F2937]">{donation.donor_info?.phone || '-'}</td>
                     <td className="px-4 py-3 font-medium text-[#8B1E1E]">₹{donation.amount?.toLocaleString()}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${donation.status === 'paid' ? 'bg-green-100 text-green-700' : donation.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
@@ -1298,7 +1300,7 @@ const DonationsSection = () => {
                     </td>
                   </tr>
                 ))
-              )}
+              )}}
             </tbody>
           </table>
         </div>
