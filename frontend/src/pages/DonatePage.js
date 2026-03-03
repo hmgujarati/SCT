@@ -171,6 +171,7 @@ const DonatePage = () => {
                 razorpay_signature: response.razorpay_signature
               }
             });
+            setPaymentId(response.razorpay_payment_id);
             setSuccess(true);
             // Scroll to top after successful donation
             window.scrollTo({ top: 0, behavior: 'smooth' });
