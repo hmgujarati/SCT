@@ -788,7 +788,7 @@ async def send_donation_confirmation_email(donation: dict):
             <div style="background: white; padding: 15px; border-radius: 8px; margin: 20px 0;">
                 <h3>Donation Details / દાનની વિગતો:</h3>
                 <p><strong>Amount / રકમ:</strong> ₹{amount:,}</p>
-                <p><strong>Date / તારીખ:</strong> {datetime.now().strftime('%d %B %Y')}</p>
+                <p><strong>Date / તારીખ:</strong> {get_ist_now().strftime('%d %B %Y, %I:%M %p IST')}</p>
                 <p><strong>Payment ID:</strong> {donation.get('razorpay_payment_id', 'N/A')}</p>
             </div>
             
