@@ -4,6 +4,7 @@ import "@/index.css";
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import axios from "axios";
 import { Toaster } from "sonner";
+import { HelmetProvider } from "react-helmet-async";
 
 // Contexts
 import { LanguageProvider } from "./contexts/LanguageContext";
