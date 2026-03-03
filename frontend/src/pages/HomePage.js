@@ -109,6 +109,15 @@ const HomePage = () => {
 
   return (
     <div className={`${language === 'gu' ? 'font-gujarati' : ''}`}>
+      <SEO 
+        title={language === 'en' ? 'Home' : 'મુખ્ય પૃષ્ઠ'}
+        description={language === 'en' 
+          ? 'Shivdhara Charitable provides lifelong compassionate care, shelter, and support to individuals with intellectual disabilities. Donate now to make a difference.'
+          : 'શિવધારા ચેરીટેબલ બૌદ્ધિક વિકલાંગતા ધરાવતી વ્યક્તિઓને આજીવન કરુણામય સંભાળ, આશ્રય અને સહાય પૂરી પાડે છે.'}
+        keywords="Shivdhara Charitable, NGO India, disability care, donate, 80G tax exemption"
+        url="/"
+        language={language}
+      />
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center bg-[#F7F1E6] overflow-hidden" data-testid="hero-section">
         {/* Background Pattern */}
