@@ -14,7 +14,7 @@ import {
 
 // Import admin sections from separate files
 import { ContentSection } from '../components/admin/ContentSection';
-import { GallerySection } from '../components/admin/GallerySection';
+import GallerySection from '../components/admin/GallerySection';
 import { StoriesSection } from '../components/admin/StoriesSection';
 import { BlogSection } from '../components/admin/BlogSection';
 
