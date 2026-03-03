@@ -1,0 +1,12 @@
+# Robots.txt for Shivdhara Charitable
+# https://shivdharacharitable.org
+
+User-agent: *
+Allow: /
+
+# Disallow admin pages
+Disallow: /admin
+Disallow: /login
+
+# Sitemap location
+Sitemap: https://shivdharacharitable.org/sitemap.xml
