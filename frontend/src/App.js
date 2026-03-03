@@ -131,29 +131,31 @@ function AppRoutes() {
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <AuthProvider>
-          <LanguageProvider>
-            <SiteSettingsProvider>
-              <PageVisibilityProvider>
-                <AppRoutes />
-                <Toaster 
-                  position="top-right" 
-                  richColors 
-                  closeButton
-                  toastOptions={{
-                    style: {
-                      fontFamily: 'Inter, sans-serif'
-                  }
-                }}
-              />
-              </PageVisibilityProvider>
-            </SiteSettingsProvider>
-          </LanguageProvider>
-        </AuthProvider>
-      </BrowserRouter>
-    </div>
+    <HelmetProvider>
+      <div className="App">
+        <BrowserRouter>
+          <AuthProvider>
+            <LanguageProvider>
+              <SiteSettingsProvider>
+                <PageVisibilityProvider>
+                  <AppRoutes />
+                  <Toaster 
+                    position="top-right" 
+                    richColors 
+                    closeButton
+                    toastOptions={{
+                      style: {
+                        fontFamily: 'Inter, sans-serif'
+                    }
+                  }}
+                />
+                </PageVisibilityProvider>
+              </SiteSettingsProvider>
+            </LanguageProvider>
+          </AuthProvider>
+        </BrowserRouter>
+      </div>
+    </HelmetProvider>
   );
 }
 
