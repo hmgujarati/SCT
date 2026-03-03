@@ -6,6 +6,7 @@ import { Input } from '../components/ui/input';
 import { Checkbox } from '../components/ui/checkbox';
 import { toast } from 'sonner';
 import { Heart, Check, Shield, Users, Stethoscope, Utensils, Home, FileText } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
