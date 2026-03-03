@@ -84,6 +84,15 @@ const ContactPage = () => {
 
   return (
     <div className={`pt-24 ${language === 'gu' ? 'font-gujarati' : ''}`}>
+      <SEO 
+        title={language === 'en' ? 'Contact Us' : 'સંપર્ક કરો'}
+        description={language === 'en' 
+          ? 'Contact Shivdhara Charitable for inquiries, volunteering, or to learn more about our disability care services in India.'
+          : 'પૂછપરછ, સ્વયંસેવા અથવા ભારતમાં અમારી વિકલાંગ સંભાળ સેવાઓ વિશે વધુ જાણવા માટે શિવધારા ચેરીટેબલનો સંપર્ક કરો.'}
+        keywords="contact NGO, Shivdhara address, volunteer India, disability care contact"
+        url="/contact"
+        language={language}
+      />
       {/* Hero */}
       <section className="py-20 bg-[#F7F1E6]" data-testid="contact-hero">
         <div className="container-custom text-center">
