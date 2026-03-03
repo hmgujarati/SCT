@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import axios from 'axios';
 import { Calendar, User, ArrowLeft } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
