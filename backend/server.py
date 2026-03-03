@@ -243,14 +243,27 @@ class DonationRecord(BaseModel):
 class GalleryImage(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     url: str
-    caption: BilingualContent
+    caption: BilingualContent = Field(default_factory=lambda: BilingualContent(en="", gu=""))
     order: int = 0
+
+class GalleryVideo(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    url: str
+    caption: BilingualContent = Field(default_factory=lambda: BilingualContent(en="", gu=""))
+    type: str = "upload"  # upload, url (youtube etc)
+
+class GalleryEmbed(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    url: str
+    type: str = "instagram"  # instagram, instagram_reel
 
 class GalleryAlbum(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     title: BilingualContent
-    category: str  # education, health, relief, community
+    category: str  # shelter, education, health, relief, nutrition, rehabilitation, therapy, community, facility, events, activities, celebrations
     images: List[GalleryImage] = []
+    videos: List[GalleryVideo] = []
+    embeds: List[GalleryEmbed] = []
     is_active: bool = True
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -258,6 +271,8 @@ class GalleryAlbumCreate(BaseModel):
     title: BilingualContent
     category: str
     images: List[GalleryImage] = []
+    videos: List[GalleryVideo] = []
+    embeds: List[GalleryEmbed] = []
     is_active: bool = True
 
 # Blog Models
