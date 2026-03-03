@@ -352,6 +352,15 @@ const DonatePage = () => {
 
   return (
     <div className={`pt-24 ${language === 'gu' ? 'font-gujarati' : ''}`}>
+      <SEO 
+        title={language === 'en' ? 'Donate' : 'દાન કરો'}
+        description={language === 'en' 
+          ? 'Donate to Shivdhara Charitable and help provide shelter, care, and support to individuals with intellectual disabilities. 80G tax exemption available.'
+          : 'શિવધારા ચેરીટેબલને દાન આપો અને બૌદ્ધિક વિકલાંગતા ધરાવતી વ્યક્તિઓને આશ્રય, સંભાળ અને સહાય પૂરી પાડવામાં મદદ કરો.'}
+        keywords="donate NGO India, 80G donation, tax exemption, support disability care, charitable donation"
+        url="/donate"
+        language={language}
+      />
       {/* Hero */}
       <section className="py-16 bg-[#F7F1E6]" data-testid="donate-hero">
         <div className="container-custom text-center">
