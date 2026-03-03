@@ -1246,7 +1246,30 @@ const DonationsSection = () => {
     fetchDonations();
   }, []);
 
-  const export80G = () => window.open(`${API}/donations/export-80g`, '_blank');
+  const export80G = async () => {
+    try {
+      const token = localStorage.getItem('shivdhara_token');
+      const response = await axios.get(`${API}/donations/export-80g`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+        responseType: 'blob'
+      });
+      
+      // Create download link
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', '80g_requests.csv');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      
+      toast.success(language === 'en' ? '80G data exported!' : '80G ડેટા નિકાસ થયો!');
+    } catch (error) {
+      console.error('Export error:', error);
+      toast.error(language === 'en' ? 'Export failed' : 'નિકાસ નિષ્ફળ');
+    }
+  };
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '-';
